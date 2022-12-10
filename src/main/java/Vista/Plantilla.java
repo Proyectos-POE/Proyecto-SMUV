@@ -29,12 +29,13 @@ public class Plantilla extends  JFrame {
     protected Color amarillo;
     protected Color rojo;
 
-    public Plantilla() {
-        //inicializarComponentesPredeterminados();
+    public Plantilla()
+    {
+
     }
 
-    public void inicializarComponentesPredeterminados() {
-        //setTitle("MEMORABBLE-MENU");
+    public void inicializarComponentesPredeterminados()
+    {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(625, 600);
         setLocationRelativeTo(null);
@@ -63,7 +64,6 @@ public class Plantilla extends  JFrame {
         lblInstrucciones = new JLabel("RELLENE LOS CAMPOS: ", SwingConstants.CENTER);
         lblInstrucciones.setBounds(0, 20, 435, 25);
         lblInstrucciones.setFont(new Font("Arial", Font.BOLD, 16));
-        //lblInstrucciones.setForeground(Color.red.darker().darker());
         jpAgregar.add(lblInstrucciones);
 
         btnAgregar = new JButton("AGREGAR");
@@ -84,7 +84,6 @@ public class Plantilla extends  JFrame {
         lblInstrucciones = new JLabel("ESCRIBA EL ID EN CUESTION:", SwingConstants.CENTER);
         lblInstrucciones.setBounds(0, 20, 435, 25);
         lblInstrucciones.setFont(new Font("Arial", Font.BOLD, 16));
-        //lblInstrucciones.setForeground(Color.red.darker().darker());
         jpEditar.add(lblInstrucciones);
 
         lblId = new JLabel("ID", SwingConstants.RIGHT);
@@ -96,7 +95,6 @@ public class Plantilla extends  JFrame {
         txtIdEditar.setBounds(130,60,200,20);
         txtIdEditar.setFont(new Font("Arial", Font.BOLD, 16));
         txtIdEditar.setBackground(verde);
-        //txtId.setForeground(Color.white);
         jpEditar.add(txtIdEditar);
 
         btnBuscar = new JButton("BUSCAR");
@@ -125,7 +123,6 @@ public class Plantilla extends  JFrame {
         lblInstrucciones = new JLabel("ESCRIBA EL ID A ELIMINAR:", SwingConstants.CENTER);
         lblInstrucciones.setBounds(0, 20, 435, 25);
         lblInstrucciones.setFont(new Font("Arial", Font.BOLD, 16));
-        //lblInstrucciones.setForeground(Color.red.darker().darker());
         jpEliminar.add(lblInstrucciones);
 
         lblId = new JLabel("ID", SwingConstants.RIGHT);
@@ -158,7 +155,6 @@ public class Plantilla extends  JFrame {
         lblInstrucciones = new JLabel("TABLA DE DATOS:", SwingConstants.CENTER);
         lblInstrucciones.setBounds(0, 20, 435, 25);
         lblInstrucciones.setFont(new Font("Arial", Font.BOLD, 16));
-        //lblInstrucciones.setForeground(Color.red.darker().darker());
         jpArchivo.add(lblInstrucciones);
 
         jsTabla = new JScrollPane();
@@ -199,31 +195,38 @@ public class Plantilla extends  JFrame {
         setVisible(true);
     }
 
-    public int getIdEditar() {
+    public int getIdEditar()
+    {
         return Integer.parseInt(txtIdEditar.getText());
     }
 
-    public int getIdEliminar() {
+    public int getIdEliminar()
+    {
         return Integer.parseInt(txtIdEliminar.getText());
     }
 
-    public void addBtnAgregarListener(ActionListener listenControles){
+    public void addBtnAgregarListener(ActionListener listenControles)
+    {
         btnAgregar.addActionListener(listenControles);
     }
 
-    public void addBtnEditarListener(ActionListener listenControles){
+    public void addBtnEditarListener(ActionListener listenControles)
+    {
         btnEditar.addActionListener(listenControles);
     }
 
-    public void addBtnBuscarListener(ActionListener listenControles){
+    public void addBtnBuscarListener(ActionListener listenControles)
+    {
         btnBuscar.addActionListener(listenControles);
     }
 
-    public void addBtnEliminarListener(ActionListener listenControles){
+    public void addBtnEliminarListener(ActionListener listenControles)
+    {
         btnEliminar.addActionListener(listenControles);
     }
 
-    public void addBtnAtrasListener(ActionListener listenControles){
+    public void addBtnAtrasListener(ActionListener listenControles)
+    {
         btnAtras.addActionListener(listenControles);
     }
 }
