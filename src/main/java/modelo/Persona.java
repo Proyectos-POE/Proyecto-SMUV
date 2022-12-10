@@ -17,7 +17,8 @@ public class Persona
         this.nombre = auxNombre;
     }
 
-    public Documento getDocumento() {
+    public Documento getDocumento()
+    {
         return documento;
     }
 
