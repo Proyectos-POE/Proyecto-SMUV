@@ -3,6 +3,8 @@ package Vista;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 
 public class Plantilla extends  JFrame {
     protected JLabel lblTitulo;
@@ -246,5 +248,18 @@ public class Plantilla extends  JFrame {
         tabla.setEnabled(false);
         jsTabla.add(tabla);
         jpArchivo.add(jsTabla);
+    }
+
+    public void limitarTxt(JTextField txt, int x)
+    {
+        txt.addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyTyped(KeyEvent e) {
+                if(txt.getText().length()==x)
+                {
+                    e.consume();
+                }
+            }
+        });
     }
 }
