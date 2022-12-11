@@ -240,7 +240,7 @@ public class Plantilla extends  JFrame {
         btnAtras.addActionListener(listenControles);
     }
 
-    public void crearTabla()
+    public void crearTabla(Object[][] datosMatriz, String[]nombresColumnas)
     {
         tabla = new JTable(datosMatriz,nombresColumnas);
         tabla.setEnabled(false);
