@@ -28,6 +28,7 @@ public class Plantilla extends  JFrame {
     protected Color verde;
     protected Color amarillo;
     protected Color rojo;
+    protected String nombresColumnas[];
 
     public Plantilla()
     {
@@ -134,7 +135,6 @@ public class Plantilla extends  JFrame {
         txtIdEliminar.setBounds(130,60,200,20);
         txtIdEliminar.setFont(new Font("Arial", Font.BOLD, 16));
         txtIdEliminar.setBackground(verde);
-        //txtId.setForeground(Color.white);
         jpEliminar.add(txtIdEliminar);
 
         btnEliminar = new JButton("ELIMINAR");
