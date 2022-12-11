@@ -34,7 +34,7 @@ public class Plantilla extends  JFrame {
 
     public Plantilla()
     {
-        inicializarComponentesPredeterminados();
+
     }
 
     public void inicializarComponentesPredeterminados()
@@ -95,7 +95,7 @@ public class Plantilla extends  JFrame {
         jpEditar.add(lblId);
 
         txtIdEditar = new JTextField("",SwingConstants.LEFT);
-        txtIdEditar.setBounds(150,60,200,20);
+        txtIdEditar.setBounds(165,60,200,20);
         txtIdEditar.setFont(new Font("Arial", Font.BOLD, 16));
         jpEditar.add(txtIdEditar);
 
@@ -133,7 +133,7 @@ public class Plantilla extends  JFrame {
         jpEliminar.add(lblId);
 
         txtIdEliminar = new JTextField("",SwingConstants.LEFT);
-        txtIdEliminar.setBounds(150,60,200,20);
+        txtIdEliminar.setBounds(165,60,200,20);
         txtIdEliminar.setFont(new Font("Arial", Font.BOLD, 16));
         jpEliminar.add(txtIdEliminar);
 
