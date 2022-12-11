@@ -220,9 +220,14 @@ public class Plantilla extends  JFrame {
         btnEditar.addActionListener(listenControles);
     }
 
-    public void addBtnBuscarListener(ActionListener listenControles)
+    public void addBtnBuscarEditarListener(ActionListener listenControles)
     {
         btnBuscarEditar.addActionListener(listenControles);
+    }
+
+    public void addBtnBuscarEliminarListener(ActionListener listenControles)
+    {
+        btnBuscarEliminar.addActionListener(listenControles);
     }
 
     public void addBtnEliminarListener(ActionListener listenControles)
