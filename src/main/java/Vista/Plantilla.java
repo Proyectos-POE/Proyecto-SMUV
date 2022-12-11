@@ -17,7 +17,8 @@ public class Plantilla extends  JFrame {
     protected JButton btnAgregar;
     protected JButton btnEditar;
     protected JTextField txtIdEliminar;
-    protected JButton btnBuscar;
+    protected JButton btnBuscarEditar;
+    protected JButton btnBuscarEliminar;
     protected JButton btnEliminar;
     protected JScrollPane jsTabla;
     protected JTable tabla;
@@ -28,10 +29,12 @@ public class Plantilla extends  JFrame {
     protected Color verde;
     protected Color amarillo;
     protected Color rojo;
+    protected String nombresColumnas[];
+    protected Object datosMatriz[][];
 
     public Plantilla()
     {
-
+        inicializarComponentesPredeterminados();
     }
 
     public void inicializarComponentesPredeterminados()
@@ -86,24 +89,23 @@ public class Plantilla extends  JFrame {
         lblInstrucciones.setFont(new Font("Arial", Font.BOLD, 16));
         jpEditar.add(lblInstrucciones);
 
-        lblId = new JLabel("ID", SwingConstants.RIGHT);
-        lblId.setBounds(10, 60, 100, 20);
+        lblId = new JLabel("ID:", SwingConstants.LEFT);
+        lblId.setBounds(60, 60, 100, 20);
         lblId.setFont(new Font("Arial", Font.BOLD, 16));
         jpEditar.add(lblId);
 
         txtIdEditar = new JTextField("",SwingConstants.LEFT);
-        txtIdEditar.setBounds(130,60,200,20);
+        txtIdEditar.setBounds(150,60,200,20);
         txtIdEditar.setFont(new Font("Arial", Font.BOLD, 16));
-        txtIdEditar.setBackground(verde);
         jpEditar.add(txtIdEditar);
 
-        btnBuscar = new JButton("BUSCAR");
-        btnBuscar.setBounds(340,60,80,20);
-        btnBuscar.setFont(new Font("Arial", Font.BOLD, 12));
-        btnBuscar.setBackground(Color.white);
-        btnBuscar.setFocusable(false);
-        btnBuscar.setBorder(null);
-        jpEditar.add(btnBuscar);
+        btnBuscarEditar = new JButton("BUSCAR");
+        btnBuscarEditar.setBounds(180,90,80,20);
+        btnBuscarEditar.setFont(new Font("Arial", Font.BOLD, 12));
+        btnBuscarEditar.setBackground(Color.white);
+        btnBuscarEditar.setFocusable(false);
+        btnBuscarEditar.setBorder(null);
+        jpEditar.add(btnBuscarEditar);
 
         btnEditar = new JButton("EDITAR");
         btnEditar.setBounds(155, 300, 125, 35);
@@ -125,17 +127,23 @@ public class Plantilla extends  JFrame {
         lblInstrucciones.setFont(new Font("Arial", Font.BOLD, 16));
         jpEliminar.add(lblInstrucciones);
 
-        lblId = new JLabel("ID", SwingConstants.RIGHT);
-        lblId.setBounds(10, 60, 100, 20);
+        lblId = new JLabel("ID:", SwingConstants.LEFT);
+        lblId.setBounds(60, 60, 100, 20);
         lblId.setFont(new Font("Arial", Font.BOLD, 16));
         jpEliminar.add(lblId);
 
         txtIdEliminar = new JTextField("",SwingConstants.LEFT);
-        txtIdEliminar.setBounds(130,60,200,20);
+        txtIdEliminar.setBounds(150,60,200,20);
         txtIdEliminar.setFont(new Font("Arial", Font.BOLD, 16));
-        txtIdEliminar.setBackground(verde);
-        //txtId.setForeground(Color.white);
         jpEliminar.add(txtIdEliminar);
+
+        btnBuscarEliminar = new JButton("BUSCAR");
+        btnBuscarEliminar.setBounds(180,90,80,20);
+        btnBuscarEliminar.setFont(new Font("Arial", Font.BOLD, 12));
+        btnBuscarEliminar.setBackground(Color.white);
+        btnBuscarEliminar.setFocusable(false);
+        btnBuscarEliminar.setBorder(null);
+        jpEliminar.add(btnBuscarEliminar);
 
         btnEliminar = new JButton("ELIMINAR");
         btnEliminar.setBounds(155, 300, 125, 35);
@@ -160,9 +168,6 @@ public class Plantilla extends  JFrame {
         jsTabla = new JScrollPane();
         jsTabla.setBounds(12,50,410,240);
         jpArchivo.add(jsTabla);
-
-        tabla = new JTable();
-        jsTabla.add(tabla);
 
         btnActualizar = new JButton("REFRESCAR");
         btnActualizar.setBounds(155,300,125,35);
@@ -215,9 +220,14 @@ public class Plantilla extends  JFrame {
         btnEditar.addActionListener(listenControles);
     }
 
-    public void addBtnBuscarListener(ActionListener listenControles)
+    public void addBtnBuscarEditarListener(ActionListener listenControles)
     {
-        btnBuscar.addActionListener(listenControles);
+        btnBuscarEditar.addActionListener(listenControles);
+    }
+
+    public void addBtnBuscarEliminarListener(ActionListener listenControles)
+    {
+        btnBuscarEliminar.addActionListener(listenControles);
     }
 
     public void addBtnEliminarListener(ActionListener listenControles)
@@ -228,5 +238,13 @@ public class Plantilla extends  JFrame {
     public void addBtnAtrasListener(ActionListener listenControles)
     {
         btnAtras.addActionListener(listenControles);
+    }
+
+    public void crearTabla()
+    {
+        tabla = new JTable(datosMatriz,nombresColumnas);
+        tabla.setEnabled(false);
+        jsTabla.add(tabla);
+        jpArchivo.add(jsTabla);
     }
 }
