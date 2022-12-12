@@ -132,4 +132,9 @@ public class VentanaMenu extends JFrame
     {
         btnMedicos.addActionListener(listenControles);
     }
+
+    public void addBtnServiciosListener(ActionListener listenControles)
+    {
+        btnServicios.addActionListener(listenControles);
+    }
 }
