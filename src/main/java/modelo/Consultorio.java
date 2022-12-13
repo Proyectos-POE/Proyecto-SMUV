@@ -38,8 +38,20 @@ public class Consultorio
     public String toString()
     {
         String auxDatos;
-        auxDatos = id + ";" + numeroConsultorio;
+        auxDatos = id + ";" + numeroConsultorio + ";" + getStringAsignado();
         return auxDatos;
+    }
+
+    public String getStringAsignado()
+    {
+        if(asignado)
+        {
+            return "Asignado";
+        }
+        else
+        {
+            return "No Asignado";
+        }
     }
 
     public boolean isAsignado()
