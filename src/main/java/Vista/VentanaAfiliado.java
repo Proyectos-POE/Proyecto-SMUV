@@ -43,8 +43,8 @@ public class VentanaAfiliado extends Plantilla
        // Componentes de la ventana Agregar
 
        
-       lblNIT = new JLabel("Documento: ", SwingConstants.LEFT);
-       lblNIT.setBounds(60, 90, 435, 20);
+       lblNIT = new JLabel("DOCUMENTO: ", SwingConstants.LEFT);
+       lblNIT.setBounds(20, 90, 435, 20);
        lblNIT.setFont(new Font("Arial", Font.BOLD, 16));
        jpAgregar.add(lblNIT);
        
@@ -54,8 +54,8 @@ public class VentanaAfiliado extends Plantilla
        limitarTxt(txtDocumentoAgregar, 10);
        jpAgregar.add(txtDocumentoAgregar);
        
-       lblNombre = new JLabel("Nombre: ", SwingConstants.LEFT);
-       lblNombre.setBounds(60, 120, 435, 20);
+       lblNombre = new JLabel("NOMBRE: ", SwingConstants.LEFT);
+       lblNombre.setBounds(20, 120, 435, 20);
        lblNombre.setFont(new Font("Arial", Font.BOLD, 16));
        jpAgregar.add(lblNombre);
        
@@ -64,8 +64,8 @@ public class VentanaAfiliado extends Plantilla
        txtNombreAgregar.setFont(new Font("Arial", Font.BOLD, 16));
        jpAgregar.add(txtNombreAgregar);
        
-       lblTelefono = new JLabel("Teléfono: ",SwingConstants.LEFT);
-       lblTelefono.setBounds(60, 150, 435, 20);
+       lblTelefono = new JLabel("TELÉFONO: ",SwingConstants.LEFT);
+       lblTelefono.setBounds(20, 150, 435, 20);
        lblTelefono.setFont(new Font("Arial", Font.BOLD, 16));
        jpAgregar.add(lblTelefono);
        
@@ -75,8 +75,8 @@ public class VentanaAfiliado extends Plantilla
        limitarTxt(txtTelefonoAgregar,10);
        jpAgregar.add(txtTelefonoAgregar);
        
-       lblCorreo = new JLabel("Correo: ", SwingConstants.LEFT);
-       lblCorreo.setBounds(60, 180, 435, 20);
+       lblCorreo = new JLabel("CORREO: ", SwingConstants.LEFT);
+       lblCorreo.setBounds(20, 180, 435, 20);
        lblCorreo.setFont(new Font("Arial", Font.BOLD, 16));
        jpAgregar.add(lblCorreo);
        
@@ -87,8 +87,8 @@ public class VentanaAfiliado extends Plantilla
        
        // Componentes de la ventana Editar
        
-       lblNIT = new JLabel("Documento: ", SwingConstants.LEFT);
-       lblNIT.setBounds(60, 120, 435, 20);
+       lblNIT = new JLabel("DOCUMENTO: ", SwingConstants.LEFT);
+       lblNIT.setBounds(20, 120, 435, 20);
        lblNIT.setFont(new Font("Arial", Font.BOLD, 16));
        jpEditar.add(lblNIT);
        
@@ -99,7 +99,7 @@ public class VentanaAfiliado extends Plantilla
        jpEditar.add(txtDocumentoEditar);
        
        lblNombre = new JLabel("Nombre: ", SwingConstants.LEFT);
-       lblNombre.setBounds(60, 150, 435, 20);
+       lblNombre.setBounds(20, 150, 435, 20);
        lblNombre.setFont(new Font("Arial", Font.BOLD, 16));
        jpEditar.add(lblNombre);
        
@@ -108,8 +108,8 @@ public class VentanaAfiliado extends Plantilla
        txtNombreEditar.setFont(new Font("Arial", Font.BOLD, 16));
        jpEditar.add(txtNombreEditar);
        
-       lblTelefono = new JLabel("Teléfono: ",SwingConstants.LEFT);
-       lblTelefono.setBounds(60, 180, 435, 20);
+       lblTelefono = new JLabel("TELÉFONO: ",SwingConstants.LEFT);
+       lblTelefono.setBounds(20, 180, 435, 20);
        lblTelefono.setFont(new Font("Arial", Font.BOLD, 16));
        jpEditar.add(lblTelefono);
        
@@ -119,8 +119,8 @@ public class VentanaAfiliado extends Plantilla
        limitarTxt(txtTelefonoEditar, 10);
        jpEditar.add(txtTelefonoEditar);
        
-       lblCorreo = new JLabel("Correo: ", SwingConstants.LEFT);
-       lblCorreo.setBounds(60, 210, 435, 20);
+       lblCorreo = new JLabel("CORREO: ", SwingConstants.LEFT);
+       lblCorreo.setBounds(20, 210, 435, 20);
        lblCorreo.setFont(new Font("Arial", Font.BOLD, 16));
        jpEditar.add(lblCorreo);
        
@@ -131,8 +131,8 @@ public class VentanaAfiliado extends Plantilla
        
        // Componentes de la ventana Eliminar
        
-       lblNIT = new JLabel("Documento: ", SwingConstants.LEFT);
-       lblNIT.setBounds(60, 120, 435, 20);
+       lblNIT = new JLabel("DOCUMENTO: ", SwingConstants.LEFT);
+       lblNIT.setBounds(20, 120, 435, 20);
        lblNIT.setFont(new Font("Arial", Font.BOLD, 16));
        jpEliminar.add(lblNIT);
        
@@ -142,8 +142,8 @@ public class VentanaAfiliado extends Plantilla
        limitarTxt(txtDocumentoEliminar, 10);
        jpEliminar.add(txtDocumentoEliminar);
        
-       lblNombre = new JLabel("Nombre: ", SwingConstants.LEFT);
-       lblNombre.setBounds(60, 150, 435, 20);
+       lblNombre = new JLabel("NOMBRE: ", SwingConstants.LEFT);
+       lblNombre.setBounds(20, 150, 435, 20);
        lblNombre.setFont(new Font("Arial", Font.BOLD, 16));
        jpEliminar.add(lblNombre);
        
@@ -152,8 +152,8 @@ public class VentanaAfiliado extends Plantilla
        txtNombreEliminar.setFont(new Font("Arial", Font.BOLD, 16));
        jpEliminar.add(txtNombreEliminar);
        
-       lblTelefono = new JLabel("Teléfono: ",SwingConstants.LEFT);
-       lblTelefono.setBounds(60, 180, 435, 20);
+       lblTelefono = new JLabel("TELÉFONO: ",SwingConstants.LEFT);
+       lblTelefono.setBounds(20, 180, 435, 20);
        lblTelefono.setFont(new Font("Arial", Font.BOLD, 16));
        jpEliminar.add(lblTelefono);
        
@@ -163,8 +163,8 @@ public class VentanaAfiliado extends Plantilla
        limitarTxt(txtTelefonoEliminar, 10);
        jpEliminar.add(txtTelefonoEliminar);
        
-       lblCorreo = new JLabel("Correo: ", SwingConstants.LEFT);
-       lblCorreo.setBounds(60, 210, 435, 20);
+       lblCorreo = new JLabel("CORREO: ", SwingConstants.LEFT);
+       lblCorreo.setBounds(20, 210, 435, 20);
        lblCorreo.setFont(new Font("Arial", Font.BOLD, 16));
        jpEliminar.add(lblCorreo);
        
@@ -183,12 +183,7 @@ public class VentanaAfiliado extends Plantilla
         return Integer.parseInt(txtDocumentoAgregar.getText());
     }
 
-    public int getTxtIDAgregar() 
-    {
-        return Integer.parseInt(txtIDAgregar.getText());
-    }
-
-    public String getTxtNombreAgregar() 
+       public String getTxtNombreAgregar() 
     {
         return String.valueOf(txtNombreAgregar);
     }
@@ -203,17 +198,7 @@ public class VentanaAfiliado extends Plantilla
         return String.valueOf(txtCorreoAgregar);
     }
 
-    public int getTxtIDEditar() 
-    {
-        return Integer.parseInt(txtIDEditar.getText());
-    }
-
-    public int getTxtIDEliminar() 
-    {
-        return Integer.parseInt(txtIDEliminar.getText());
-    }
-
-    public int getTxtDocumentoEditar() 
+        public int getTxtDocumentoEditar() 
     {
         return Integer.parseInt(txtDocumentoEditar.getText());
     }
