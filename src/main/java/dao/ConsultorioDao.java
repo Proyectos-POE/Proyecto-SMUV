@@ -6,7 +6,7 @@ import java.util.ArrayList;
 
 public class ConsultorioDao
 {
-    private ArrayList<Consultorio> consultorios;
+    private final ArrayList<Consultorio> consultorios;
 
     public ConsultorioDao()
     {
