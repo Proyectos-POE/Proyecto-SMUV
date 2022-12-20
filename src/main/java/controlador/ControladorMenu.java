@@ -30,21 +30,18 @@ public class ControladorMenu
             {
                 ventanaMenu.dispose();
                 VentanaAfiliado ventanaAfiliado = new VentanaAfiliado();
-                //Conexion conexionAfiliado = new Conexion();
                 //ControladorAfiliado controladorAfiliado = new ControladorAfiliado(auxServicioMedicoUv,ventanaAfiliado,conexionAfiliado);
             }
             if (e.getActionCommand().equalsIgnoreCase("<html><p style=\"text-align:center\">GESTIONAR</p><p style=\"text-align:center\">CONSULTORIO</p></html>"))
             {
                 ventanaMenu.dispose();
                 VentanaConsultorio ventanaConsultorio = new VentanaConsultorio();
-                Conexion conexionConsultorio = new Conexion();
                 ControladorConsultorio controladorConsultorio = new ControladorConsultorio(servicioMedicoUV,ventanaConsultorio);
             }
             if (e.getActionCommand().equalsIgnoreCase("<html><p style=\"text-align:center\">GESTIONAR</p><p style=\"text-align:center\">CITAS</p></html>"))
             {
                 ventanaMenu.dispose();
                 VentanaCita ventanaCita = new VentanaCita();
-                //Conexion conexionCita = new Conexion();
                 //ControaldorCita controladorCita = new controladorCita(servicioMedicoUV,ventanaCita,conexionCita);
             }
             if (e.getActionCommand().equalsIgnoreCase("<html><p style=\"text-align:center\">GESTIONAR</p><p style=\"text-align:center\">MEDICOS</p></html>"))
@@ -57,14 +54,12 @@ public class ControladorMenu
             {
                 ventanaMenu.dispose();
                 VentanaServicio ventanaServicio = new VentanaServicio();
-                //Conexion conexionConsultorio = new Conexion();
                 //ControladorConsultorio controladorConsultorio = new ControladorConsultorio(servicioMedicoUV,ventanaConsultorio,conexionConsultorio);
             }
             if (e.getActionCommand().equalsIgnoreCase("<html><p style=\"text-align:center\">BACKUP Y</p><p style=\"text-align:center\">RESTAURAR</p></html>"))
             {
                 ventanaMenu.dispose();
                 VentanaBackUp ventanaBackUp = new VentanaBackUp();
-                //Conexion conexionConsultorio = new Conexion();
                 //ControladorConsultorio controladorConsultorio = new ControladorConsultorio(servicioMedicoUV,ventanaConsultorio,conexionConsultorio);
             }
 
