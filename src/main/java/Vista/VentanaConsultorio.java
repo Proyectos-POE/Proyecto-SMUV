@@ -74,6 +74,25 @@ public class VentanaConsultorio extends Plantilla
         txtNumeroEditar.setEnabled(false);
     }
 
+    public void activarControlesEliminar()
+    {
+        txtNumeroEliminar.setEnabled(true);
+    }
+
+    public void desactivarControlesEliminar()
+    {
+        txtNumeroEliminar.setEditable(false);
+    }
+
+    public void manejarTextFieldIdEditar(boolean estado)
+    {
+        txtIdEditar.setEnabled(estado);
+    }
+
+    public void manejarTextFieldIdEliminar(boolean estado)
+    {
+        txtIdEliminar.setEnabled(estado);
+    }
     //getters
     public String getNumeroAgregar()
     {

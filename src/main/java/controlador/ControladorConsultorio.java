@@ -179,12 +179,14 @@ public class ControladorConsultorio
                         //escribirConsultorios();
                         ventanaConsultorio.setTxtNumeroEliminar("");
                         ventanaConsultorio.setIdEliminar("");
+                        ventanaConsultorio.manejarTextFieldIdElimnar(true);
                     }
                     else
                     {
                         ventanaConsultorio.mostrarMensaje("Consultorio eliminado sin exito");
                         ventanaConsultorio.setTxtNumeroEliminar("");
                         ventanaConsultorio.setIdEliminar("");
+                        ventanaConsultorio.manejarTextFieldIdElimnar(true);
                     }
                 }
                 else
@@ -240,6 +242,7 @@ public class ControladorConsultorio
                         ventanaConsultorio.setTxtNumeroEditar("");
                         ventanaConsultorio.setIdEditar("");
                         ventanaConsultorio.desactivarControlesEditar();
+                        ventanaConsultorio.manejarTextFieldIdEditar(true);
                     }
                     else
                     {
@@ -247,6 +250,7 @@ public class ControladorConsultorio
                         ventanaConsultorio.setTxtNumeroEditar("");
                         ventanaConsultorio.setIdEditar("");
                         //ventanaConsultorio.desactivarControlesEditar();
+                        ventanaConsultorio.manejarTextFieldIdEditar(true);
                     }
                 }
                 else
@@ -254,6 +258,7 @@ public class ControladorConsultorio
                     ventanaConsultorio.setTxtNumeroEditar("");
                     ventanaConsultorio.setIdEditar("");
                     ventanaConsultorio.desactivarControlesEditar();
+                    ventanaConsultorio.manejarTextFieldIdEditar(true);
                 }
             }
             else
@@ -262,6 +267,7 @@ public class ControladorConsultorio
                 ventanaConsultorio.setTxtNumeroEditar("");
                 ventanaConsultorio.setIdEditar("");
                 ventanaConsultorio.desactivarControlesEditar();
+                ventanaConsultorio.manejarTextFieldIdEditar(true);
             }
         }
         catch (Exception ex)
@@ -361,6 +367,8 @@ public class ControladorConsultorio
                         ventanaConsultorio.setTxtNumeroEliminar(Integer.toString(auxConsultorio.getNumeroConsultorio()));
                         ventanaConsultorio.manejarTextFieldIdElimnar(false);
                         ventanaConsultorio.manejarBtnCancelarEliminar(true);
+                        ventanaConsultorio.activarControlesEliminar();
+                        ventanaConsultorio.desactivarControlesEliminar();
                     }
                     else
                     {
@@ -386,7 +394,7 @@ public class ControladorConsultorio
             {
                 ventanaConsultorio.setIdEliminar("");
                 ventanaConsultorio.setTxtNumeroEliminar("");
-                ventanaConsultorio.manejarTextFieldIdElimnar(true);
+                ventanaConsultorio.manejarTextFieldIdEliminar(true);
                 ventanaConsultorio.manejarBtnCancelarEditar(false);
             }
         }
