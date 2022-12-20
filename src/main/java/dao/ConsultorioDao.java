@@ -10,7 +10,7 @@ public class ConsultorioDao
 
     public ConsultorioDao()
     {
-        consultorios = new ArrayList<Consultorio>();;
+        consultorios = new ArrayList<Consultorio>();
     }
 
     public Consultorio getConsultorio(int auxId)
