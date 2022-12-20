@@ -37,7 +37,7 @@ public class Servicio
     public String toString()
     {
         String auxDatos;
-        auxDatos = id + ";" + nombre;
+        auxDatos = nombre;
         return auxDatos;
     }
 }

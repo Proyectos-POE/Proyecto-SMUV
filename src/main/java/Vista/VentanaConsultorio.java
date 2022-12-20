@@ -25,12 +25,12 @@ public class VentanaConsultorio extends Plantilla
         //Panel Agregar
 
         lblNumero = new JLabel("NÚMERO: ", SwingConstants.LEFT);
-        lblNumero.setBounds(20, 60, 100, 20);
+        lblNumero.setBounds(200, 60, 100, 20);
         lblNumero.setFont(new Font("Arial", Font.BOLD, 16));
         jpAgregar.add(lblNumero);
 
         txtNumeroAgregar = new JTextField("",SwingConstants.LEFT);
-        txtNumeroAgregar.setBounds(165,60,200,20);
+        txtNumeroAgregar.setBounds(390,60,200,20);
         txtNumeroAgregar.setFont(new Font("Arial", Font.BOLD, 16));
         limitarTxt(txtNumeroAgregar,3);
         jpAgregar.add(txtNumeroAgregar);
@@ -38,12 +38,12 @@ public class VentanaConsultorio extends Plantilla
         //Panel Editar
 
         lblNumero = new JLabel("NÚMERO: ", SwingConstants.LEFT);
-        lblNumero.setBounds(20, 120, 120, 20);
+        lblNumero.setBounds(200, 120, 120, 20);
         lblNumero.setFont(new Font("Arial", Font.BOLD, 16));
         jpEditar.add(lblNumero);
 
         txtNumeroEditar= new JTextField("",SwingConstants.LEFT);
-        txtNumeroEditar.setBounds(165,120,200,20);
+        txtNumeroEditar.setBounds(390,120,200,20);
         txtNumeroEditar.setFont(new Font("Arial", Font.BOLD, 16));
         limitarTxt(txtNumeroEditar,3);
         txtNumeroEditar.setEnabled(false);
@@ -52,40 +52,53 @@ public class VentanaConsultorio extends Plantilla
         //Panel Eliminar
 
         lblNumero = new JLabel("NÚMERO: ", SwingConstants.LEFT);
-        lblNumero.setBounds(20, 120, 100, 20);
+        lblNumero.setBounds(200, 120, 100, 20);
         lblNumero.setFont(new Font("Arial", Font.BOLD, 16));
         jpEliminar.add(lblNumero);
 
         txtNumeroEliminar= new JTextField("",SwingConstants.LEFT);
-        txtNumeroEliminar.setBounds(165,120,200,20);
+        txtNumeroEliminar.setBounds(390,120,200,20);
         txtNumeroEliminar.setFont(new Font("Arial", Font.BOLD, 16));
         limitarTxt(txtNumeroEliminar,3);
         txtNumeroEliminar.setEnabled(false);
         jpEliminar.add(txtNumeroEliminar);
-
-        //Panel Archivo
-
-        String[] nombresColumnas = {"ID","NUMERO","ESTADO"};
     }
 
-    public int getNumeroAgregar()
+    public void activarControlesEditar()
     {
-        return Integer.parseInt(txtNumeroAgregar.getText());
+        txtNumeroEditar.setEnabled(true);
     }
 
-    public int getNumeroEditar()
+    public void desactivarControlesEditar()
     {
-        return Integer.parseInt(txtNumeroEditar.getText());
+        txtNumeroEditar.setEnabled(false);
     }
 
-    public void setTxtNumeroEditar(int numero)
+    //getters
+    public String getNumeroAgregar()
     {
-        //agregar
+        return txtNumeroAgregar.getText();
     }
 
-    public void setTxtNumeroEliminar(JTextField txtNumeroEliminar)
+    public String getNumeroEditar()
     {
-       //agregar
+        return txtNumeroEditar.getText();
     }
+
+    //setters
+    public void setTxtNumeroAgregar(String txt)
+    {
+        txtNumeroAgregar.setText(txt);
+    }
+    public void setTxtNumeroEditar(String txt)
+    {
+        txtNumeroEditar.setText(txt);
+    }
+
+    public void setTxtNumeroEliminar(String txt)
+    {
+        txtNumeroEliminar.setText(txt);
+    }
+
 }
 

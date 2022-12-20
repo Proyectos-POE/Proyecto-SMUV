@@ -26,7 +26,7 @@ public class VentanaMenu extends JFrame
     {
         setTitle("VENTANA-MENU");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setSize(625, 600);
+        setSize(1000, 600);
         setLocationRelativeTo(null);
         setResizable(false);
         setLayout(null);
@@ -37,10 +37,10 @@ public class VentanaMenu extends JFrame
         jpContenido = new JPanel();
         jpContenido.setLayout(null);
         jpContenido.setBackground(gris);
-        jpContenido.setBounds(0,0,625,600);
+        jpContenido.setBounds(0,0,1000,600);
 
         lblTitulo = new JLabel("SERVICIO DE SALUD UV", SwingConstants.CENTER);
-        lblTitulo.setBounds(0, 15, 625, 40);
+        lblTitulo.setBounds(0, 15, 1200, 40);
         lblTitulo.setFont(new Font("Arial", Font.BOLD, 40));
         jpContenido.add(lblTitulo);
 
@@ -135,6 +135,16 @@ public class VentanaMenu extends JFrame
 
     public void addBtnServiciosListener(ActionListener listenControles)
     {
+        btnServicios.addActionListener(listenControles);
+    }
+
+    public void addBtnListener(ActionListener listenControles)
+    {
+        btnAfiliado.addActionListener(listenControles);
+        btnBackUp.addActionListener(listenControles);
+        btnConsultorio.addActionListener(listenControles);
+        btnCitas.addActionListener(listenControles);
+        btnMedicos.addActionListener(listenControles);
         btnServicios.addActionListener(listenControles);
     }
 }
