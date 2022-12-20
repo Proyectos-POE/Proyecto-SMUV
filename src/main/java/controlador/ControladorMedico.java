@@ -18,11 +18,6 @@ public class ControladorMedico
         this.servicioMedicoUV = auxServicioMedicoUV;
         this.ventanaMedico = auxVentanaMedico;
 
-        Servicio s1 = new Servicio("hola");
-
-        servicioMedicoUV.agregarServicio(s1);
-
-
         rellenarConsultorios(servicioMedicoUV.getConsultorios(false));
         rellenarEspecialidades(servicioMedicoUV.getServicios());
         ventanaMedico.setNullBoxTipoDocumentoAgregar();
