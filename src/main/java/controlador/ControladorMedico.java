@@ -68,7 +68,7 @@ public class ControladorMedico
                 Medico auxMedico = new Medico(auxNombre,auxDocu,auxCorreo,auxTelefono,auxServicio,auxConsultorio);
                 if (servicioMedicoUV.agregarMedico(auxMedico))
                 {
-                    ventanaMedico.mostrarMensaje("Medico agregado con exito");
+                    ventanaMedico.mostrarMensaje("Medico agregado con exito"+mostrarDatos(auxMedico));
                     auxConsultorio.setAsignado(true);
                     ventanaMedico.limpiarDatosAgregar();
                     ventanaMedico.vaciarBoxConsultorio();
@@ -226,9 +226,9 @@ public class ControladorMedico
                     auxMedico.setTelefono(auxTelefono);
                     auxMedico.setConsultorio(auxConsultorio);
                     auxMedico.setEspecialidad(auxServicio);
-                    ventanaMedico.mostrarMensaje("Medico editado con exito");
                     auxConsultorio.setAsignado(true);
                     ventanaMedico.manejarTextFieldIdEditar(true);
+                    ventanaMedico.mostrarMensaje("Medico editado con exito"+mostrarDatos(auxMedico));
                     ventanaMedico.setIdEditar("");
                     ventanaMedico.limpiarDatosEditar();
                     ventanaMedico.desactivarControlesEditar();
@@ -479,5 +479,21 @@ public class ControladorMedico
                 ventanaMedico.mostrarMensaje("Rellene todos los campos");
             }
             return DatosValidos;
+    }
+    public String mostrarDatos(Medico medico)
+    {
+        String datos;
+        String auxId = String.valueOf(medico.getId());
+        String auxNombre = medico.getNombre();
+        String auxDocumento = String.valueOf(medico.getDocumento().getNumeroDocumento());
+        String auxTipoDocu = medico.getDocumento().getTipoDocumento();
+        String auxCorreo = medico.getCorreo();
+        String auxTelefono = String.valueOf(medico.getTelefono());
+        String auxConsultorio = String.valueOf(medico.getConsultorio().getNumeroConsultorio());
+        String auxEspecialidad = medico.getEspecialidad().getNombre();
+
+        datos = "\n"+"ID: "+auxId+"\n"+"Nombre: "+auxNombre+"\n"+"# documento: "+auxDocumento+"\n"+"Tipo Documento: "+auxTipoDocu+"\n"+"Correo: "+auxCorreo+"\n"+"Telefono: "+auxTelefono+"\n"+"# consultorio: "+auxConsultorio+"\n"+"Especialidad: "+auxEspecialidad;
+
+        return datos;
     }
 }
