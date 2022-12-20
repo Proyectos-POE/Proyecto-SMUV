@@ -35,11 +35,16 @@ public class Consultorio
         this.numeroConsultorio = auxNumeroConsultorio;
     }
 
-    public String toString()
+    public String toDatos()
     {
         String auxDatos;
         auxDatos = id + ";" + numeroConsultorio + ";" + getStringAsignado();
         return auxDatos;
+    }
+
+    public String toString()
+    {
+        return String.valueOf(numeroConsultorio);
     }
 
     public String getStringAsignado()
