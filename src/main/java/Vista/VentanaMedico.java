@@ -320,6 +320,7 @@ public class VentanaMedico extends Plantilla
         txtNombreEliminar.setEnabled(true);
         txtDocumentoEliminar.setEnabled(true);
         txtCorreoEliminar.setEnabled(true);
+        txtTipoDocumentoEliminar.setEnabled(true);
         txtTelefonoEliminar.setEnabled(true);
         txtEspecialidadEliminar.setEnabled(true);
         txtConsulEliminar.setEnabled(true);
@@ -327,12 +328,13 @@ public class VentanaMedico extends Plantilla
 
     public void desactivarControlesEliminar()
     {
-        txtNombreEliminar.setEnabled(false);
-        txtDocumentoEliminar.setEnabled(false);
-        txtCorreoEliminar.setEnabled(false);
-        txtTelefonoEliminar.setEnabled(false);
-        txtEspecialidadEliminar.setEnabled(false);
-        txtConsulEliminar.setEnabled(false);
+        txtNombreEliminar.setEditable(false);
+        txtDocumentoEliminar.setEditable(false);
+        txtTipoDocumentoEliminar.setEditable(false);
+        txtCorreoEliminar.setEditable(false);
+        txtTelefonoEliminar.setEditable(false);
+        txtEspecialidadEliminar.setEditable(false);
+        txtConsulEliminar.setEditable(false);
     }
 
     public void rellenarBoxConsultorio(Consultorio item)
