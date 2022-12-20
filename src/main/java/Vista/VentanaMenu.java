@@ -40,14 +40,14 @@ public class VentanaMenu extends JFrame
         jpContenido.setBounds(0,0,1000,600);
 
         lblTitulo = new JLabel("SERVICIO DE SALUD UV", SwingConstants.CENTER);
-        lblTitulo.setBounds(0, 15, 1200, 40);
+        lblTitulo.setBounds(0, 15, 990, 40);
         lblTitulo.setFont(new Font("Arial", Font.BOLD, 40));
         jpContenido.add(lblTitulo);
 
         btnConsultorio = new JButton();
         btnConsultorio.setBorder(null);
         btnConsultorio.setBackground(Color.gray.darker());
-        btnConsultorio.setBounds(60,125,180,70);
+        btnConsultorio.setBounds(250,125,180,70);
         btnConsultorio.setText("<html><p style=\"text-align:center\">GESTIONAR</p><p style=\"text-align:center\">CONSULTORIO</p></html>");
         btnConsultorio.setFont(new Font("Arial", Font.BOLD, 20));
         btnConsultorio.setForeground(Color.white);
@@ -57,7 +57,7 @@ public class VentanaMenu extends JFrame
         btnAfiliado = new JButton();
         btnAfiliado.setBorder(null);
         btnAfiliado.setBackground(Color.gray.darker());
-        btnAfiliado.setBounds(375,125,180,70);
+        btnAfiliado.setBounds(560,125,180,70);
         btnAfiliado.setText("<html><p style=\"text-align:center\">GESTIONAR</p><p style=\"text-align:center\">AFILIADO</p></html>");
         btnAfiliado.setFont(new Font("Arial", Font.BOLD, 20));
         btnAfiliado.setForeground(Color.white);
@@ -67,7 +67,7 @@ public class VentanaMenu extends JFrame
         btnCitas = new JButton();
         btnCitas.setBorder(null);
         btnCitas.setBackground(Color.gray.darker());
-        btnCitas.setBounds(60,325,180,70);
+        btnCitas.setBounds(250,325,180,70);
         btnCitas.setText("<html><p style=\"text-align:center\">GESTIONAR</p><p style=\"text-align:center\">CITAS</p></html>");
         btnCitas.setFont(new Font("Arial", Font.BOLD, 20));
         btnCitas.setForeground(Color.white);
@@ -77,7 +77,7 @@ public class VentanaMenu extends JFrame
         btnMedicos = new JButton();
         btnMedicos.setBorder(null);
         btnMedicos.setBackground(Color.gray.darker());
-        btnMedicos.setBounds(375,325,180,70);
+        btnMedicos.setBounds(560,325,180,70);
         btnMedicos.setText("<html><p style=\"text-align:center\">GESTIONAR</p><p style=\"text-align:center\">MEDICOS</p></html>");
         btnMedicos.setFont(new Font("Arial", Font.BOLD, 20));
         btnMedicos.setForeground(Color.white);
@@ -87,7 +87,7 @@ public class VentanaMenu extends JFrame
         btnServicios = new JButton();
         btnServicios.setBorder(null);
         btnServicios.setBackground(Color.gray.darker());
-        btnServicios.setBounds(215,225,180,70);
+        btnServicios.setBounds(405,225,180,70);
         btnServicios.setText("<html><p style=\"text-align:center\">GESTIONAR</p><p style=\"text-align:center\">SERVICIOS</p></html>");
         btnServicios.setFont(new Font("Arial", Font.BOLD, 20));
         btnServicios.setForeground(Color.white);
@@ -97,7 +97,7 @@ public class VentanaMenu extends JFrame
         btnBackUp = new JButton();
         btnBackUp.setBorder(null);
         btnBackUp.setBackground(rojo);
-        btnBackUp.setBounds(215,425,180,70);
+        btnBackUp.setBounds(405,425,180,70);
         btnBackUp.setText("<html><p style=\"text-align:center\">BACKUP Y</p><p style=\"text-align:center\">RESTAURAR</p></html>");
         btnBackUp.setFont(new Font("Arial", Font.BOLD, 20));
         btnBackUp.setForeground(Color.white);
