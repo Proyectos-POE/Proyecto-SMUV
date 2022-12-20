@@ -18,6 +18,9 @@ public class ControladorMedico
         this.servicioMedicoUV = auxServicioMedicoUV;
         this.ventanaMedico = auxVentanaMedico;
 
+        Servicio s1 = new Servicio("gey");
+        servicioMedicoUV.agregarServicio(s1);
+
         rellenarConsultorios(servicioMedicoUV.getConsultorios(false));
         rellenarEspecialidades(servicioMedicoUV.getServicios());
         ventanaMedico.setNullBoxTipoDocumentoAgregar();
@@ -234,6 +237,7 @@ public class ControladorMedico
                     ventanaMedico.desactivarControlesEditar();
                     ventanaMedico.vaciarBoxConsultorio();
                     rellenarConsultorios(servicioMedicoUV.getConsultorios(false));
+                    ventanaMedico.manejarBtnCancelarEditar(false);
                 }
                 else
                 {
@@ -340,6 +344,7 @@ public class ControladorMedico
                     ventanaMedico.vaciarBoxConsultorio();
                     rellenarConsultorios(servicioMedicoUV.getConsultorios());
                     ventanaMedico.manejarTextFieldIdElimnar(true);
+                    ventanaMedico.manejarBtnCancelarEliminar(false);
                 }
             }
         }

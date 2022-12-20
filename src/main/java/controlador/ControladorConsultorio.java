@@ -274,7 +274,6 @@ public class ControladorConsultorio
         {
             ventanaConsultorio.mostrarMensaje("Porfavor ingrese un numero entero");
             ventanaConsultorio.setTxtNumeroEditar("");
-            ventanaConsultorio.setIdEditar("");
             //ventanaConsultorio.desactivarControlesEditar();
         }
     }
