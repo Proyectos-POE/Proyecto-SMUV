@@ -249,8 +249,9 @@ public class ControladorConsultorio
                         ventanaConsultorio.mostrarMensaje("Consultorio editado sin exito");
                         ventanaConsultorio.setTxtNumeroEditar("");
                         ventanaConsultorio.setIdEditar("");
-                        //ventanaConsultorio.desactivarControlesEditar();
+                        ventanaConsultorio.desactivarControlesEditar();
                         ventanaConsultorio.manejarTextFieldIdEditar(true);
+                        ventanaConsultorio.manejarBtnCancelarEditar(false);
                     }
                 }
                 else
@@ -265,9 +266,11 @@ public class ControladorConsultorio
             {
                 ventanaConsultorio.mostrarMensaje("Consultorio encontrado sin exito");
                 ventanaConsultorio.setTxtNumeroEditar("");
-                ventanaConsultorio.setIdEditar("");
                 ventanaConsultorio.desactivarControlesEditar();
                 ventanaConsultorio.manejarTextFieldIdEditar(true);
+                ventanaConsultorio.setIdEditar("");
+                ventanaConsultorio.manejarBtnCancelarEditar(false);
+
             }
         }
         catch (Exception ex)
@@ -316,6 +319,10 @@ public class ControladorConsultorio
                     {
                         ventanaConsultorio.mostrarMensaje("Consultorio encontrado sin exito");
                         ventanaConsultorio.setIdEditar("");
+                        ventanaConsultorio.setTxtNumeroEditar("");
+                        ventanaConsultorio.desactivarControlesEditar();
+                        ventanaConsultorio.manejarTextFieldIdEditar(true);
+                        ventanaConsultorio.manejarBtnCancelarEditar(false);
                     }
                 }
                 catch (Exception ex)

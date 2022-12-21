@@ -18,7 +18,7 @@ public class ControladorMedico
         this.servicioMedicoUV = auxServicioMedicoUV;
         this.ventanaMedico = auxVentanaMedico;
 
-        Servicio s1 = new Servicio("gey");
+        Servicio s1 = new Servicio("hey");
         servicioMedicoUV.agregarServicio(s1);
 
         rellenarConsultorios(servicioMedicoUV.getConsultorios(false));
@@ -144,6 +144,9 @@ public class ControladorMedico
                     {
                         ventanaMedico.mostrarMensaje("Medico no encontrado");
                         ventanaMedico.setIdEditar("");
+                        ventanaMedico.limpiarDatosEditar();
+                        ventanaMedico.manejarTextFieldIdEditar(true);
+                        ventanaMedico.manejarBtnCancelarEditar(false);
                     }
                 }
                 catch (Exception ex)
@@ -206,50 +209,58 @@ public class ControladorMedico
         Consultorio auxConsultorio;
 
         auxMedico = servicioMedicoUV.getMedico(Integer.parseInt(ventanaMedico.getIdEditar()));
-        auxMedico.getConsultorio().setAsignado(false);
-        auxNombre = ventanaMedico.getTxtNombreEditar();
-        auxServicio = ventanaMedico.getBoxEspecialidadEditar();
-        auxConsultorio = ventanaMedico.getBoxConsulEditar();
-        auxCorreo = ventanaMedico.getTxtCorreoEditar();
-        auxMedico.setDocumento(null);
-        auxTipoDocumento = ventanaMedico.getBoxTipoDocumentoEditar();
-
-        try {
-            auxNumDocumento = Long.parseLong(ventanaMedico.getTxtDocumentoEditar());
-            auxTelefono = Integer.parseInt(ventanaMedico.getTxtTelefonoEditar());
-            auxDocumento = new Documento(auxTipoDocumento, auxNumDocumento);
-
-            if (comprobarDatosMedico(auxNombre, auxDocumento, auxCorreo, auxTelefono, auxServicio, auxConsultorio))
-            {
-                auxMedico.setDocumento(auxDocumento);
-                if (servicioMedicoUV.actualizarMedico(auxMedico))
-                {
-                    auxMedico.setNombre(auxNombre);
-                    auxMedico.setCorreo(auxCorreo);
-                    auxMedico.setTelefono(auxTelefono);
-                    auxMedico.setConsultorio(auxConsultorio);
-                    auxMedico.setEspecialidad(auxServicio);
-                    auxConsultorio.setAsignado(true);
-                    ventanaMedico.manejarTextFieldIdEditar(true);
-                    ventanaMedico.mostrarMensaje("Medico editado con exito"+mostrarDatos(auxMedico));
-                    ventanaMedico.setIdEditar("");
-                    ventanaMedico.limpiarDatosEditar();
-                    ventanaMedico.desactivarControlesEditar();
-                    ventanaMedico.vaciarBoxConsultorio();
-                    rellenarConsultorios(servicioMedicoUV.getConsultorios(false));
-                    ventanaMedico.manejarBtnCancelarEditar(false);
-                }
-                else
-                {
-                    ventanaMedico.mostrarMensaje("Medico Editado sin exito");
-                    ventanaMedico.limpiarDatosEditar();
-                    ventanaMedico.setIdEditar("");
-                }
-            }
-
-        }catch(NumberFormatException ex)
+        if(auxMedico!=null)
         {
-            ventanaMedico.mostrarMensaje("Por favor ingrese el numero de documento y telefono");
+            auxMedico.getConsultorio().setAsignado(false);
+            auxNombre = ventanaMedico.getTxtNombreEditar();
+            auxServicio = ventanaMedico.getBoxEspecialidadEditar();
+            auxConsultorio = ventanaMedico.getBoxConsulEditar();
+            auxCorreo = ventanaMedico.getTxtCorreoEditar();
+            auxMedico.setDocumento(null);
+            auxTipoDocumento = ventanaMedico.getBoxTipoDocumentoEditar();
+
+            try {
+                auxNumDocumento = Long.parseLong(ventanaMedico.getTxtDocumentoEditar());
+                auxTelefono = Integer.parseInt(ventanaMedico.getTxtTelefonoEditar());
+                auxDocumento = new Documento(auxTipoDocumento, auxNumDocumento);
+
+                if (comprobarDatosMedico(auxNombre, auxDocumento, auxCorreo, auxTelefono, auxServicio, auxConsultorio)) {
+                    auxMedico.setDocumento(auxDocumento);
+                    if (servicioMedicoUV.actualizarMedico(auxMedico)) {
+                        auxMedico.setNombre(auxNombre);
+                        auxMedico.setCorreo(auxCorreo);
+                        auxMedico.setTelefono(auxTelefono);
+                        auxMedico.setConsultorio(auxConsultorio);
+                        auxMedico.setEspecialidad(auxServicio);
+                        auxConsultorio.setAsignado(true);
+                        ventanaMedico.manejarTextFieldIdEditar(true);
+                        ventanaMedico.mostrarMensaje("Medico editado con exito" + mostrarDatos(auxMedico));
+                        ventanaMedico.setIdEditar("");
+                        ventanaMedico.limpiarDatosEditar();
+                        ventanaMedico.desactivarControlesEditar();
+                        ventanaMedico.vaciarBoxConsultorio();
+                        rellenarConsultorios(servicioMedicoUV.getConsultorios(false));
+                        ventanaMedico.manejarBtnCancelarEditar(false);
+                    } else {
+                        ventanaMedico.mostrarMensaje("Medico Editado sin exito");
+                        ventanaMedico.limpiarDatosEditar();
+                        ventanaMedico.setIdEditar("");
+                    }
+                }
+
+            } catch (NumberFormatException ex) {
+                ventanaMedico.mostrarMensaje("Por favor ingrese el numero de documento y telefono");
+            }
+        }
+        else
+        {
+            ventanaMedico.mostrarMensaje("Medico no encontrado");
+            ventanaMedico.activarControlesEditar();
+            ventanaMedico.limpiarDatosEditar();
+            ventanaMedico.setIdEditar("");
+            ventanaMedico.manejarTextFieldIdEditar(true);
+            ventanaMedico.desactivarControlesEditar();
+            ventanaMedico.manejarBtnCancelarEditar(false);
         }
     }
 
