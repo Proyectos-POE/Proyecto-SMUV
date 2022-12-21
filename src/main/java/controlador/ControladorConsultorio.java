@@ -175,7 +175,7 @@ public class ControladorConsultorio
                 {
                     if (servicioMedicoUV.eliminarConsultorio(auxConsultorio))
                     {
-                        ventanaConsultorio.mostrarMensaje("Consultorio eliminado con exito" + "\n" + auxConsultorio.getNumeroConsultorio());
+                        ventanaConsultorio.mostrarMensaje("Consultorio eliminado con exito");
                         //escribirConsultorios();
                         ventanaConsultorio.setTxtNumeroEliminar("");
                         ventanaConsultorio.setIdEliminar("");
@@ -243,6 +243,7 @@ public class ControladorConsultorio
                         ventanaConsultorio.setIdEditar("");
                         ventanaConsultorio.desactivarControlesEditar();
                         ventanaConsultorio.manejarTextFieldIdEditar(true);
+                        ventanaConsultorio.manejarBtnCancelarEditar(false);
                     }
                     else
                     {
@@ -256,10 +257,10 @@ public class ControladorConsultorio
                 }
                 else
                 {
-                    ventanaConsultorio.setTxtNumeroEditar("");
-                    ventanaConsultorio.setIdEditar("");
-                    ventanaConsultorio.desactivarControlesEditar();
-                    ventanaConsultorio.manejarTextFieldIdEditar(true);
+                    //ventanaConsultorio.setTxtNumeroEditar("");
+                    //ventanaConsultorio.setIdEditar("");
+                    //ventanaConsultorio.desactivarControlesEditar();
+                    //ventanaConsultorio.manejarTextFieldIdEditar(true);
                 }
             }
             else
