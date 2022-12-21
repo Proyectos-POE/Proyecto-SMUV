@@ -270,7 +270,6 @@ public class ControladorConsultorio
                 ventanaConsultorio.manejarTextFieldIdEditar(true);
                 ventanaConsultorio.setIdEditar("");
                 ventanaConsultorio.manejarBtnCancelarEditar(false);
-
             }
         }
         catch (Exception ex)
