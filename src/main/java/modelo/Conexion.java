@@ -2,17 +2,11 @@ package modelo;
 
 import java.io.*;
 import java.util.ArrayList;
-import java.util.NoSuchElementException;
 import java.util.StringTokenizer;
 
 public class Conexion implements Serializable
 {
     private File archivo;
-
-    public Conexion(File auxArchivo)
-    {
-        this.archivo = auxArchivo;
-    }
 
     public Conexion()
     {
@@ -50,17 +44,9 @@ public class Conexion implements Serializable
                 auxDatos.add(auxDatosFila);
             }
         }
-        catch (IOException e)
+        catch (IOException | NumberFormatException e)
         {
-            e.printStackTrace();
-        }
-        catch (NoSuchElementException e)
-        {
-            e.printStackTrace();
-        }
-        catch (NumberFormatException e)
-        {
-            e.printStackTrace();
+            System.out.println("Error a cargar las clases" + e.getMessage());
         }
         return auxDatos;
     }
@@ -71,18 +57,61 @@ public class Conexion implements Serializable
         {
             FileWriter salida = new FileWriter(archivo);
             PrintWriter salidaBuffer = new PrintWriter(salida);
-            for(int i = 0; i < auxDatos.size(); i++)
+            for (String auxDato : auxDatos)
             {
-               salidaBuffer.println(auxDatos.get(i));
+                salidaBuffer.println(auxDato);
             }
-            if ( salida != null)
-            {
-                salida.close();
-            }
+            salida.close();
         }
         catch (IOException e)
         {
-            e.printStackTrace();
+            System.out.println("Error a cargar las datos" + e.getMessage());
         }
+    }
+
+    public void escribirDatosBinario(ArrayList auxDatos)
+    {
+        try
+        {
+            FileOutputStream salida = new FileOutputStream(archivo);
+            ObjectOutputStream salidaObject = new ObjectOutputStream(salida);
+            for (Object auxDato : auxDatos)
+            {
+                salidaObject.writeObject(auxDato);
+            }
+            salida.close();
+        }
+        catch (IOException e)
+        {
+            System.out.println("Error a cargar las datos" + e.getMessage());
+        }
+    }
+
+    public ArrayList<Object> leerDatosBinario()
+    {
+        ArrayList<Object> auxDatos = new ArrayList<Object>();
+        try
+        {
+            FileInputStream entrada = new FileInputStream (archivo);
+            ObjectInputStream  entradaObjeto = new ObjectInputStream(entrada);
+            Object auxObjeto;
+            while (entrada.available() > 0)
+            {
+                auxObjeto = entradaObjeto.readObject();
+                if(auxObjeto != null)
+                {
+                    auxDatos.add(auxObjeto);
+                }
+                ;           }
+        }
+        catch (IOException e)
+        {
+            System.out.println("Error a cargar los datos" + e.getMessage());
+        }
+        catch (ClassNotFoundException e)
+        {
+            System.out.println("Error a cargar las clases" + e.getMessage());
+        }
+        return auxDatos;
     }
 }

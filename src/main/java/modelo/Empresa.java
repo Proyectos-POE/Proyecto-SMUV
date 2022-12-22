@@ -17,6 +17,7 @@ public class Empresa
     private final CitaDao citaDao;
     private final Horario horario;
     //private final Backup backup;
+    private final Conexion conexion;
 
     public Empresa(String auxNombre)
     {
@@ -28,6 +29,7 @@ public class Empresa
         this.citaDao = new CitaDao();
         this.horario = new Horario(LocalTime.of(7,0,0), Duration.ofMinutes(30));
         //this.backup = new Backup("src/main/java/archivos/", "src/main/java/backup/");
+        this.conexion = new Conexion();
     }
 
     //----------|Afiliados|----------//
@@ -227,5 +229,36 @@ public class Empresa
     public void restablecerDisponibilidad()
     {
         horario.restablecerDisponibilidad();
+    }
+
+    //----------Coenxion----------//
+    public File getArchivo()
+    {
+        return conexion.getArchivo();
+    }
+
+    public void setArchivo(File auxArchivo)
+    {
+        conexion.setArchivo(auxArchivo);
+    }
+
+    public ArrayList<ArrayList<String>> leerDatos()
+    {
+        return conexion.leerDatos();
+    }
+
+    public void escribirDatos(ArrayList<String> auxDatos)
+    {
+        conexion.escribirDatos(auxDatos);
+    }
+
+    public void escribirDatosBinario(ArrayList<Object> auxDatos)
+    {
+        conexion.escribirDatosBinario(auxDatos);
+    }
+
+    public ArrayList<Object> leerDatosBinario()
+    {
+        return  conexion.leerDatosBinario();
     }
 }
