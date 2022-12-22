@@ -1,9 +1,10 @@
 package modelo;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
-public class Fecha
+public class Fecha implements Serializable
 {
     private LocalDate fecha;
 

@@ -1,10 +1,11 @@
 package modelo;
 
+import java.io.Serializable;
 import java.time.Duration;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 
-public class Hora
+public class Hora implements Serializable
 {
     private int id;
     private LocalTime inicio;

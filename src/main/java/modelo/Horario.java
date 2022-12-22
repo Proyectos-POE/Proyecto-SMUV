@@ -1,10 +1,11 @@
 package modelo;
 
+import java.io.Serializable;
 import java.time.Duration;
 import java.time.LocalTime;
 import java.util.ArrayList;
 
-public class Horario
+public class Horario implements Serializable
 {
     private final ArrayList<Hora> horario;
     private final LocalTime horaInicial;

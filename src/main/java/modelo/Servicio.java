@@ -1,6 +1,8 @@
 package modelo;
 
-public class Servicio
+import java.io.Serializable;
+
+public class Servicio implements Serializable
 {
     private static int numero;
     private int id;
@@ -39,5 +41,10 @@ public class Servicio
         String auxDatos;
         auxDatos = nombre;
         return auxDatos;
+    }
+
+    public static void setNumeroServicio(int auxNumero)
+    {
+        Servicio.numero = auxNumero;
     }
 }

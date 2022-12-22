@@ -105,6 +105,7 @@ public class ControladorServicio
                 if(servicioMedicoUV.agregarServicio(auxServicios))
                 {
                    ventanaServicio.mostrarMensaje("Servicio agregado con éxito"+mostrarDatos(auxServicios));
+                   servicioMedicoUV.escribirServicios();
                    ventanaServicio.setTxtServicioAgregar("");
                 }
                 else
@@ -158,6 +159,7 @@ public class ControladorServicio
                     if(servicioMedicoUV.eliminarServicio(auxServicio))
                     {
                         ventanaServicio.mostrarMensaje("Servicio eliminado con éxito");
+                        servicioMedicoUV.escribirConsultorios();
                         ventanaServicio.setTxtServicioEliminar("");
                         ventanaServicio.setIdEliminar("");
                         ventanaServicio.manejarBtnCancelarEliminar(false);
@@ -229,10 +231,15 @@ public class ControladorServicio
                     {
                         ventanaServicio.mostrarMensaje("Servicio editado con exito");
                         ventanaServicio.manejarTextFieldIdEditar(true);
+                        servicioMedicoUV.escribirServicios();
                         ventanaServicio.setTxtServicioEditar("");
                         ventanaServicio.setIdEditar("");
                         ventanaServicio.desactivarControlesEditar();
                         ventanaServicio.manejarBtnCancelarEditar(false);
+                        if(comprobarAsignacion(auxServicio))
+                        {
+                            servicioMedicoUV.escribirMedicos();
+                        }
                     }
                     else
                     {
@@ -445,7 +452,7 @@ public class ControladorServicio
         {
             for(Medico medico: auxMedicos)
             {
-                if(medico.getEspecialidad() == auxServicio)
+                if(medico.getEspecialidad().getId() == auxServicio.getId())
                 {
                     asignado = true;
                     
@@ -455,9 +462,7 @@ public class ControladorServicio
         }
         return asignado;
     }
-            
-                
-    
+
     public String mostrarDatos(Servicio servicio)
     {
         String idServicio = String.valueOf(servicio.getId());

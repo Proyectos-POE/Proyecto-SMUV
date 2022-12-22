@@ -12,8 +12,9 @@ public class Main
 {
     public static void main(String[] args)
     {
-        Empresa e1 = new Empresa("Te amo bicho");
-        VentanaMenu p1 = new VentanaMenu();
-        ControladorMenu cm1 = new ControladorMenu(e1,p1);
+        Empresa servicioMedicoUV = new Empresa("servicioMedicoUV");
+        servicioMedicoUV.recuperarDatos();
+        VentanaMenu ventanaMenu = new VentanaMenu();
+        ControladorMenu controladorMenu = new ControladorMenu(servicioMedicoUV,ventanaMenu);
     }
 }

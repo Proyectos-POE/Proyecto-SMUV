@@ -1,6 +1,8 @@
 package modelo;
 
-public class Medico extends Persona
+import java.io.Serializable;
+
+public class Medico extends Persona implements Serializable
 {
     private static int numero;
     private int id;
@@ -53,7 +55,12 @@ public class Medico extends Persona
     public String toString()
     {
         String auxDatos;
-        auxDatos = id + ";" + nombre + ";" + documento.getTipoDocumento() + ";" + documento.getNumeroDocumento() + ";" + correo + ";" + telefono + ";" + especialidad.getId() + ";" + especialidad.getNombre() + ";" + consultorio.getId() + ";" + consultorio.getNumeroConsultorio();
+        auxDatos = id + ";" + nombre + ";" + documento.getTipoDocumento() + ";" + documento.getNumeroDocumento() + ";" + correo + ";" + telefono + ";" + especialidad.getId() + ";" + especialidad.getNombre() + ";" + consultorio.getId() + ";" + consultorio.getNombreConsultorio();
         return auxDatos;
+    }
+
+    public static void setNumeroMedico(int auxNumero)
+    {
+        Medico.numero = auxNumero;
     }
 }

@@ -104,6 +104,7 @@ public class ControladorAfiliado
                     if (servicioMedicoUV.agregarAfiliado(auxAfiliado))
                     {
                         ventanaAfiliado.mostrarMensaje("Afiliado agregado con éxito" + mostrarDatos(auxAfiliado));
+                        servicioMedicoUV.escribirAfiliados();
                         ventanaAfiliado.limpiarDatosAgregar();
                     }
                     else
@@ -189,6 +190,7 @@ public class ControladorAfiliado
                             auxAfiliado.setNombre(auxNombre);
                             auxAfiliado.setCorreo(auxCorreo);
                             auxAfiliado.setTelefono(auxTelefono);
+                            servicioMedicoUV.escribirAfiliados();
                             ventanaAfiliado.mostrarMensaje("Afiliado editado con éxito" + mostrarDatos(auxAfiliado));
                             ventanaAfiliado.manejarTextFieldIdEditar(true);
                             ventanaAfiliado.setIdEditar("");
@@ -328,6 +330,7 @@ public class ControladorAfiliado
                 if(servicioMedicoUV.eliminarAfiliado(auxAfiliado))
                 {
                     ventanaAfiliado.mostrarMensaje("Afiliado eliminado con éxito");
+                    servicioMedicoUV.escribirAfiliados();
                     ventanaAfiliado.limpiarDatosEliminar();
                     ventanaAfiliado.setIdEliminar("");
                     ventanaAfiliado.manejarTextFieldIdElimnar(true);

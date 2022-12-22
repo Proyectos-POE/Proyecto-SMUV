@@ -1,17 +1,13 @@
 package controlador;
 
 import Vista.VentanaMenu;
-import modelo.Conexion;
 import modelo.Consultorio;
 import modelo.Empresa;
 import Vista.VentanaConsultorio;
 
-import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.File;
 import java.util.ArrayList;
-import java.util.Scanner;
 
 public class ControladorConsultorio
 {
@@ -47,7 +43,7 @@ public class ControladorConsultorio
             auxId = auxConsultorios.get(fila).getId();
 
             int auxNumeroConsultorio;
-            auxNumeroConsultorio = auxConsultorios.get(fila).getNumeroConsultorio();
+            auxNumeroConsultorio = auxConsultorios.get(fila).getNombreConsultorio();
 
             String auxEstado;
             auxEstado = auxConsultorios.get(fila).getStringAsignado();
@@ -107,6 +103,7 @@ public class ControladorConsultorio
                     if (servicioMedicoUV.agregarConsultorio(auxConsultorio))
                     {
                         ventanaConsultorio.mostrarMensaje("Consultorio agregado con exito" + mostrarDatos(auxConsultorio));
+                        servicioMedicoUV.escribirConsultorios();
                         ventanaConsultorio.setTxtNumeroAgregar("");
                     }
                     else
@@ -180,6 +177,7 @@ public class ControladorConsultorio
                     if (servicioMedicoUV.eliminarConsultorio(auxConsultorio))
                     {
                         ventanaConsultorio.mostrarMensaje("Consultorio eliminado con exito");
+                        servicioMedicoUV.escribirConsultorios();
                         ventanaConsultorio.setTxtNumeroEliminar("");
                         ventanaConsultorio.setIdEliminar("");
                         ventanaConsultorio.manejarTextFieldIdElimnar(true);
@@ -240,16 +238,22 @@ public class ControladorConsultorio
                     intAuxNumeroConsultorio = Integer.parseInt(auxNumeroConsultorio);
                     if (comprobarNumeroConsultorio(intAuxNumeroConsultorio))
                     {
-                        auxConsultorio.setNumeroConsultorio(intAuxNumeroConsultorio);
+                        auxConsultorio.setNombreConsultorio(intAuxNumeroConsultorio);
 
                         if (servicioMedicoUV.actualizarConsultorio(auxConsultorio))
                         {
                             ventanaConsultorio.mostrarMensaje("Consultorio editado con exito" + mostrarDatos(auxConsultorio));
                             ventanaConsultorio.setTxtNumeroEditar("");
+                            servicioMedicoUV.escribirConsultorios();
                             ventanaConsultorio.setIdEditar("");
                             ventanaConsultorio.desactivarControlesEditar();
                             ventanaConsultorio.manejarTextFieldIdEditar(true);
                             ventanaConsultorio.manejarBtnCancelarEditar(false);
+                            if(auxConsultorio.isAsignado())
+                            {
+                                servicioMedicoUV.escribirMedicos();
+                                //espacio para citas.
+                            }
                         }
                         else
                         {
@@ -313,7 +317,7 @@ public class ControladorConsultorio
                     auxConsultorio = servicioMedicoUV.getConsultorio(intAuxNumeroId);
                     if(auxConsultorio != null)
                     {
-                        ventanaConsultorio.setTxtNumeroEditar(Integer.toString(auxConsultorio.getNumeroConsultorio()));
+                        ventanaConsultorio.setTxtNumeroEditar(Integer.toString(auxConsultorio.getNombreConsultorio()));
                         ventanaConsultorio.activarControlesEditar();
                         ventanaConsultorio.manejarTextFieldIdEditar(false);
                         ventanaConsultorio.manejarBtnCancelarEditar(true);
@@ -372,7 +376,7 @@ public class ControladorConsultorio
                     auxConsultorio = servicioMedicoUV.getConsultorio(intAuxNumeroId);
                     if(auxConsultorio != null)
                     {
-                        ventanaConsultorio.setTxtNumeroEliminar(Integer.toString(auxConsultorio.getNumeroConsultorio()));
+                        ventanaConsultorio.setTxtNumeroEliminar(Integer.toString(auxConsultorio.getNombreConsultorio()));
                         ventanaConsultorio.manejarTextFieldIdElimnar(false);
                         ventanaConsultorio.manejarBtnCancelarEliminar(true);
                         ventanaConsultorio.activarControlesEliminar();
@@ -418,7 +422,7 @@ public class ControladorConsultorio
         {
             for(Consultorio consultorio: auxConsultorios)
             {
-                if(consultorio.getNumeroConsultorio() == auxNumeroConsultorio)
+                if(consultorio.getNombreConsultorio() == auxNumeroConsultorio)
                 {
                     ventanaConsultorio.mostrarMensaje("El numero de consultorio ya fue agregado. Por favor digite otro numero");
                     auxValido = false;
@@ -458,7 +462,7 @@ public class ControladorConsultorio
     public String mostrarDatos(Consultorio consultorio)
     {
         String idConsul = String.valueOf(consultorio.getId());
-        String nConsul = String.valueOf(consultorio.getNumeroConsultorio());
+        String nConsul = String.valueOf(consultorio.getNombreConsultorio());
 
         String datos = "\nId: " + idConsul+"\nNumero: "+ nConsul;
         return datos;
