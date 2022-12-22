@@ -6,33 +6,36 @@ import javax.swing.*;
 
 public class VentanaServicio extends Plantilla 
 {
-    public JLabel lblServicio;
-    public JTextField txtServicioAgregar;
-    public JTextField txtServicioEditar;
-    public JTextField txtServicioEliminar;
+    private JLabel lblServicio;
+    private JTextField txtServicioAgregar;
+    private JTextField txtServicioEditar;
+    private JTextField txtServicioEliminar;
 
 
 
 
     public VentanaServicio()
     {
-      inicializarComponentesPredeterminados();
       inicializarNuevosComponentes();
     }
 
     public void inicializarNuevosComponentes()
     {
-
+       setTitle("VENTANA-SERVICIO"); 
+       inicializarComponentesPredeterminados();
+       
+       lblTitulo.setText("GESTIÓN DE SERVICIOS");
+       
        // Componentes de la ventana Agregar
 
 
        lblServicio = new JLabel("SERVICIO: ", SwingConstants.LEFT);
-       lblServicio.setBounds(20, 60, 435, 20);
+       lblServicio.setBounds(200, 60, 100, 20);
        lblServicio.setFont(new Font("Arial", Font.BOLD, 16));
        jpAgregar.add(lblServicio);
 
        txtServicioAgregar = new JTextField("", SwingConstants.LEFT);
-       txtServicioAgregar.setBounds(165, 60, 200, 20);
+       txtServicioAgregar.setBounds(390, 60, 200, 20);
        txtServicioAgregar.setFont(new Font("Arial", Font.BOLD, 16));
        jpAgregar.add(txtServicioAgregar);
 
@@ -40,53 +43,77 @@ public class VentanaServicio extends Plantilla
        // Componentes de la ventana Editar
 
        lblServicio = new JLabel("SERVICIO: ", SwingConstants.LEFT);
-       lblServicio.setBounds(20, 120, 435, 20);
+       lblServicio.setBounds(200, 120, 120, 20);
        lblServicio.setFont(new Font("Arial", Font.BOLD, 16));
        jpEditar.add(lblServicio);
 
        txtServicioEditar = new JTextField("", SwingConstants.LEFT);
-       txtServicioEditar.setBounds(165, 120, 200, 20);
+       txtServicioEditar.setBounds(390, 120, 200, 20);
        txtServicioEditar.setFont(new Font("Arial", Font.BOLD, 16));
+       txtServicioEditar.setEnabled(false);
        jpEditar.add(txtServicioEditar);
 
 
        // Componentes de la ventana Eliminar
 
        lblServicio = new JLabel("SERVICIO: ", SwingConstants.LEFT);
-       lblServicio.setBounds(20, 120, 435, 20);
+       lblServicio.setBounds(200, 120, 100, 20);
        lblServicio.setFont(new Font("Arial", Font.BOLD, 16));
        jpEliminar.add(lblServicio);
 
        txtServicioEliminar = new JTextField("", SwingConstants.LEFT);
-       txtServicioEliminar.setBounds(165, 120, 200, 20);
+       txtServicioEliminar.setBounds(390, 120, 200, 20);
        txtServicioEliminar.setFont(new Font("Arial", Font.BOLD, 16));
+       txtServicioEliminar.setEnabled(false);
        jpEliminar.add(txtServicioEliminar);
 
-
-
-       //Componentes de la ventana Archivo
-
-       String[] nombresColumnas = {"ID", "SERVICIO"};
+    }
+    
+    public void activarControlesEditar()
+    {
+        txtServicioEditar.setEnabled(true);
+    }
+    
+    public void desactivarControlesEditar()
+    {
+        txtServicioEditar.setEnabled(false);
+    }
+    
+    public void activarControlesEliminar()
+    {
+        txtServicioEliminar.setEnabled(true);
+    }
+    
+    public void desactivarControlesEliminar()
+    {
+        txtServicioEliminar.setEditable(false);
+    }
+    //Getters
+    
+    public String getTxtServicioAgregar() 
+    {
+        return txtServicioAgregar.getText();
     }
 
-    public int getTxtServicioAgregar() 
+    public String getTxtServicioEditar() 
     {
-        return Integer.parseInt(txtServicioAgregar.getText());
+        return txtServicioEditar.getText();
+    }
+    
+    //Setters
+    
+    public void setTxtServicioAgregar(String txt)
+    {
+       txtServicioAgregar.setText(txt);
+    }
+    public void setTxtServicioEditar(String txt) 
+    {
+        txtServicioEditar.setText(txt);
     }
 
-    public int getTxtServicioEditar() 
+    public void setTxtServicioEliminar(String txt) 
     {
-        return Integer.parseInt(txtServicioEditar.getText());
-    }
-
-    public void setTxtServicioEditar(int txtServicioEditar) 
-    {
-
-    }
-
-    public void setTxtServicioEliminar(int txtServicioEliminar) 
-    {
-
+        txtServicioEliminar.setText(txt);
     }
 
 }
