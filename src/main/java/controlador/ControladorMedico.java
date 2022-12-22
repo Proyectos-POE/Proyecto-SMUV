@@ -36,7 +36,6 @@ public class ControladorMedico
         this.ventanaMedico.addBtnActualizarListener(new ListarMedicoListener());
     }
 
-
     class AgregarMedicoListener implements ActionListener
     {
         @Override
@@ -52,7 +51,6 @@ public class ControladorMedico
     private void AgregarMedico()
     {
         String auxNombre;
-        //Documento auxDocu;
         String auxCorreo;
         long auxTelefono;
         Servicio auxServicio;
@@ -62,29 +60,36 @@ public class ControladorMedico
         auxCorreo = ventanaMedico.getTxtCorreoAgregar();
         auxServicio = ventanaMedico.getBoxEspecialidadAgregar();
         auxConsultorio = ventanaMedico.getBoxConsulAgregar();
-        try {
+        try
+        {
 
             Documento auxDocu = new Documento(ventanaMedico.getBoxTipoDocumentoAgregar(), Long.parseLong(ventanaMedico.getTxtDocumentoAgregar()));
             auxTelefono = Long.parseLong(ventanaMedico.getTxtTelefonoAgregar());
-
-            if (comprobarDatosMedico(auxNombre, auxDocu, auxCorreo, auxTelefono, auxServicio, auxConsultorio))
+            if(Long.parseLong(ventanaMedico.getTxtDocumentoAgregar())>=100000 && auxTelefono>=100000)
             {
-                Medico auxMedico = new Medico(auxNombre,auxDocu,auxCorreo,auxTelefono,auxServicio,auxConsultorio);
-                if (servicioMedicoUV.agregarMedico(auxMedico))
+
+                if (comprobarDatosMedico(auxNombre, auxDocu, auxCorreo, auxTelefono, auxServicio, auxConsultorio))
                 {
-                    ventanaMedico.mostrarMensaje("Medico agregado con exito"+mostrarDatos(auxMedico));
-                    auxConsultorio.setAsignado(true);
-                    ventanaMedico.limpiarDatosAgregar();
-                    ventanaMedico.vaciarBoxConsultorio();
-                    rellenarConsultorios(servicioMedicoUV.getConsultorios(false));
-                }
-                else
-                {
-                    ventanaMedico.mostrarMensaje("No se pudo agregar el Medico");
-                    ventanaMedico.limpiarDatosAgregar();
+                    Medico auxMedico = new Medico(auxNombre, auxDocu, auxCorreo, auxTelefono, auxServicio, auxConsultorio);
+                    if (servicioMedicoUV.agregarMedico(auxMedico))
+                    {
+                        ventanaMedico.mostrarMensaje("Medico agregado con exito" + mostrarDatos(auxMedico));
+                        auxConsultorio.setAsignado(true);
+                        ventanaMedico.limpiarDatosAgregar();
+                        ventanaMedico.vaciarBoxConsultorio();
+                        rellenarConsultorios(servicioMedicoUV.getConsultorios(false));
+                    }
+                    else
+                    {
+                        ventanaMedico.mostrarMensaje("No se pudo agregar el Medico");
+                        ventanaMedico.limpiarDatosAgregar();
+                    }
                 }
             }
-
+            else
+            {
+                ventanaMedico.mostrarMensaje("Ingrese un numero de documento y un numero de telefono valido");
+            }
         }
         catch(NumberFormatException ex)
         {
@@ -232,42 +237,52 @@ public class ControladorMedico
             auxMedico.setDocumento(null);
             auxTipoDocumento = ventanaMedico.getBoxTipoDocumentoEditar();
 
-            try {
-                auxNumDocumento = Long.parseLong(ventanaMedico.getTxtDocumentoEditar());
-                auxTelefono = Long.parseLong(ventanaMedico.getTxtTelefonoEditar());
-                auxDocumento = new Documento(auxTipoDocumento, auxNumDocumento);
+                try
+                {
+                    auxNumDocumento = Long.parseLong(ventanaMedico.getTxtDocumentoEditar());
+                    auxTelefono = Long.parseLong(ventanaMedico.getTxtTelefonoEditar());
+                    auxDocumento = new Documento(auxTipoDocumento, auxNumDocumento);
 
-                if (comprobarDatosMedico(auxNombre, auxDocumento, auxCorreo, auxTelefono, auxServicio, auxConsultorio)) {
-                    auxMedico.setDocumento(auxDocumento);
-                    if (servicioMedicoUV.actualizarMedico(auxMedico)) {
-                        auxMedico.setNombre(auxNombre);
-                        auxMedico.setCorreo(auxCorreo);
-                        auxMedico.setTelefono(auxTelefono);
-                        auxMedico.setConsultorio(auxConsultorio);
-                        auxMedico.setEspecialidad(auxServicio);
-                        auxConsultorio.setAsignado(true);
-                        ventanaMedico.manejarTextFieldIdEditar(true);
-                        ventanaMedico.mostrarMensaje("Medico editado con exito" + mostrarDatos(auxMedico));
-                        ventanaMedico.setIdEditar("");
-                        ventanaMedico.limpiarDatosEditar();
-                        ventanaMedico.desactivarControlesEditar();
-                        ventanaMedico.vaciarBoxConsultorio();
-                        rellenarConsultorios(servicioMedicoUV.getConsultorios(false));
-                        ventanaMedico.manejarBtnCancelarEditar(false);
+                    if(auxNumDocumento>=100000 && auxTelefono>=100000)
+                    {
+
+                        if (comprobarDatosMedico(auxNombre, auxDocumento, auxCorreo, auxTelefono, auxServicio, auxConsultorio))
+                        {
+                            auxMedico.setDocumento(auxDocumento);
+                            if (servicioMedicoUV.actualizarMedico(auxMedico))
+                            {
+                                auxMedico.setNombre(auxNombre);
+                                auxMedico.setCorreo(auxCorreo);
+                                auxMedico.setTelefono(auxTelefono);
+                                auxMedico.setConsultorio(auxConsultorio);
+                                auxMedico.setEspecialidad(auxServicio);
+                                auxConsultorio.setAsignado(true);
+                                ventanaMedico.manejarTextFieldIdEditar(true);
+                                ventanaMedico.mostrarMensaje("Medico editado con exito" + mostrarDatos(auxMedico));
+                                ventanaMedico.setIdEditar("");
+                                ventanaMedico.limpiarDatosEditar();
+                                ventanaMedico.desactivarControlesEditar();
+                                ventanaMedico.vaciarBoxConsultorio();
+                                rellenarConsultorios(servicioMedicoUV.getConsultorios(false));
+                                ventanaMedico.manejarBtnCancelarEditar(false);
+                            }
+                            else
+                            {
+                                ventanaMedico.mostrarMensaje("No se pudo editar el medico");
+                                ventanaMedico.limpiarDatosEditar();
+                                ventanaMedico.setIdEditar("");
+                            }
+                        }
                     }
                     else
                     {
-                        ventanaMedico.mostrarMensaje("No se pudo editar el medico");
-                        ventanaMedico.limpiarDatosEditar();
-                        ventanaMedico.setIdEditar("");
+                        ventanaMedico.mostrarMensaje("Ingrese un numero de documento y un numero de telefono valido");
                     }
                 }
-
-            }
-            catch (NumberFormatException ex)
-            {
-                ventanaMedico.mostrarMensaje("Ingrese numeros enteros en los campos de documento y telefono");
-            }
+                catch (NumberFormatException ex)
+                {
+                    ventanaMedico.mostrarMensaje("Ingrese numeros enteros en los campos de documento y telefono");
+                }
         }
         else
         {
@@ -313,7 +328,7 @@ public class ControladorMedico
                         else
                         {
                             ventanaMedico.mostrarMensaje("Medico no econtrado");
-                            ventanaMedico.setIdEditar("");
+                            ventanaMedico.setIdEliminar("");
                         }
                     }
                     catch (Exception ex)

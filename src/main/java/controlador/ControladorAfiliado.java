@@ -95,20 +95,27 @@ public class ControladorAfiliado
         {
             Documento auxDocumento = new Documento(ventanaAfiliado.getBoxTipoDocumentoAgregar(), Long.parseLong(ventanaAfiliado.getTxtDocumentoAgregar()));
             auxTelefono = Long.parseLong(ventanaAfiliado.getTxtTelefonoAgregar());
-            
-            if (comprobarDatosAfiliado(auxNombre, auxDocumento, auxCorreo, auxTelefono))
+
+            if(Long.parseLong(ventanaAfiliado.getTxtDocumentoAgregar())>=100000 && auxTelefono>=100000)
             {
-                Afiliado auxAfiliado = new Afiliado(auxNombre, auxDocumento, auxCorreo, auxTelefono);
-                if(servicioMedicoUV.agregarAfiliado(auxAfiliado))
+                if (comprobarDatosAfiliado(auxNombre, auxDocumento, auxCorreo, auxTelefono))
                 {
-                    ventanaAfiliado.mostrarMensaje("Afiliado agregado con éxito"+mostrarDatos(auxAfiliado));
-                    ventanaAfiliado.limpiarDatosAgregar();
+                    Afiliado auxAfiliado = new Afiliado(auxNombre, auxDocumento, auxCorreo, auxTelefono);
+                    if (servicioMedicoUV.agregarAfiliado(auxAfiliado))
+                    {
+                        ventanaAfiliado.mostrarMensaje("Afiliado agregado con éxito" + mostrarDatos(auxAfiliado));
+                        ventanaAfiliado.limpiarDatosAgregar();
+                    }
+                    else
+                    {
+                        ventanaAfiliado.mostrarMensaje("No se pudo agregar el afiliado");
+                        ventanaAfiliado.limpiarDatosAgregar();
+                    }
                 }
-                else
-                {
-                    ventanaAfiliado.mostrarMensaje("No se pudo agregar el afiliado");
-                    ventanaAfiliado.limpiarDatosAgregar();
-                }
+            }
+            else
+            {
+                ventanaAfiliado.mostrarMensaje("Ingrese un numero de documento y de telefono valido");
             }
         }
         catch(NumberFormatException ex)
@@ -119,7 +126,6 @@ public class ControladorAfiliado
     
     class AgregarAfiliadoListener implements ActionListener
     {
-
         @Override
         public void actionPerformed(ActionEvent e) 
         {
@@ -139,7 +145,6 @@ public class ControladorAfiliado
     
     class AtrasAfiliadoListener implements ActionListener
     {
-
         @Override
         public void actionPerformed(ActionEvent e) 
         {
@@ -174,27 +179,34 @@ public class ControladorAfiliado
                 auxTelefono = Long.parseLong(ventanaAfiliado.getTxtTelefonoEditar());
                 auxDocumento = new Documento(auxTipoDocumento, auxNumDocumento);
 
-                if(comprobarDatosAfiliado(auxNombre, auxDocumento, auxCorreo, auxTelefono))
+                if(auxNumDocumento>=100000 && auxTelefono>=100000)
                 {
-                    auxAfiliado.setDocumento(auxDocumento);
-                    if(servicioMedicoUV.actualizarAfiliado(auxAfiliado))
+                    if (comprobarDatosAfiliado(auxNombre, auxDocumento, auxCorreo, auxTelefono))
                     {
-                        auxAfiliado.setNombre(auxNombre);
-                        auxAfiliado.setCorreo(auxCorreo);
-                        auxAfiliado.setTelefono(auxTelefono);
-                        ventanaAfiliado.mostrarMensaje("Afiliado editado con éxito"+mostrarDatos(auxAfiliado));
-                        ventanaAfiliado.manejarTextFieldIdEditar(true);
-                        ventanaAfiliado.setIdEditar("");
-                        ventanaAfiliado.limpiarDatosEditar();
-                        ventanaAfiliado.desactivarControlesEditar(); 
-                        ventanaAfiliado.manejarBtnCancelarEditar(false);
+                        auxAfiliado.setDocumento(auxDocumento);
+                        if (servicioMedicoUV.actualizarAfiliado(auxAfiliado))
+                        {
+                            auxAfiliado.setNombre(auxNombre);
+                            auxAfiliado.setCorreo(auxCorreo);
+                            auxAfiliado.setTelefono(auxTelefono);
+                            ventanaAfiliado.mostrarMensaje("Afiliado editado con éxito" + mostrarDatos(auxAfiliado));
+                            ventanaAfiliado.manejarTextFieldIdEditar(true);
+                            ventanaAfiliado.setIdEditar("");
+                            ventanaAfiliado.limpiarDatosEditar();
+                            ventanaAfiliado.desactivarControlesEditar();
+                            ventanaAfiliado.manejarBtnCancelarEditar(false);
+                        }
+                        else
+                        {
+                            ventanaAfiliado.mostrarMensaje("No se pudo editar el afiliado");
+                            ventanaAfiliado.limpiarDatosEditar();
+                            ventanaAfiliado.setIdEditar("");
+                        }
                     }
-                    else
-                    {
-                        ventanaAfiliado.mostrarMensaje("No se pudo editar el afiliado");
-                        ventanaAfiliado.limpiarDatosEditar();
-                        ventanaAfiliado.setIdEditar("");                    
-                    }
+                }
+                else
+                {
+                    ventanaAfiliado.mostrarMensaje("Ingrese un numero de documento y de telefono valido");
                 }
             }
             catch(NumberFormatException ex)
@@ -216,7 +228,6 @@ public class ControladorAfiliado
     
     class EditarAfiliadoListener implements ActionListener
     {
-
         @Override
         public void actionPerformed(ActionEvent e) 
         {
@@ -230,7 +241,6 @@ public class ControladorAfiliado
     
     class BuscarEditarListener implements ActionListener
     {
-
         @Override
         public void actionPerformed(ActionEvent e) 
         {
@@ -274,7 +284,6 @@ public class ControladorAfiliado
     
     class CancelarEditarListener implements ActionListener
     {
-
         @Override
         public void actionPerformed(ActionEvent e) 
         {
@@ -335,7 +344,6 @@ public class ControladorAfiliado
     
     class EliminarAfiliadoListener implements ActionListener
     {
-
         @Override
         public void actionPerformed(ActionEvent e) 
         {
@@ -389,7 +397,6 @@ public class ControladorAfiliado
     
     class CancelarEliminarListener implements ActionListener
     {
-
         @Override
         public void actionPerformed(ActionEvent e) 
         {

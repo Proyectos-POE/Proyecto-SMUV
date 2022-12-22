@@ -1,6 +1,8 @@
 package Vista;
 
+import com.toedter.calendar.JDateChooser;
 import java.awt.*;
+import java.awt.event.ActionListener;
 import java.awt.event.ItemListener;
 import javax.swing.*;
 import modelo.Afiliado;
@@ -34,6 +36,8 @@ public class VentanaCita extends Plantilla
     public JTextField txtFechaEliminar;
     public JTextField txtHoraEliminar;
     public JButton btnReiniciarAgregar;
+    public JButton btnReiniciarEditar;
+    public JDateChooser a;
     
     
     
@@ -112,7 +116,7 @@ public class VentanaCita extends Plantilla
        
        btnReiniciarAgregar = new JButton("REINICIAR");
        btnReiniciarAgregar.setBounds(337, 255, 125, 35);
-       btnReiniciarAgregar.setBackground(morado);
+       btnReiniciarAgregar.setBackground(azul);
        btnReiniciarAgregar.setForeground(Color.WHITE);
        btnReiniciarAgregar.setFocusable(false);
        btnReiniciarAgregar.setBorder(null);
@@ -184,7 +188,14 @@ public class VentanaCita extends Plantilla
        ((JLabel)boxHoraEditar.getRenderer()).setHorizontalAlignment(SwingConstants.CENTER);
        jpEditar.add(boxHoraEditar);
        
-       
+       btnReiniciarEditar = new JButton("REINICIAR");
+       btnReiniciarEditar.setBounds(337, 255, 125, 35);
+       btnReiniciarEditar.setBackground(azul);
+       btnReiniciarEditar.setForeground(Color.WHITE);
+       btnReiniciarEditar.setFocusable(false);
+       btnReiniciarEditar.setBorder(null);
+       btnReiniciarEditar.setFont(new Font("Arial", Font.BOLD, 16));
+       jpAgregar.add(btnReiniciarEditar);
        
        // Componentes de la ventana Eliminar
        
@@ -615,6 +626,16 @@ public class VentanaCita extends Plantilla
     public void addBoxHoraEditarListener(ItemListener listenerBox)
     {
         boxHoraAgregar.addItemListener(listenerBox);
+    }
+    
+    public void addBtnReiniciarAgregarListener(ActionListener listenControles)
+    {
+        btnReiniciarAgregar.addActionListener(listenControles);
+    }
+    
+    public void addBtnReiniciarEditarListener(ActionListener listenControles)
+    {
+        btnReiniciarEditar.addActionListener(listenControles);
     }
     
     public void rellenarBoxAfiliadosEditar(Afiliado item)
