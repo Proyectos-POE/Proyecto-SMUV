@@ -1,7 +1,13 @@
 package Vista;
 
 import java.awt.*;
+import java.awt.event.ItemListener;
 import javax.swing.*;
+import modelo.Afiliado;
+import modelo.Hora;
+import modelo.Horario;
+import modelo.Medico;
+import modelo.Servicio;
 
 
 public class VentanaCita extends Plantilla 
@@ -9,325 +15,645 @@ public class VentanaCita extends Plantilla
     public JLabel lblAfiliado;
     public JLabel lblMedico;
     public JLabel lblServicio;
-    public JLabel lblSitio;
+    public JLabel lblConsultorio;
     public JLabel lblFecha;
     public JLabel lblHora;
-    public JTextField txtAfiliadoAgregar;
-    public JTextField txtMedicoAgregar;
-    public JTextField txtServicioAgregar;
-    public JTextField txtSitioAgregar;
+    public JComboBox boxAfiliadoAgregar;
+    public JComboBox boxMedicoAgregar;
+    public JComboBox boxServicioAgregar;
     public JTextField txtFechaAgregar;
-    public JTextField txtHoraAgregar;
-    public JTextField txtAfiliadoEditar;
-    public JTextField txtMedicoEditar;
-    public JTextField txtServicioEditar;
-    public JTextField txtSitioEditar;
+    public JComboBox boxHoraAgregar;
+    public JComboBox boxAfiliadoEditar;
+    public JComboBox boxMedicoEditar;
+    public JComboBox boxServicioEditar;
     public JTextField txtFechaEditar;
-    public JTextField txtHoraEditar;
+    public JComboBox boxHoraEditar;
     public JTextField txtAfiliadoEliminar;
     public JTextField txtMedicoEliminar;
     public JTextField txtServicioEliminar;
-    public JTextField txtSitioEliminar;
     public JTextField txtFechaEliminar;
     public JTextField txtHoraEliminar;
+    public JButton btnReiniciarAgregar;
     
     
     
     
     public VentanaCita()
     {
-      inicializarComponentesPredeterminados();
       inicializarNuevosComponentes();
     }
     
     public void inicializarNuevosComponentes()
     {
-        
+       setTitle("VENTANA-CITAS");
+       inicializarComponentesPredeterminados();
+       lblTitulo.setText("GESTIÓN CITAS");
+
        // Componentes de la ventana Agregar
 
        
        lblAfiliado = new JLabel("AFILIADO: ", SwingConstants.LEFT);
-       lblAfiliado.setBounds(20, 60, 435, 20);
+       lblAfiliado.setBounds(200, 60, 135, 20);
        lblAfiliado.setFont(new Font("Arial", Font.BOLD, 16));
        jpAgregar.add(lblAfiliado);
        
-       txtAfiliadoAgregar = new JTextField("", SwingConstants.LEFT);
-       txtAfiliadoAgregar.setBounds(165, 60, 200, 20);
-       txtAfiliadoAgregar.setFont(new Font("Arial", Font.BOLD, 16));
-       jpAgregar.add(txtAfiliadoAgregar);
-       
-       lblMedico = new JLabel("MÉDICO: ", SwingConstants.LEFT);
-       lblMedico.setBounds(20, 90, 435, 20);
-       lblMedico.setFont(new Font("Arial", Font.BOLD, 16));
-       jpAgregar.add(lblMedico);
-       
-       txtMedicoAgregar = new JTextField("",SwingConstants.LEFT);
-       txtMedicoAgregar.setBounds(165, 90, 200, 20);
-       txtMedicoAgregar.setFont(new Font("Arial", Font.BOLD, 16));
-       jpAgregar.add(txtMedicoAgregar);
+       boxAfiliadoAgregar = new JComboBox();
+       boxAfiliadoAgregar.setBounds(390, 60, 200, 20);
+       boxAfiliadoAgregar.setFocusable(false);
+       ((JLabel)boxAfiliadoAgregar.getRenderer()).setHorizontalAlignment(SwingConstants.CENTER);
+       boxAfiliadoAgregar.setFont(new Font("Arial", Font.BOLD, 16));
+       jpAgregar.add(boxAfiliadoAgregar);
        
        lblServicio = new JLabel("SERVICIO: ",SwingConstants.LEFT);
-       lblServicio.setBounds(20, 120, 435, 20);
+       lblServicio.setBounds(200, 90, 130, 20);
        lblServicio.setFont(new Font("Arial", Font.BOLD, 16));
        jpAgregar.add(lblServicio);
        
-       txtServicioAgregar = new JTextField("", SwingConstants.LEFT);
-       txtServicioAgregar.setBounds(165, 120, 200, 20);
-       txtServicioAgregar.setFont(new Font("Arial", Font.BOLD, 16));
-       jpAgregar.add(txtServicioAgregar);
+       boxServicioAgregar = new JComboBox();
+       boxServicioAgregar.setBounds(390, 90, 200, 20);
+       boxServicioAgregar.setFocusable(false);
+       boxServicioAgregar.setFont(new Font("Arial", Font.BOLD, 16));
+       ((JLabel)boxServicioAgregar.getRenderer()).setHorizontalAlignment(SwingConstants.CENTER);
+       jpAgregar.add(boxServicioAgregar);
        
-       lblSitio = new JLabel("SITIO: ", SwingConstants.LEFT);
-       lblSitio.setBounds(20, 150, 435, 20);
-       lblSitio.setFont(new Font("Arial", Font.BOLD, 16));
-       jpAgregar.add(lblSitio);
+       lblMedico = new JLabel("MÉDICO: ", SwingConstants.LEFT);
+       lblMedico.setBounds(200, 120, 130, 20);
+       lblMedico.setFont(new Font("Arial", Font.BOLD, 16));
+       jpAgregar.add(lblMedico);
        
-       txtSitioAgregar = new JTextField("", SwingConstants.LEFT);
-       txtSitioAgregar.setBounds(165, 150, 200, 20);
-       txtSitioAgregar.setFont(new Font("Arial", Font.BOLD, 16));
-       jpAgregar.add(txtSitioAgregar);
+       boxMedicoAgregar = new JComboBox();
+       boxMedicoAgregar.setBounds(390, 120, 200, 20);
+       boxMedicoAgregar.setFocusable(false);
+       ((JLabel)boxMedicoAgregar.getRenderer()).setHorizontalAlignment(SwingConstants.CENTER);
+       boxMedicoAgregar.setFont(new Font("Arial", Font.BOLD, 16));
+       jpAgregar.add(boxMedicoAgregar);
        
        lblFecha = new JLabel("FECHA: ", SwingConstants.LEFT);
-       lblFecha.setBounds(20, 180, 435, 20);
+       lblFecha.setBounds(200, 150, 130, 20);
        lblFecha.setFont(new Font("Arial", Font.BOLD, 16));
        jpAgregar.add(lblFecha);
        
        txtFechaAgregar = new JTextField("", SwingConstants.LEFT);
-       txtFechaAgregar.setBounds(165, 180, 200, 20);
+       txtFechaAgregar.setBounds(390, 150, 200, 20);
        txtFechaAgregar.setFont(new Font("Arial", Font.BOLD, 16));
        jpAgregar.add(txtFechaAgregar);
        
        lblHora = new JLabel("HORA: ", SwingConstants.LEFT);
-       lblHora.setBounds(20, 210, 435, 20);
+       lblHora.setBounds(200, 180, 130, 20);
        lblHora.setFont(new Font("Arial", Font.BOLD, 16));
        jpAgregar.add(lblHora);
        
-       txtHoraAgregar = new JTextField("", SwingConstants.LEFT);
-       txtHoraAgregar.setBounds(165, 210, 200, 20);
-       txtHoraAgregar.setFont(new Font("Arial", Font.BOLD, 16));
-       jpAgregar.add(txtHoraAgregar);
+       boxHoraAgregar = new JComboBox();
+       boxHoraAgregar.setBounds(390, 180, 200, 20);
+       boxHoraAgregar.setFont(new Font("Arial", Font.BOLD, 16));
+       boxHoraAgregar.setFocusable(false);
+       ((JLabel)boxHoraAgregar.getRenderer()).setHorizontalAlignment(SwingConstants.CENTER);
+       jpAgregar.add(boxHoraAgregar);
+       
+       btnReiniciarAgregar = new JButton("REINICIAR");
+       btnReiniciarAgregar.setBounds(337, 255, 125, 35);
+       btnReiniciarAgregar.setBackground(morado);
+       btnReiniciarAgregar.setForeground(Color.WHITE);
+       btnReiniciarAgregar.setFocusable(false);
+       btnReiniciarAgregar.setBorder(null);
+       btnReiniciarAgregar.setFont(new Font("Arial", Font.BOLD, 16));
+       jpAgregar.add(btnReiniciarAgregar);
        
        // Componentes de la ventana Editar
        
        lblAfiliado = new JLabel("AFILIADO: ", SwingConstants.LEFT);
-       lblAfiliado.setBounds(20, 120, 435, 20);
+       lblAfiliado.setBounds(200, 120, 130, 20);
        lblAfiliado.setFont(new Font("Arial", Font.BOLD, 16));
        jpEditar.add(lblAfiliado);
        
-       txtAfiliadoEditar = new JTextField("", SwingConstants.LEFT);
-       txtAfiliadoEditar.setBounds(165, 120, 200, 20);
-       txtAfiliadoEditar.setFont(new Font("Arial", Font.BOLD, 16));
-       jpEditar.add(txtAfiliadoEditar);
-       
-       lblMedico = new JLabel("MÉDICO: ", SwingConstants.LEFT);
-       lblMedico.setBounds(20, 150, 435, 20);
-       lblMedico.setFont(new Font("Arial", Font.BOLD, 16));
-       jpEditar.add(lblMedico);
-       
-       txtMedicoEditar = new JTextField("",SwingConstants.LEFT);
-       txtMedicoEditar.setBounds(165, 150, 200, 20);
-       txtMedicoEditar.setFont(new Font("Arial", Font.BOLD, 16));
-       jpEditar.add(txtMedicoEditar);
+       boxAfiliadoEditar = new JComboBox();
+       boxAfiliadoEditar.setBounds(390, 120, 200, 20);
+       boxAfiliadoEditar.setFont(new Font("Arial", Font.BOLD, 16));
+       ((JLabel)boxAfiliadoEditar.getRenderer()).setHorizontalAlignment(SwingConstants.CENTER);
+       boxAfiliadoEditar.setFocusable(false);
+       boxAfiliadoEditar.setEnabled(false);
+       jpEditar.add(boxAfiliadoEditar);
        
        lblServicio = new JLabel("SERVICIO: ",SwingConstants.LEFT);
-       lblServicio.setBounds(20, 180, 435, 20);
+       lblServicio.setBounds(200, 150, 130, 20);
        lblServicio.setFont(new Font("Arial", Font.BOLD, 16));
        jpEditar.add(lblServicio);
        
-       txtServicioEditar = new JTextField("", SwingConstants.LEFT);
-       txtServicioEditar.setBounds(165, 180, 200, 20);
-       txtServicioEditar.setFont(new Font("Arial", Font.BOLD, 16));
-       jpEditar.add(txtServicioEditar);
+       boxServicioEditar = new JComboBox();
+       boxServicioEditar.setBounds(390, 150, 200, 20);
+       boxServicioEditar.setFont(new Font("Arial", Font.BOLD, 16));
+       boxServicioEditar.setFocusable(false);
+       ((JLabel)boxServicioEditar.getRenderer()).setHorizontalAlignment(SwingConstants.CENTER);
+       boxServicioEditar.setEnabled(false);
+       jpEditar.add(boxServicioEditar);
        
-       lblSitio = new JLabel("SITIO: ", SwingConstants.LEFT);
-       lblSitio.setBounds(20, 210, 435, 20);
-       lblSitio.setFont(new Font("Arial", Font.BOLD, 16));
-       jpEditar.add(lblSitio);
+       lblMedico = new JLabel("MÉDICO: ", SwingConstants.LEFT);
+       lblMedico.setBounds(200, 180, 130, 20);
+       lblMedico.setFont(new Font("Arial", Font.BOLD, 16));
+       jpEditar.add(lblMedico);
        
-       txtSitioEditar = new JTextField("", SwingConstants.LEFT);
-       txtSitioEditar.setBounds(165, 210, 200, 20);
-       txtSitioEditar.setFont(new Font("Arial", Font.BOLD, 16));
-       jpEditar.add(txtSitioEditar);
+       boxMedicoEditar = new JComboBox();
+       boxMedicoEditar.setBounds(390, 180, 200, 20);
+       boxMedicoEditar.setFont(new Font("Arial", Font.BOLD, 16));
+       ((JLabel)boxMedicoEditar.getRenderer()).setHorizontalAlignment(SwingConstants.CENTER);
+       boxMedicoEditar.setFocusable(false);
+       boxMedicoEditar.setEnabled(false);
+       jpEditar.add(boxMedicoEditar);
        
        lblFecha = new JLabel("FECHA: ", SwingConstants.LEFT);
-       lblFecha.setBounds(20, 240, 435, 20);
+       lblFecha.setBounds(200, 210, 130, 20);
        lblFecha.setFont(new Font("Arial", Font.BOLD, 16));
        jpEditar.add(lblFecha);
        
        txtFechaEditar = new JTextField("", SwingConstants.LEFT);
-       txtFechaEditar.setBounds(165, 240, 200, 20);
+       txtFechaEditar.setBounds(390, 210, 200, 20);
        txtFechaEditar.setFont(new Font("Arial", Font.BOLD, 16));
+       txtFechaEditar.setEnabled(false);
        jpEditar.add(txtFechaEditar);
        
        lblHora = new JLabel("HORA: ", SwingConstants.LEFT);
-       lblHora.setBounds(20, 270, 435, 20);
+       lblHora.setBounds(200, 240, 130, 20);
        lblHora.setFont(new Font("Arial", Font.BOLD, 16));
        jpEditar.add(lblHora);
        
-       txtHoraEditar = new JTextField("", SwingConstants.LEFT);
-       txtHoraEditar.setBounds(165, 270, 200, 20);
-       txtHoraEditar.setFont(new Font("Arial", Font.BOLD, 16));
-       jpEditar.add(txtHoraEditar);
+       boxHoraEditar = new JComboBox();
+       boxHoraEditar.setBounds(390, 240, 200, 20);
+       boxHoraEditar.setFont(new Font("Arial", Font.BOLD, 16));
+       boxHoraEditar.setEnabled(false);
+       boxHoraEditar.setFocusable(false);
+       ((JLabel)boxHoraEditar.getRenderer()).setHorizontalAlignment(SwingConstants.CENTER);
+       jpEditar.add(boxHoraEditar);
        
        
        
        // Componentes de la ventana Eliminar
        
        lblAfiliado = new JLabel("AFILIADO: ", SwingConstants.LEFT);
-       lblAfiliado.setBounds(20, 120, 435, 20);
+       lblAfiliado.setBounds(200, 120, 130, 20);
        lblAfiliado.setFont(new Font("Arial", Font.BOLD, 16));
        jpEliminar.add(lblAfiliado);
        
        txtAfiliadoEliminar = new JTextField("", SwingConstants.LEFT);
-       txtAfiliadoEliminar.setBounds(165, 120, 200, 20);
+       txtAfiliadoEliminar.setBounds(390, 120, 200, 20);
        txtAfiliadoEliminar.setFont(new Font("Arial", Font.BOLD, 16));
+       txtAfiliadoEliminar.setEnabled(false);
        jpEliminar.add(txtAfiliadoEliminar);
        
-       lblMedico = new JLabel("MÉDICO: ", SwingConstants.LEFT);
-       lblMedico.setBounds(20, 150, 435, 20);
-       lblMedico.setFont(new Font("Arial", Font.BOLD, 16));
-       jpEliminar.add(lblMedico);
-       
-       txtMedicoEliminar = new JTextField("",SwingConstants.LEFT);
-       txtMedicoEliminar.setBounds(165, 150, 200, 20);
-       txtMedicoEliminar.setFont(new Font("Arial", Font.BOLD, 16));
-       jpEliminar.add(txtMedicoEliminar);
-       
        lblServicio = new JLabel("SERVICIO: ",SwingConstants.LEFT);
-       lblServicio.setBounds(20, 180, 435, 20);
+       lblServicio.setBounds(200, 150, 130, 20);
        lblServicio.setFont(new Font("Arial", Font.BOLD, 16));
        jpEliminar.add(lblServicio);
        
        txtServicioEliminar = new JTextField("", SwingConstants.LEFT);
-       txtServicioEliminar.setBounds(165, 180, 200, 20);
+       txtServicioEliminar.setBounds(390, 150, 200, 20);
        txtServicioEliminar.setFont(new Font("Arial", Font.BOLD, 16));
+       txtServicioEliminar.setEnabled(false);
        jpEliminar.add(txtServicioEliminar);
        
-       lblSitio = new JLabel("SITIO: ", SwingConstants.LEFT);
-       lblSitio.setBounds(20, 210, 435, 20);
-       lblSitio.setFont(new Font("Arial", Font.BOLD, 16));
-       jpEliminar.add(lblSitio);
+       lblMedico = new JLabel("MÉDICO: ", SwingConstants.LEFT);
+       lblMedico.setBounds(200, 180, 130, 20);
+       lblMedico.setFont(new Font("Arial", Font.BOLD, 16));
+       jpEliminar.add(lblMedico);
        
-       txtSitioEliminar = new JTextField("", SwingConstants.LEFT);
-       txtSitioEliminar.setBounds(165, 210, 200, 20);
-       txtSitioEliminar.setFont(new Font("Arial", Font.BOLD, 16));
-       jpEliminar.add(txtSitioEliminar);
+       txtMedicoEliminar = new JTextField("",SwingConstants.LEFT);
+       txtMedicoEliminar.setBounds(390, 180, 200, 20);
+       txtMedicoEliminar.setFont(new Font("Arial", Font.BOLD, 16));
+       txtMedicoEliminar.setEnabled(false);
+       jpEliminar.add(txtMedicoEliminar);
        
        lblFecha = new JLabel("FECHA: ", SwingConstants.LEFT);
-       lblFecha.setBounds(20, 240, 435, 20);
+       lblFecha.setBounds(200, 210, 130, 20);
        lblFecha.setFont(new Font("Arial", Font.BOLD, 16));
        jpEliminar.add(lblFecha);
        
        txtFechaEliminar = new JTextField("", SwingConstants.LEFT);
-       txtFechaEliminar.setBounds(165, 240, 200, 20);
+       txtFechaEliminar.setBounds(390, 210, 200, 20);
        txtFechaEliminar.setFont(new Font("Arial", Font.BOLD, 16));
+       txtFechaEliminar.setEnabled(false);
        jpEliminar.add(txtFechaEliminar);
        
        lblHora = new JLabel("HORA: ", SwingConstants.LEFT);
-       lblHora.setBounds(20, 270, 435, 20);
+       lblHora.setBounds(200, 240, 130, 20);
        lblHora.setFont(new Font("Arial", Font.BOLD, 16));
        jpEliminar.add(lblHora);
        
        txtHoraEliminar = new JTextField("", SwingConstants.LEFT);
-       txtHoraEliminar.setBounds(165, 270, 200, 20);
+       txtHoraEliminar.setBounds(390, 240, 200, 20);
        txtHoraEliminar.setFont(new Font("Arial", Font.BOLD, 16));
+       txtHoraEliminar.setEnabled(false);
        jpEliminar.add(txtHoraEliminar);
        
-       //Componentes de la ventana Archivo
-       
-       String[] nombresColumnas = {"ID", "AFILIADO","MÉDICO", "SERVICIO", "SITIO", "FECHA", "HORA"};
     }
-
-    public JTextField getTxtAfiliadoAgregar() {
-        return txtAfiliadoAgregar;
-    }
-
-    public JTextField getTxtMedicoAgregar() {
-        return txtMedicoAgregar;
-    }
-
-    public JTextField getTxtServicioAgregar() {
-        return txtServicioAgregar;
-    }
-
-    public JTextField getTxtSitioAgregar() {
-        return txtSitioAgregar;
-    }
-
-    public JTextField getTxtFechaAgregar() {
-        return txtFechaAgregar;
-    }
-
-    public JTextField getTxtHoraAgregar() {
-        return txtHoraAgregar;
-    }
-
-    public JTextField getTxtAfiliadoEditar() {
-        return txtAfiliadoEditar;
-    }
-
-    public void setTxtAfiliadoEditar(JTextField txtAfiliadoEditar) {
-        this.txtAfiliadoEditar = txtAfiliadoEditar;
-    }
-
-    public JTextField getTxtMedicoEditar() {
-        return txtMedicoEditar;
-    }
-
-    public void setTxtMedicoEditar(JTextField txtMedicoEditar) {
-        this.txtMedicoEditar = txtMedicoEditar;
-    }
-
-    public JTextField getTxtServicioEditar() {
-        return txtServicioEditar;
-    }
-
-    public void setTxtServicioEditar(JTextField txtServicioEditar) {
-        this.txtServicioEditar = txtServicioEditar;
-    }
-
-    public JTextField getTxtSitioEditar() {
-        return txtSitioEditar;
-    }
-
-    public void setTxtSitioEditar(JTextField txtSitioEditar) {
-        this.txtSitioEditar = txtSitioEditar;
-    }
-
-    public JTextField getTxtFechaEditar() {
-        return txtFechaEditar;
-    }
-
-    public void setTxtFechaEditar(JTextField txtFechaEditar) {
-        this.txtFechaEditar = txtFechaEditar;
-    }
-
-    public JTextField getTxtHoraEditar() {
-        return txtHoraEditar;
-    }
-
-    public void setTxtHoraEditar(JTextField txtHoraEditar) {
-        this.txtHoraEditar = txtHoraEditar;
-    }
-
-    public void setTxtAfiliadoEliminar(JTextField txtAfiliadoEliminar) {
-        this.txtAfiliadoEliminar = txtAfiliadoEliminar;
-    }
-
-    public void setTxtServicioEliminar(JTextField txtServicioEliminar) {
-        this.txtServicioEliminar = txtServicioEliminar;
-    }
-
-    public void setTxtSitioEliminar(JTextField txtSitioEliminar) {
-        this.txtSitioEliminar = txtSitioEliminar;
-    }
-
-    public void setTxtFechaEliminar(JTextField txtFechaEliminar) {
-        this.txtFechaEliminar = txtFechaEliminar;
-    }
-
-    public void setTxtHoraEliminar(JTextField txtHoraEliminar) {
-        this.txtHoraEliminar = txtHoraEliminar;
-    }
-
     
+    //ACTIVAR Y DESACTIVAR PANEL AGREGAR
+    public void setEnabledAfiliadoAgregar(boolean a)
+    {
+        boxAfiliadoAgregar.setEnabled(a);
+    }
+    
+    public void setEnabledServicioAgregar(boolean a)
+    {
+        boxServicioAgregar.setEnabled(a);
+    }
+    
+    public void setEnabledMedicoAgregar(boolean a)
+    {
+        boxMedicoAgregar.setEnabled(a);
+    }
+    
+    public void setEnabledFechaAgregar(boolean a)
+    {
+        txtFechaAgregar.setEnabled(a);
+    }
+
+    public void setEnabledHoraAgregar(boolean a)
+    {
+        boxHoraAgregar.setEnabled(a);
+    }
+
+    //ACTIVAR Y DESACTIVAR PANEL EDITAR
+    public void setEnabledAfiliadoEditar(boolean a)
+    {
+        boxAfiliadoEditar.setEnabled(a);
+    }
+
+    public void setEnabledServicioEditar(boolean a)
+    {
+        boxServicioEditar.setEnabled(a);
+    }
+
+    public void setEnabledMedicoEditar(boolean a)
+    {
+        boxMedicoEditar.setEnabled(a);
+    }
+ 
+    public void setEnabledFechaEditar(boolean a)
+    {
+        txtFechaEditar.setEnabled(a);
+    }
+ 
+    public void setEnabledHoraEditar(boolean a)
+    {
+        boxHoraEditar.setEnabled(a);
+    }
+    
+    public void activarControlesEditar()
+    {
+        boxAfiliadoEditar.setEnabled(true);
+        boxMedicoEditar.setEnabled(true);
+        boxServicioEditar.setEnabled(true);
+        txtFechaEditar.setEnabled(true);
+        boxHoraEditar.setEnabled(true);
+    }
+    
+    public void desactivarControlesEditar()
+    {
+        boxAfiliadoEditar.setEnabled(false);
+        boxMedicoEditar.setEnabled(false);
+        boxServicioEditar.setEnabled(false);
+        txtFechaEditar.setEnabled(false);
+        boxHoraEditar.setEnabled(false);
+    }
+    
+    public void activarControlesEliminar()
+    {
+        txtAfiliadoEliminar.setEnabled(true);
+        txtMedicoEliminar.setEnabled(true);
+        txtServicioEliminar.setEnabled(true);
+        txtFechaEliminar.setEnabled(true);
+        txtHoraEliminar.setEnabled(true);
+    }
+    
+    public void desactivarControlesEliminar()
+    {
+        txtAfiliadoEliminar.setEditable(false);
+        txtMedicoEliminar.setEditable(false);
+        txtServicioEliminar.setEditable(false);
+        txtFechaEliminar.setEditable(false);
+        txtHoraEliminar.setEditable(false);
+    }
+    
+    public void limpiarDatosAgregar()
+    {
+        setNullBoxAfiliadoAgregar();
+        setNullBoxMedicoAgregar();
+        setNullBoxServicioAgregar();
+        setTxtFechaAgregar("");
+        setNullBoxHoraAgregar();
+    }
+
+    public void limpiarDatosEditar()
+    {
+        setNullBoxAfiliadoEditar();
+        setNullBoxMedicoEditar();
+        setNullBoxServicioEditar();
+        setTxtFechaEditar("");
+        setNullBoxHoraEditar();
+    }
+    
+    public void limpiarDatosEliminar()
+    {
+        setTxtAfiliadoEliminar("");
+        setTxtMedicoEliminar("");
+        setTxtServicioEliminar("");
+        setTxtFechaEliminar("");
+        setTxtHoraEliminar("");
+    }
+
+    //Getters
+    
+    public String getBoxAfiliadoAgregar()
+    {
+        return (String) boxAfiliadoAgregar.getSelectedItem();
+    }
+    
+    public String getBoxAfiliadoEditar()
+    {
+        return (String) boxAfiliadoEditar.getSelectedItem();
+    }
+    
+    public String getBoxMedicoAgregar()
+    {
+        return (String) boxMedicoAgregar.getSelectedItem();
+    }
+    
+    public String getBoxMedicoEditar()
+    {
+        return (String) boxMedicoEditar.getSelectedItem();
+    }
+    
+    public String getBoxServicioAgregar()
+    {
+         return (String) boxServicioAgregar.getSelectedItem();
+    }
+    
+    public String getTxtServicioEditar()
+    {
+        return (String) boxServicioEditar.getSelectedItem();
+    }
+    
+    public String getTxtFechaAgregar()
+    {
+        return txtFechaAgregar.getText();
+    }
+    
+    public String getTxtFechaEditar()
+    {
+        return txtFechaEditar.getText();
+    }
+    
+    public String getBoxHoraAgregar()
+    {
+        return (String) boxHoraAgregar.getSelectedItem();
+    }
+    
+    public String getTxtHoraEditar()
+    {
+        return (String) boxHoraEditar.getSelectedItem();
+    }
+    
+    //Setters
+
+    public void setBoxAfiliadoAgregar(Afiliado afiliado)
+    {
+       boxAfiliadoAgregar.setSelectedItem(afiliado);
+    }
+    
+    public void setNullBoxAfiliadoAgregar()
+    {
+        boxAfiliadoAgregar.setSelectedItem(null);
+    }
+
+    public void setBoxMedicoAgregar(Medico medico) 
+    {
+        boxMedicoAgregar.setSelectedItem(medico);
+    }
+    
+    public void setNullBoxMedicoAgregar()
+    {
+        boxMedicoAgregar.setSelectedItem(null);
+    }
+    
+    public void setBoxServicioAgregar(Servicio servicio)
+    {
+        boxServicioAgregar.setSelectedItem(servicio);
+    }
+
+    public void setNullBoxServicioAgregar()
+    {
+        boxServicioAgregar.setSelectedItem(null);
+    }
+
+    public void setTxtFechaAgregar(String txt) 
+    {
+        txtFechaAgregar.setText(txt);
+    }
+
+    public void setBoxHoraAgregar(Hora hora)
+    {
+        boxHoraAgregar.setSelectedItem(hora);
+    }
+    
+    public void setBoxNullHoraAgregar()
+    {
+        boxHoraAgregar.setSelectedItem(null);
+    }
+    
+    public void setNullBoxHoraAgregar()
+    {
+        boxHoraAgregar.setSelectedItem(null);
+    }
+
+    public void setBoxAfiliadoEditar(Afiliado afiliado) 
+    {
+        boxAfiliadoEditar.setSelectedItem(afiliado);
+    }
+    
+    public void setNullBoxAfiliadoEditar()
+    {
+        boxAfiliadoEditar.setSelectedItem(null);
+    }
+
+    public void setBoxMedicoEditar(Medico medico)
+    {
+        boxMedicoEditar.setSelectedItem(medico);
+    }
+    
+    public void setNullBoxMedicoEditar()
+    {
+        boxMedicoEditar.setSelectedItem(null);
+    }
+    
+    public void setBoxServicioEditar(Servicio servicio)
+    {
+        boxServicioEditar.setSelectedItem(servicio);
+    }
+    
+    public void setNullBoxServicioEditar() 
+    {
+        boxServicioEditar.setSelectedItem(null);
+    }
+    
+    public void setTxtFechaEditar(String txt) 
+    {
+        txtFechaEditar.setText(txt);
+    }
+    
+    public void setBoxHoraEditar(Hora hora)
+    {
+        boxHoraEditar.setSelectedItem(hora);
+    }
+    
+    public void setNullBoxHoraEditar()
+    {
+        boxHoraEditar.setSelectedItem(null);
+    }
+
+    public void setTxtAfiliadoEliminar(String txt) 
+    {
+        txtAfiliadoEliminar.setText(txt);
+    }
+
+    public void setTxtMedicoEliminar(String txt)
+    {
+        txtMedicoEliminar.setText(txt);
+    }
+
+    public void setTxtServicioEliminar(String txt) 
+    {
+        txtServicioEliminar.setText(txt);
+    }
+
+    public void setTxtFechaEliminar(String txt) 
+    {
+        txtFechaEliminar.setText(txt);
+    }
+
+    public void setTxtHoraEliminar(String txt) 
+    {
+        txtHoraEliminar.setText(txt);
+    }
+    
+    //PANEL AGREGAR
+    public void addBoxAfiliadoAgregarListener(ItemListener listenerBox)
+    {
+        boxAfiliadoAgregar.addItemListener(listenerBox);
+    }
+    
+    public void addBoxServicioAgregarListener(ItemListener listenerBox)
+    {
+        boxServicioAgregar.addItemListener(listenerBox);
+    }
+    
+    public void addBoxMedicoAgregarListener(ItemListener listenerBox)
+    {
+        boxMedicoAgregar.addItemListener(listenerBox);
+    }
+    
+    public void addBoxHoraAgregarListener(ItemListener listenerBox)
+    {
+        boxHoraAgregar.addItemListener(listenerBox);
+    }
+    
+    public void rellenarBoxAfiliadosAgregar(Afiliado item)
+    {
+        boxAfiliadoAgregar.addItem(item);
+    }
+    
+    public void rellenarBoxServiciosAgregar(Servicio item)
+    {
+        boxServicioAgregar.addItem(item);
+    }
+    
+    public void rellenarBoxMedicosAgregar(Medico item)
+    {
+        boxMedicoAgregar.addItem(item);
+    }
+    
+    public void rellenarBoxHorasAgregar(Hora item)
+    {
+        boxHoraAgregar.addItem(item);
+    }
+    
+    public void vaciarBoxAfiliadosAgregar()
+    {
+        boxAfiliadoAgregar.removeAllItems();
+    }
+    
+    public void vaciarBoxServiciosAgregar()
+    {
+        boxServicioAgregar.removeAllItems();
+    }
+    
+    public void vaciarBoxMedicosAgregar()
+    {
+        boxMedicoAgregar.removeAllItems();
+    }
+    
+    public void vaciarBoxHorasAgregar()
+    {
+        boxHoraAgregar.removeAllItems();
+    }
+    
+    //PANEL EDITAR
+    
+    public void addBoxAfiliadoEditarListener(ItemListener listenerBox)
+    {
+        boxAfiliadoEditar.addItemListener(listenerBox);
+    }
+    
+    public void addBoxServicioEditarListener(ItemListener listenerBox)
+    {
+        boxServicioEditar.addItemListener(listenerBox);
+    }
+    
+    public void addBoxMedicoEditarListener(ItemListener listenerBox)
+    {
+        boxMedicoEditar.addItemListener(listenerBox);
+    }
+    
+    public void addBoxHoraEditarListener(ItemListener listenerBox)
+    {
+        boxHoraAgregar.addItemListener(listenerBox);
+    }
+    
+    public void rellenarBoxAfiliadosEditar(Afiliado item)
+    {
+        boxAfiliadoAgregar.addItem(item);
+    }
+    
+    public void rellenarBoxServiciosEditar(Servicio item)
+    {
+        boxServicioAgregar.addItem(item);
+    }
+    
+    public void rellenarBoxMedicosEditar(Medico item)
+    {
+        boxMedicoAgregar.addItem(item);
+    }
+    
+    public void rellenarBoxHorasEditar(Hora item)
+    {
+        boxHoraAgregar.addItem(item);
+    }
+    
+    public void vaciarBoxAfiliadosEditar()
+    {
+        boxAfiliadoEditar.removeAllItems();
+    }
+    
+    public void vaciarBoxServiciosEditar()
+    {
+        boxServicioEditar.removeAllItems();
+    }
+    
+    public void vaciarBoxMedicosEditar()
+    {
+        boxMedicoEditar.removeAllItems();
+    }
+    
+    public void vaciarBoxHorasEditar()
+    {
+        boxHoraEditar.removeAllItems();
+    }
 }
