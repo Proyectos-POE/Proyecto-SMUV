@@ -30,8 +30,7 @@ public class ControladorServicio
        
         ventanaServicio.setVisible(true);
         ventanaServicio.setLocationRelativeTo(null);
-        
-        
+
         this.ventanaServicio.addBtnAgregarListener(new AgregarServicioListener());
         this.ventanaServicio.addBtnBuscarEditarListener(new BuscarEditarServicioListener());
         this.ventanaServicio.addBtnEditarListener(new EditarServicioListener());
@@ -41,7 +40,6 @@ public class ControladorServicio
         this.ventanaServicio.addBtnAtrasListener(new AtrasServicioListener());
         this.ventanaServicio.addBtnCancelarEditarListener(new CancelarEditarListener());
         this.ventanaServicio.addBtnCancelarEliminarListener(new CancelarEliminarListener());
-   
     }
     
     private Object[][] dataServicio(ArrayList <Servicio> auxServicios)
@@ -95,28 +93,34 @@ public class ControladorServicio
     {
         String auxServicio;
         
-        try
-        {
-            auxServicio = ventanaServicio.getTxtServicioAgregar();
-            
-            if(comprobarNombreServicios(auxServicio))
+        try {
+            if (ventanaServicio.getTxtServicioAgregar().length() > 0)
             {
-                Servicio auxServicios = new Servicio(auxServicio);
-                if(servicioMedicoUV.agregarServicio(auxServicios))
+                auxServicio = ventanaServicio.getTxtServicioAgregar();
+
+                if (comprobarNombreServicios(auxServicio))
                 {
-                   ventanaServicio.mostrarMensaje("Servicio agregado con éxito"+mostrarDatos(auxServicios));
-                   servicioMedicoUV.escribirServicios();
-                   ventanaServicio.setTxtServicioAgregar("");
+                    Servicio auxServicios = new Servicio(auxServicio);
+                    if (servicioMedicoUV.agregarServicio(auxServicios))
+                    {
+                        ventanaServicio.mostrarMensaje("Servicio agregado con éxito" + mostrarDatos(auxServicios));
+                        servicioMedicoUV.escribirServicios();
+                        ventanaServicio.setTxtServicioAgregar("");
+                    }
+                    else
+                    {
+                        ventanaServicio.mostrarMensaje("No se pudo agregar el servicio");
+                        ventanaServicio.setTxtServicioAgregar("");
+                    }
                 }
                 else
                 {
-                   ventanaServicio.mostrarMensaje("No se pudo agregar el servicio");
-                   ventanaServicio.setTxtServicioAgregar(""); 
+                    ventanaServicio.setTxtServicioAgregar("");
                 }
             }
             else
             {
-                ventanaServicio.setTxtServicioAgregar("");
+                ventanaServicio.mostrarMensaje("No se puede crear un servicio vacio");
             }
         }
         catch(NumberFormatException ex)
@@ -189,7 +193,7 @@ public class ControladorServicio
         }
         catch(Exception ex)
         {
-            ventanaServicio.mostrarMensaje("Por favor ingrese un número entero");
+            ventanaServicio.mostrarMensaje("Ingrese un Entero en el campo ID");
             ventanaServicio.setIdEliminar("");
         }
     }
@@ -216,57 +220,65 @@ public class ControladorServicio
 
         try
         {
-            auxNumeroId = ventanaServicio.getIdEditar();
-            intAuxNumeroId = Integer.parseInt(auxNumeroId);
-            auxServicio = servicioMedicoUV.getServicio(intAuxNumeroId);
-            if(auxServicio != null)
-            {
-                auxCualServicio = ventanaServicio.getTxtServicioEditar();
-       
-                if(comprobarNombreServicios(auxCualServicio))
+                auxNumeroId = ventanaServicio.getIdEditar();
+                intAuxNumeroId = Integer.parseInt(auxNumeroId);
+                auxServicio = servicioMedicoUV.getServicio(intAuxNumeroId);
+                if (auxServicio != null)
                 {
-                    auxServicio.setNombre(auxCualServicio);
-
-                    if(servicioMedicoUV.actualizarServicio(auxServicio))
+                    if (ventanaServicio.getIdEditar().length() < 0)
                     {
-                        ventanaServicio.mostrarMensaje("Servicio editado con exito");
-                        ventanaServicio.manejarTextFieldIdEditar(true);
-                        servicioMedicoUV.escribirServicios();
-                        ventanaServicio.setTxtServicioEditar("");
-                        ventanaServicio.setIdEditar("");
-                        ventanaServicio.desactivarControlesEditar();
-                        ventanaServicio.manejarBtnCancelarEditar(false);
-                        if(comprobarAsignacion(auxServicio))
+                        auxCualServicio = ventanaServicio.getTxtServicioEditar();
+
+                        if (comprobarNombreServicios(auxCualServicio))
                         {
-                            servicioMedicoUV.escribirMedicos();
+                            auxServicio.setNombre(auxCualServicio);
+
+                            if (servicioMedicoUV.actualizarServicio(auxServicio))
+                            {
+                                ventanaServicio.mostrarMensaje("Servicio editado con exito");
+                                ventanaServicio.manejarTextFieldIdEditar(true);
+                                servicioMedicoUV.escribirServicios();
+                                ventanaServicio.setTxtServicioEditar("");
+                                ventanaServicio.setIdEditar("");
+                                ventanaServicio.desactivarControlesEditar();
+                                ventanaServicio.manejarBtnCancelarEditar(false);
+                                if (comprobarAsignacion(auxServicio))
+                                {
+                                    servicioMedicoUV.escribirMedicos();
+                                }
+                            }
+                            else
+                            {
+                                ventanaServicio.mostrarMensaje("No se pudo editar el servicio");
+                                ventanaServicio.setTxtServicioEditar("");
+                                ventanaServicio.setIdEditar("");
+
+                            }
+                        }
+                        else
+                        {
+                            ventanaServicio.setTxtServicioEditar("");
+                            ventanaServicio.setIdEditar("");
+                            ventanaServicio.desactivarControlesEditar();
                         }
                     }
                     else
                     {
-                        ventanaServicio.mostrarMensaje("No se pudo editar el servicio");
-                        ventanaServicio.setTxtServicioEditar("");
-                        ventanaServicio.setIdEditar("");
-                        
+                        ventanaServicio.mostrarMensaje("No se puede crear un servicio vacio");
                     }
                 }
                 else
                 {
+                    ventanaServicio.mostrarMensaje("Servicio no encontrado");
                     ventanaServicio.setTxtServicioEditar("");
                     ventanaServicio.setIdEditar("");
+                    ventanaServicio.manejarTextFieldIdEditar(true);
                     ventanaServicio.desactivarControlesEditar();
                 }
-            }
-            else
-            {
-                ventanaServicio.mostrarMensaje("Servicio no encontrado");
-                ventanaServicio.setTxtServicioEditar("");
-                ventanaServicio.setIdEditar("");
-                ventanaServicio.desactivarControlesEditar();
-            }
         }
         catch (Exception ex)
         {
-            ventanaServicio.mostrarMensaje("Ingrese enteros en el campo ID");
+            ventanaServicio.mostrarMensaje("Ingrese un Entero en el campo ID");
             ventanaServicio.setTxtServicioEditar("");
             ventanaServicio.setIdEditar("");
             ventanaServicio.desactivarControlesEditar();
@@ -362,7 +374,7 @@ public class ControladorServicio
                 }
                 catch (Exception ex)
                 {
-                    ventanaServicio.mostrarMensaje("Ingrese enteros en el campo ID");
+                    ventanaServicio.mostrarMensaje("Ingrese un Entero en el campo ID");
                     ventanaServicio.setIdEliminar("");
                 }
             }
