@@ -253,6 +253,8 @@ public class Empresa implements Serializable
         auxAfiliados = getAfiliados();
         conexion.setArchivo(new File("src/main/java/archivos/afiliados.bin"));
         conexion.escribirDatosBinario(auxAfiliados);
+        conexion.setArchivo(new File("src/main/java/archivos/afiliados.txt"));
+        conexion.escribirDatosTxt(auxAfiliados);
     }
 
     public void escribirConsultorios()

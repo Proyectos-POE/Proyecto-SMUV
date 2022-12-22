@@ -45,4 +45,11 @@ public class Afiliado extends Persona implements Serializable
         auxDatos = id + ";" + nombre + ";" + documento.getTipoDocumento() + ";" + documento.getNumeroDocumento() + ";" + correo + ";" + telefono;
         return auxDatos;
     }
+
+    public String toDatos()
+    {
+        String auxDatos;
+        auxDatos = id + ";" + nombre + ";" + documento.getTipoDocumento() + ";" + documento.getNumeroDocumento() + ";" + correo + ";" + telefono;
+        return auxDatos;
+    }
 }

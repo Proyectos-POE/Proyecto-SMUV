@@ -229,7 +229,7 @@ public class ControladorMedico
         Servicio auxServicio;
         Consultorio auxConsultorio;
 
-        if(ventanaMedico.getIdEditar().length()<0)
+        if(ventanaMedico.getIdEditar().length()>0)
         {
 
 
