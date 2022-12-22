@@ -1,9 +1,12 @@
 package modelo;
 
-public class Afiliado extends Persona
+import java.io.Serializable;
+
+public class Afiliado extends Persona implements Serializable
 {
     private int id;
     private static int numero;
+    private static final long serialVersionUID = 1L;
 
     public Afiliado(String auxNombre, Documento auxDocumento, String auxCorreo, long auxTelefono)
     {
@@ -31,7 +34,7 @@ public class Afiliado extends Persona
         return numero;
     }
 
-    public static void setNumero(int auxNumero)
+    public static void setNumeroAfiliado(int auxNumero)
     {
         Afiliado.numero = auxNumero;
     }

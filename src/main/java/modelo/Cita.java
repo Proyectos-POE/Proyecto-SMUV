@@ -1,6 +1,8 @@
 package modelo;
 
-public class Cita
+import java.io.Serializable;
+
+public class Cita implements Serializable
 {
     private static int numero;
     private int id;
@@ -106,7 +108,7 @@ public class Cita
     public String toString()
     {
         String auxDatos;
-        auxDatos = id + ";" + afiliado.getId() + ";" + afiliado.getNombre() + ";" + medico.getId() + ";" + medico.getNombre() + ";" + servicio.getId() + ";" + servicio.getNombre() + ";" + consultorio.getId() + ";" + consultorio.getNumeroConsultorio() + ";" + fecha.getFecha() + ";" + hora.toString();
+        auxDatos = id + ";" + afiliado.getId() + ";" + afiliado.getNombre() + ";" + medico.getId() + ";" + medico.getNombre() + ";" + servicio.getId() + ";" + servicio.getNombre() + ";" + consultorio.getId() + ";" + consultorio.getNombreConsultorio() + ";" + fecha.getFecha() + ";" + hora.toString();
         return auxDatos;
     }
 

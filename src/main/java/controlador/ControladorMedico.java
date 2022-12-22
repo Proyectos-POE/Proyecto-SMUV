@@ -74,7 +74,9 @@ public class ControladorMedico
                     if (servicioMedicoUV.agregarMedico(auxMedico))
                     {
                         ventanaMedico.mostrarMensaje("Medico agregado con exito" + mostrarDatos(auxMedico));
+                        servicioMedicoUV.escribirMedicos();
                         auxConsultorio.setAsignado(true);
+                        servicioMedicoUV.escribirConsultorios();
                         ventanaMedico.limpiarDatosAgregar();
                         ventanaMedico.vaciarBoxConsultorio();
                         rellenarConsultorios(servicioMedicoUV.getConsultorios(false));
@@ -148,7 +150,8 @@ public class ControladorMedico
                         ventanaMedico.manejarBtnCancelarEditar(true);
                         auxConsultorio.setAsignado(false);
                         ventanaMedico.vaciarBoxConsultorioEditar();
-                        rellenarConsultoriosEditar(servicioMedicoUV.getConsultorios());
+                        rellenarConsultoriosEditar(servicioMedicoUV.getConsultorios(false));
+                        ventanaMedico.setBoxConsultorioEditar(auxConsultorio);
                         auxConsultorio.setAsignado(true);
                     }
                     else
@@ -378,14 +381,18 @@ public class ControladorMedico
             auxIdMedico = Integer.parseInt(ventanaMedico.getIdEliminar());
             auxMedico = servicioMedicoUV.getMedico(auxIdMedico);
             auxConsultorio = auxMedico.getConsultorio();
+
             if(auxMedico != null)
             {
                 if(servicioMedicoUV.eliminarMedico(auxMedico))
                 {
                     ventanaMedico.mostrarMensaje("Medico eliminado con exito");
+                    servicioMedicoUV.escribirMedicos();
                     ventanaMedico.limpiarDatosEliminar();
                     ventanaMedico.setIdEliminar("");
                     auxConsultorio.setAsignado(false);
+                    servicioMedicoUV.actualizarConsultorio(auxConsultorio);
+                    servicioMedicoUV.escribirConsultorios();
                     ventanaMedico.vaciarBoxConsultorio();
                     rellenarConsultorios(servicioMedicoUV.getConsultorios());
                     ventanaMedico.manejarTextFieldIdElimnar(true);
@@ -541,7 +548,7 @@ public class ControladorMedico
         String auxTipoDocu = medico.getDocumento().getTipoDocumento();
         String auxCorreo = medico.getCorreo();
         String auxTelefono = String.valueOf(medico.getTelefono());
-        String auxConsultorio = String.valueOf(medico.getConsultorio().getNumeroConsultorio());
+        String auxConsultorio = String.valueOf(medico.getConsultorio().getNombreConsultorio());
         String auxEspecialidad = medico.getEspecialidad().getNombre();
 
         datos = "\n"+"ID: "+auxId+"\n"+"Nombre: "+auxNombre+"\n"+"# documento: "+auxDocumento+"\n"+"Tipo Documento: "+auxTipoDocu+"\n"+"Correo: "+auxCorreo+"\n"+"Telefono: "+auxTelefono+"\n"+"# consultorio: "+auxConsultorio+"\n"+"Especialidad: "+auxEspecialidad;

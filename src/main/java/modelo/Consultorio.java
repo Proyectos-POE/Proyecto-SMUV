@@ -1,10 +1,12 @@
 package modelo;
 
-public class Consultorio
+import java.io.Serializable;
+
+public class Consultorio implements Serializable
 {
     private static int numero;
     private int id;
-    private int numeroConsultorio;
+    private int nombreConsultorio;
     private boolean asignado;
 
     public Consultorio(int auxNumeroConsultorio)
@@ -12,7 +14,7 @@ public class Consultorio
         numero++;
         this.id = numero;
         this.asignado = false;
-        this.numeroConsultorio = auxNumeroConsultorio;
+        this.nombreConsultorio = auxNumeroConsultorio;
     }
 
     public int getId()
@@ -25,26 +27,26 @@ public class Consultorio
         this.id = auxId;
     }
 
-    public int getNumeroConsultorio()
+    public int getNombreConsultorio()
     {
-        return numeroConsultorio;
+        return nombreConsultorio;
     }
 
-    public void setNumeroConsultorio(int auxNumeroConsultorio)
+    public void setNombreConsultorio(int auxNumeroConsultorio)
     {
-        this.numeroConsultorio = auxNumeroConsultorio;
+        this.nombreConsultorio = auxNumeroConsultorio;
     }
 
     public String toDatos()
     {
         String auxDatos;
-        auxDatos = id + ";" + numeroConsultorio + ";" + getStringAsignado();
+        auxDatos = id + ";" + nombreConsultorio + ";" + getStringAsignado();
         return auxDatos;
     }
 
     public String toString()
     {
-        return String.valueOf(numeroConsultorio);
+        return String.valueOf(nombreConsultorio);
     }
 
     public String getStringAsignado()
@@ -67,5 +69,10 @@ public class Consultorio
     public void setAsignado(boolean auxAsignado)
     {
         this.asignado = auxAsignado;
+    }
+
+    public static void setNumeroConsultorio(int auxNumero)
+    {
+        Consultorio.numero = auxNumero;
     }
 }

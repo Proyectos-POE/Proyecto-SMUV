@@ -3,11 +3,17 @@ package modelo;
 import dao.*;
 
 import java.io.File;
+import java.io.Serializable;
 import java.time.Duration;
 import java.time.LocalTime;
 import java.util.ArrayList;
 
-public class Empresa
+import static modelo.Afiliado.setNumeroAfiliado;
+import static modelo.Consultorio.setNumeroConsultorio;
+import static modelo.Medico.setNumeroMedico;
+import static modelo.Servicio.setNumeroServicio;
+
+public class Empresa implements Serializable
 {
     private final String nombre;
     private final AfiliadoDao afiliadoDao;
@@ -231,34 +237,86 @@ public class Empresa
         horario.restablecerDisponibilidad();
     }
 
-    //----------Coenxion----------//
-    public File getArchivo()
+    //Parte de Archivos
+
+    public void escribirMedicos()
     {
-        return conexion.getArchivo();
+        ArrayList auxMedicos;
+        auxMedicos = getMedicos();
+        conexion.setArchivo(new File("src/main/java/archivos/medicos.bin"));
+        conexion.escribirDatosBinario(auxMedicos);
     }
 
-    public void setArchivo(File auxArchivo)
+    public void escribirAfiliados()
     {
-        conexion.setArchivo(auxArchivo);
+        ArrayList auxAfiliados;
+        auxAfiliados = getAfiliados();
+        conexion.setArchivo(new File("src/main/java/archivos/afiliados.bin"));
+        conexion.escribirDatosBinario(auxAfiliados);
     }
 
-    public ArrayList<ArrayList<String>> leerDatos()
+    public void escribirConsultorios()
     {
-        return conexion.leerDatos();
+        ArrayList auxConsultorios;
+        auxConsultorios = getConsultorios();
+        conexion.setArchivo(new File("src/main/java/archivos/consultorios.bin"));
+        conexion.escribirDatosBinario(auxConsultorios);
     }
 
-    public void escribirDatos(ArrayList<String> auxDatos)
+    public void escribirServicios()
     {
-        conexion.escribirDatos(auxDatos);
+        ArrayList auxServicios;
+        auxServicios = getServicios();
+        conexion.setArchivo(new File("src/main/java/archivos/servicios.bin"));
+        conexion.escribirDatosBinario(auxServicios);
     }
 
-    public void escribirDatosBinario(ArrayList<Object> auxDatos)
+    public void recuperarDatos()
     {
-        conexion.escribirDatosBinario(auxDatos);
-    }
+        ArrayList<Object> auxDatos;
+        conexion.setArchivo(new File("src/main/java/archivos/afiliados.bin"));
+        auxDatos = conexion.leerDatosBinario();
+        Afiliado auxAfiliado;
+        for(Object objeto: auxDatos)
+        {
+            auxAfiliado = (Afiliado) objeto;
+            agregarAfiliado(auxAfiliado);
+            setNumeroAfiliado(auxAfiliado.getId());
+        }
 
-    public ArrayList<Object> leerDatosBinario()
-    {
-        return  conexion.leerDatosBinario();
+        conexion.setArchivo(new File("src/main/java/archivos/servicios.bin"));
+        auxDatos = conexion.leerDatosBinario();
+        Servicio auxServicio;
+        for(Object objeto: auxDatos)
+        {
+            auxServicio = (Servicio) objeto;
+            agregarServicio(auxServicio);
+            setNumeroServicio(auxServicio.getId());
+        }
+
+        conexion.setArchivo(new File("src/main/java/archivos/consultorios.bin"));
+        auxDatos = conexion.leerDatosBinario();
+        Consultorio auxConsultorio;
+        for(Object objeto: auxDatos)
+        {
+            auxConsultorio = (Consultorio) objeto;
+            agregarConsultorio(auxConsultorio);
+            setNumeroConsultorio(auxConsultorio.getId());
+        }
+
+        conexion.setArchivo(new File("src/main/java/archivos/medicos.bin"));
+        auxDatos = conexion.leerDatosBinario();
+        Medico auxMedico;
+        for(Object objeto: auxDatos)
+        {
+            auxMedico = (Medico) objeto;
+            auxServicio = getServicio(auxMedico.getEspecialidad().getId());
+            auxConsultorio = getConsultorio(auxMedico.getConsultorio().getId());
+            auxMedico.setEspecialidad(auxServicio);
+            auxMedico.setConsultorio(auxConsultorio);
+            agregarMedico(auxMedico);
+            setNumeroMedico(auxMedico.getId());
+        }
     }
 }
+
