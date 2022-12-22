@@ -95,25 +95,34 @@ public class ControladorConsultorio
         int intAuxNumeroConsultorio;
         try
         {
+
             auxNumeroConsultorio = ventanaConsultorio.getNumeroAgregar();
             intAuxNumeroConsultorio = Integer.parseInt(auxNumeroConsultorio);
-            if(comprobarNumeroConsultorio(intAuxNumeroConsultorio))
+
+            if(intAuxNumeroConsultorio>=100)
             {
-                Consultorio auxConsultorio = new Consultorio(intAuxNumeroConsultorio);
-                if(servicioMedicoUV.agregarConsultorio(auxConsultorio))
+                if (comprobarNumeroConsultorio(intAuxNumeroConsultorio))
                 {
-                    ventanaConsultorio.mostrarMensaje("Consultorio agregado con exito"+mostrarDatos(auxConsultorio));
-                    ventanaConsultorio.setTxtNumeroAgregar("");
+                    Consultorio auxConsultorio = new Consultorio(intAuxNumeroConsultorio);
+                    if (servicioMedicoUV.agregarConsultorio(auxConsultorio))
+                    {
+                        ventanaConsultorio.mostrarMensaje("Consultorio agregado con exito" + mostrarDatos(auxConsultorio));
+                        ventanaConsultorio.setTxtNumeroAgregar("");
+                    }
+                    else
+                    {
+                        ventanaConsultorio.mostrarMensaje("No se pudo agregar el consultorio");
+                        ventanaConsultorio.setTxtNumeroAgregar("");
+                    }
                 }
                 else
                 {
-                    ventanaConsultorio.mostrarMensaje("No se pudo agregar el consultorio");
                     ventanaConsultorio.setTxtNumeroAgregar("");
                 }
             }
             else
             {
-                ventanaConsultorio.setTxtNumeroAgregar("");
+                ventanaConsultorio.mostrarMensaje("Ingrese un Consultorio de 3 numeros");
             }
         }
         catch (NumberFormatException ex)
@@ -222,42 +231,50 @@ public class ControladorConsultorio
             auxNumeroId = ventanaConsultorio.getIdEditar();
             intAuxNumeroId = Integer.parseInt(auxNumeroId);
             auxConsultorio = servicioMedicoUV.getConsultorio(intAuxNumeroId);
-            if(auxConsultorio != null)
-            {
-                auxNumeroConsultorio = ventanaConsultorio.getNumeroEditar();
-                intAuxNumeroConsultorio = Integer.parseInt(auxNumeroConsultorio);
-                if(comprobarNumeroConsultorio(intAuxNumeroConsultorio))
-                {
-                    auxConsultorio.setNumeroConsultorio(intAuxNumeroConsultorio);
 
-                    if(servicioMedicoUV.actualizarConsultorio(auxConsultorio))
+            if(Long.parseLong(ventanaConsultorio.getNumeroEditar())>=100)
+            {
+                if (auxConsultorio != null)
+                {
+                    auxNumeroConsultorio = ventanaConsultorio.getNumeroEditar();
+                    intAuxNumeroConsultorio = Integer.parseInt(auxNumeroConsultorio);
+                    if (comprobarNumeroConsultorio(intAuxNumeroConsultorio))
                     {
-                        ventanaConsultorio.mostrarMensaje("Consultorio editado con exito"+mostrarDatos(auxConsultorio));
-                        ventanaConsultorio.setTxtNumeroEditar("");
-                        ventanaConsultorio.setIdEditar("");
-                        ventanaConsultorio.desactivarControlesEditar();
-                        ventanaConsultorio.manejarTextFieldIdEditar(true);
-                        ventanaConsultorio.manejarBtnCancelarEditar(false);
+                        auxConsultorio.setNumeroConsultorio(intAuxNumeroConsultorio);
+
+                        if (servicioMedicoUV.actualizarConsultorio(auxConsultorio))
+                        {
+                            ventanaConsultorio.mostrarMensaje("Consultorio editado con exito" + mostrarDatos(auxConsultorio));
+                            ventanaConsultorio.setTxtNumeroEditar("");
+                            ventanaConsultorio.setIdEditar("");
+                            ventanaConsultorio.desactivarControlesEditar();
+                            ventanaConsultorio.manejarTextFieldIdEditar(true);
+                            ventanaConsultorio.manejarBtnCancelarEditar(false);
+                        }
+                        else
+                        {
+                            ventanaConsultorio.mostrarMensaje("No se pudo editar el consultorio");
+                            ventanaConsultorio.setTxtNumeroEditar("");
+                            ventanaConsultorio.setIdEditar("");
+                            ventanaConsultorio.desactivarControlesEditar();
+                            ventanaConsultorio.manejarTextFieldIdEditar(true);
+                            ventanaConsultorio.manejarBtnCancelarEditar(false);
+                        }
                     }
-                    else
-                    {
-                        ventanaConsultorio.mostrarMensaje("No se pudo editar el consultorio");
-                        ventanaConsultorio.setTxtNumeroEditar("");
-                        ventanaConsultorio.setIdEditar("");
-                        ventanaConsultorio.desactivarControlesEditar();
-                        ventanaConsultorio.manejarTextFieldIdEditar(true);
-                        ventanaConsultorio.manejarBtnCancelarEditar(false);
-                    }
+                }
+                else
+                {
+                    ventanaConsultorio.mostrarMensaje("Consultorio no encontrado");
+                    ventanaConsultorio.setTxtNumeroEditar("");
+                    ventanaConsultorio.desactivarControlesEditar();
+                    ventanaConsultorio.manejarTextFieldIdEditar(true);
+                    ventanaConsultorio.setIdEditar("");
+                    ventanaConsultorio.manejarBtnCancelarEditar(false);
                 }
             }
             else
             {
-                ventanaConsultorio.mostrarMensaje("Consultorio no encontrado");
-                ventanaConsultorio.setTxtNumeroEditar("");
-                ventanaConsultorio.desactivarControlesEditar();
-                ventanaConsultorio.manejarTextFieldIdEditar(true);
-                ventanaConsultorio.setIdEditar("");
-                ventanaConsultorio.manejarBtnCancelarEditar(false);
+                ventanaConsultorio.mostrarMensaje("Ingrese un numero de Consultorio de 3 digitos");
             }
         }
         catch (Exception ex)
@@ -386,7 +403,7 @@ public class ControladorConsultorio
                 ventanaConsultorio.setIdEliminar("");
                 ventanaConsultorio.setTxtNumeroEliminar("");
                 ventanaConsultorio.manejarTextFieldIdEliminar(true);
-                ventanaConsultorio.manejarBtnCancelarEditar(false);
+                ventanaConsultorio.manejarBtnCancelarEliminar(false);
             }
         }
     }
