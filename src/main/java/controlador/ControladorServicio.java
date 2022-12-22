@@ -225,7 +225,7 @@ public class ControladorServicio
                 auxServicio = servicioMedicoUV.getServicio(intAuxNumeroId);
                 if (auxServicio != null)
                 {
-                    if (ventanaServicio.getIdEditar().length() < 0)
+                    if (ventanaServicio.getIdEditar().length() > 0)
                     {
                         auxCualServicio = ventanaServicio.getTxtServicioEditar();
 

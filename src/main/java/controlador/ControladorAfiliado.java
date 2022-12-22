@@ -116,7 +116,7 @@ public class ControladorAfiliado
             }
             else
             {
-                ventanaAfiliado.mostrarMensaje("Ingrese un numero de documento y de telefono valido");
+                ventanaAfiliado.mostrarMensaje("Ingrese un numero de documento y de telefono valido (minimo 6 numeros)");
             }
         }
         catch(NumberFormatException ex)
@@ -166,7 +166,7 @@ public class ControladorAfiliado
         String auxCorreo;
         long auxTelefono;
 
-        if (ventanaAfiliado.getIdEditar().length() < 0)
+        if (ventanaAfiliado.getIdEditar().length() > 0)
         {
             auxAfiliado = servicioMedicoUV.getAfiliado(Integer.parseInt(ventanaAfiliado.getIdEditar()));
             if (auxAfiliado != null)
@@ -203,7 +203,7 @@ public class ControladorAfiliado
                                 }
                             }
                         } else {
-                            ventanaAfiliado.mostrarMensaje("Ingrese un numero de documento y de telefono valido");
+                            ventanaAfiliado.mostrarMensaje("Ingrese un numero de documento y de telefono valido (minimo 6 numeros)");
                         }
                     } catch (NumberFormatException ex) {
                         ventanaAfiliado.mostrarMensaje("Ingrese números en los campos de documento y teléfono");

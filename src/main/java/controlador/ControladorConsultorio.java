@@ -199,7 +199,7 @@ public class ControladorConsultorio
         }
         catch (Exception ex)
         {
-            ventanaConsultorio.mostrarMensaje("Porfavor ingrese un numero entero en el campo Numero");
+            ventanaConsultorio.mostrarMensaje("Porfavor ingrese los datos correctamente");
             ventanaConsultorio.setIdEliminar("");
         }
     }
@@ -283,7 +283,7 @@ public class ControladorConsultorio
         }
         catch (Exception ex)
         {
-            ventanaConsultorio.mostrarMensaje("Porfavor ingrese un numero entero en el campo Numero");
+            ventanaConsultorio.mostrarMensaje("Porfavor ingrese los datos correctamente");
             ventanaConsultorio.setTxtNumeroEditar("");
         }
     }
@@ -384,7 +384,7 @@ public class ControladorConsultorio
                     }
                     else
                     {
-                        ventanaConsultorio.mostrarMensaje("Consultorio encontrado sin exito");
+                        ventanaConsultorio.mostrarMensaje("Consultorio no encontrado");
                         ventanaConsultorio.setIdEliminar("");
                     }
                 }
