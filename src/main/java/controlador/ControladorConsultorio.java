@@ -18,12 +18,10 @@ public class ControladorConsultorio
     private Empresa servicioMedicoUV;
     private VentanaConsultorio ventanaConsultorio;
 
-    //private Conexion conexionConsultorio;
-    public ControladorConsultorio(Empresa auxServicioMedicoUV, VentanaConsultorio auxVentanaConsultorio/*,Conexion auxConexion*/)
+    public ControladorConsultorio(Empresa auxServicioMedicoUV, VentanaConsultorio auxVentanaConsultorio)
     {
         this.servicioMedicoUV = auxServicioMedicoUV;
         this.ventanaConsultorio = auxVentanaConsultorio;
-        //this.conexionConsultorio = auxConexion;
 
         ventanaConsultorio.setVisible(true);
         ventanaConsultorio.setLocationRelativeTo(null);
@@ -37,8 +35,6 @@ public class ControladorConsultorio
         this.ventanaConsultorio.addBtnEditarListener(new EditarConsultorioListener());
         this.ventanaConsultorio.addBtnEliminarListener(new EliminarConsultorioListener());
         this.ventanaConsultorio.addBtnActualizarListener(new ListarConsultorioListener());
-
-
     }
 
     private Object[][] dataConsultorios(ArrayList<Consultorio> auxConsultorios)
@@ -108,11 +104,10 @@ public class ControladorConsultorio
                 {
                     ventanaConsultorio.mostrarMensaje("Consultorio agregado con exito"+mostrarDatos(auxConsultorio));
                     ventanaConsultorio.setTxtNumeroAgregar("");
-                    //escribirConsultorios();
                 }
                 else
                 {
-                    ventanaConsultorio.mostrarMensaje("Consultorio agregado sin exito");
+                    ventanaConsultorio.mostrarMensaje("No se pudo agregar el consultorio");
                     ventanaConsultorio.setTxtNumeroAgregar("");
                 }
             }
@@ -123,7 +118,7 @@ public class ControladorConsultorio
         }
         catch (NumberFormatException ex)
         {
-            ventanaConsultorio.mostrarMensaje("Porfavor ingrese un numero entero");
+            ventanaConsultorio.mostrarMensaje("Porfavor ingrese un numero entero en el campo Numero");
             ventanaConsultorio.setTxtNumeroAgregar("");
         }
     }
@@ -142,9 +137,9 @@ public class ControladorConsultorio
 
     class AtrasConsultorioListener implements ActionListener
     {
-
         @Override
-        public void actionPerformed(ActionEvent e) {
+        public void actionPerformed(ActionEvent e)
+        {
             if(e.getActionCommand().equalsIgnoreCase("ATRAS"))
             {
                 volverMenuPrincipal();
@@ -176,14 +171,14 @@ public class ControladorConsultorio
                     if (servicioMedicoUV.eliminarConsultorio(auxConsultorio))
                     {
                         ventanaConsultorio.mostrarMensaje("Consultorio eliminado con exito");
-                        //escribirConsultorios();
                         ventanaConsultorio.setTxtNumeroEliminar("");
                         ventanaConsultorio.setIdEliminar("");
                         ventanaConsultorio.manejarTextFieldIdElimnar(true);
+                        ventanaConsultorio.manejarBtnCancelarEliminar(false);
                     }
                     else
                     {
-                        ventanaConsultorio.mostrarMensaje("Consultorio eliminado sin exito");
+                        ventanaConsultorio.mostrarMensaje("No se pudo eliminar el consultorio");
                         ventanaConsultorio.setTxtNumeroEliminar("");
                         ventanaConsultorio.setIdEliminar("");
                         ventanaConsultorio.manejarTextFieldIdElimnar(true);
@@ -197,7 +192,7 @@ public class ControladorConsultorio
         }
         catch (Exception ex)
         {
-            ventanaConsultorio.mostrarMensaje("Porfavor ingrese un numero entero");
+            ventanaConsultorio.mostrarMensaje("Porfavor ingrese un numero entero en el campo Numero");
             ventanaConsultorio.setIdEliminar("");
         }
     }
@@ -238,7 +233,6 @@ public class ControladorConsultorio
                     if(servicioMedicoUV.actualizarConsultorio(auxConsultorio))
                     {
                         ventanaConsultorio.mostrarMensaje("Consultorio editado con exito"+mostrarDatos(auxConsultorio));
-                        //escribirConsultorios();
                         ventanaConsultorio.setTxtNumeroEditar("");
                         ventanaConsultorio.setIdEditar("");
                         ventanaConsultorio.desactivarControlesEditar();
@@ -247,7 +241,7 @@ public class ControladorConsultorio
                     }
                     else
                     {
-                        ventanaConsultorio.mostrarMensaje("Consultorio editado sin exito");
+                        ventanaConsultorio.mostrarMensaje("No se pudo editar el consultorio");
                         ventanaConsultorio.setTxtNumeroEditar("");
                         ventanaConsultorio.setIdEditar("");
                         ventanaConsultorio.desactivarControlesEditar();
@@ -255,17 +249,10 @@ public class ControladorConsultorio
                         ventanaConsultorio.manejarBtnCancelarEditar(false);
                     }
                 }
-                else
-                {
-                    //ventanaConsultorio.setTxtNumeroEditar("");
-                    //ventanaConsultorio.setIdEditar("");
-                    //ventanaConsultorio.desactivarControlesEditar();
-                    //ventanaConsultorio.manejarTextFieldIdEditar(true);
-                }
             }
             else
             {
-                ventanaConsultorio.mostrarMensaje("Consultorio encontrado sin exito");
+                ventanaConsultorio.mostrarMensaje("Consultorio no encontrado");
                 ventanaConsultorio.setTxtNumeroEditar("");
                 ventanaConsultorio.desactivarControlesEditar();
                 ventanaConsultorio.manejarTextFieldIdEditar(true);
@@ -275,9 +262,8 @@ public class ControladorConsultorio
         }
         catch (Exception ex)
         {
-            ventanaConsultorio.mostrarMensaje("Porfavor ingrese un numero entero");
+            ventanaConsultorio.mostrarMensaje("Porfavor ingrese un numero entero en el campo Numero");
             ventanaConsultorio.setTxtNumeroEditar("");
-            //ventanaConsultorio.desactivarControlesEditar();
         }
     }
     class EditarConsultorioListener implements ActionListener
@@ -317,7 +303,7 @@ public class ControladorConsultorio
                     }
                     else
                     {
-                        ventanaConsultorio.mostrarMensaje("Consultorio encontrado sin exito");
+                        ventanaConsultorio.mostrarMensaje("Consultorio no encontrado");
                         ventanaConsultorio.setIdEditar("");
                         ventanaConsultorio.setTxtNumeroEditar("");
                         ventanaConsultorio.desactivarControlesEditar();
@@ -327,7 +313,7 @@ public class ControladorConsultorio
                 }
                 catch (Exception ex)
                 {
-                    ventanaConsultorio.mostrarMensaje("Porfavor ingrese un numero entero");
+                    ventanaConsultorio.mostrarMensaje("Porfavor ingrese un numero entero en el campo ID");
                     ventanaConsultorio.setIdEditar("");
                 }
             }
@@ -353,7 +339,6 @@ public class ControladorConsultorio
 
     class BuscarEliminarConsultorioListener implements ActionListener
     {
-
         @Override
         public void actionPerformed(ActionEvent e)
         {
@@ -384,7 +369,7 @@ public class ControladorConsultorio
                 }
                 catch (Exception ex)
                 {
-                    ventanaConsultorio.mostrarMensaje("Porfavor ingrese un numero entero");
+                    ventanaConsultorio.mostrarMensaje("Porfavor ingrese un numero entero en el campo ID");
                     ventanaConsultorio.setIdEliminar("");
                 }
             }
@@ -405,37 +390,6 @@ public class ControladorConsultorio
             }
         }
     }
-    /*
-    public void control()
-    {
-        byte opcion;
-        Scanner sc = new Scanner(System.in);
-        do
-        {
-            System.out.println("1. Listar Consultorios");
-            System.out.println("2. Agregar Consultorio");
-            System.out.println("3. Eliminar Consultorio");
-            System.out.println("4. Actualizar Consultorio");
-            System.out.println("5. Volver al Menu");
-            System.out.print("Opción : ");
-            opcion = sc.nextByte();
-            switch(opcion)
-            {
-                case 1: listarConsultorios();
-                    break;
-                case 2: agregarConsultorio();
-                    break;
-                case 3: eliminarConsultorio();
-                    break;
-                case 4: editarConsultorio();
-                    break;
-            }
-        }
-        while (opcion != 5);
-        System.out.println("Gracias!!!!");
-    }
-
-     */
 
     private boolean comprobarNumeroConsultorio(int auxNumeroConsultorio)
     {
@@ -492,5 +446,4 @@ public class ControladorConsultorio
         String datos = "\nId: " + idConsul+"\nNumero: "+ nConsul;
         return datos;
     }
-
 }

@@ -30,7 +30,7 @@ public class ControladorMenu
             {
                 ventanaMenu.dispose();
                 VentanaAfiliado ventanaAfiliado = new VentanaAfiliado();
-                //ControladorAfiliado controladorAfiliado = new ControladorAfiliado(auxServicioMedicoUv,ventanaAfiliado,conexionAfiliado);
+                ControladorAfiliado controladorAfiliado = new ControladorAfiliado(servicioMedicoUV,ventanaAfiliado);
             }
             if (e.getActionCommand().equalsIgnoreCase("<html><p style=\"text-align:center\">GESTIONAR</p><p style=\"text-align:center\">CONSULTORIO</p></html>"))
             {
@@ -42,7 +42,7 @@ public class ControladorMenu
             {
                 ventanaMenu.dispose();
                 VentanaCita ventanaCita = new VentanaCita();
-                //ControaldorCita controladorCita = new controladorCita(servicioMedicoUV,ventanaCita,conexionCita);
+                ControladorCita controladorCita = new ControladorCita(servicioMedicoUV,ventanaCita);
             }
             if (e.getActionCommand().equalsIgnoreCase("<html><p style=\"text-align:center\">GESTIONAR</p><p style=\"text-align:center\">MEDICOS</p></html>"))
             {
@@ -54,15 +54,14 @@ public class ControladorMenu
             {
                 ventanaMenu.dispose();
                 VentanaServicio ventanaServicio = new VentanaServicio();
-                //ControladorConsultorio controladorConsultorio = new ControladorConsultorio(servicioMedicoUV,ventanaConsultorio,conexionConsultorio);
+                ControladorServicio controladorServicio = new ControladorServicio(servicioMedicoUV,ventanaServicio);
             }
             if (e.getActionCommand().equalsIgnoreCase("<html><p style=\"text-align:center\">BACKUP Y</p><p style=\"text-align:center\">RESTAURAR</p></html>"))
             {
                 ventanaMenu.dispose();
                 VentanaBackUp ventanaBackUp = new VentanaBackUp();
-                //ControladorConsultorio controladorConsultorio = new ControladorConsultorio(servicioMedicoUV,ventanaConsultorio,conexionConsultorio);
+                ControladorBackUp controladorBackUp = new ControladorBackUp(servicioMedicoUV,ventanaBackUp);
             }
-
         }
     }
 }

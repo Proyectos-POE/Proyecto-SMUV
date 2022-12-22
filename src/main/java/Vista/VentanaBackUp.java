@@ -25,7 +25,7 @@ public class VentanaBackUp extends JFrame{
     {
         setTitle("VENTANA-MENU");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setSize(625, 600);
+        setSize(1000, 600);
         setLocationRelativeTo(null);
         setResizable(false);
         setLayout(null);
@@ -38,17 +38,17 @@ public class VentanaBackUp extends JFrame{
         jpContenido = new JPanel();
         jpContenido.setLayout(null);
         jpContenido.setBackground(gris);
-        jpContenido.setBounds(0,0,625,600);
+        jpContenido.setBounds(0,0,1000,600);
 
         lblTitulo = new JLabel("BACKUP Y RESTAURAR", SwingConstants.CENTER);
-        lblTitulo.setBounds(0, 15, 625, 40);
+        lblTitulo.setBounds(0, 15, 1000, 40);
         lblTitulo.setFont(new Font("Arial", Font.BOLD, 40));
         jpContenido.add(lblTitulo);
 
         btnBackUp = new JButton();
         btnBackUp.setBorder(null);
         btnBackUp.setBackground(rojo);
-        btnBackUp.setBounds(60,225,180,70);
+        btnBackUp.setBounds(250,225,180,70);
         btnBackUp.setText("<html><p style=\"text-align:center\">REALIZAR</p><p style=\"text-align:center\">BACK UP</p></html>");
         btnBackUp.setFont(new Font("Arial", Font.BOLD, 20));
         btnBackUp.setForeground(Color.white);
@@ -58,7 +58,7 @@ public class VentanaBackUp extends JFrame{
         btnRestaurar = new JButton();
         btnRestaurar.setBorder(null);
         btnRestaurar.setBackground(verde);
-        btnRestaurar.setBounds(375,225,180,70);
+        btnRestaurar.setBounds(560,225,180,70);
         btnRestaurar.setText("<html><p style=\"text-align:center\">REALIZAR</p><p style=\"text-align:center\">RESTAURACIÓN</p></html>");
         btnRestaurar.setFont(new Font("Arial", Font.BOLD, 20));
         btnRestaurar.setForeground(Color.white);
@@ -66,7 +66,7 @@ public class VentanaBackUp extends JFrame{
         jpContenido.add(btnRestaurar);
 
         btnAtras = new JButton("ATRAS");
-        btnAtras.setBounds(230, 480, 155, 55);
+        btnAtras.setBounds(418, 480, 155, 55);
         btnAtras.setBackground(azul);
         btnAtras.setForeground(Color.WHITE);
         btnAtras.setFocusable(false);
