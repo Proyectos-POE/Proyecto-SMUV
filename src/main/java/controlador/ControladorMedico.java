@@ -165,7 +165,7 @@ public class ControladorMedico
                 }
                 catch (Exception ex)
                 {
-                    ventanaMedico.mostrarMensaje("Ingrese enteros en el campo ID");
+                    ventanaMedico.mostrarMensaje("Ingrese un Entero en el campo ID");
                 }
             }
         }
@@ -229,16 +229,20 @@ public class ControladorMedico
         Servicio auxServicio;
         Consultorio auxConsultorio;
 
-        auxMedico = servicioMedicoUV.getMedico(Integer.parseInt(ventanaMedico.getIdEditar()));
-        if(auxMedico!=null)
+        if(ventanaMedico.getIdEditar().length()<0)
         {
-            auxMedico.getConsultorio().setAsignado(false);
-            auxNombre = ventanaMedico.getTxtNombreEditar();
-            auxServicio = ventanaMedico.getBoxEspecialidadEditar();
-            auxConsultorio = ventanaMedico.getBoxConsulEditar();
-            auxCorreo = ventanaMedico.getTxtCorreoEditar();
-            auxMedico.setDocumento(null);
-            auxTipoDocumento = ventanaMedico.getBoxTipoDocumentoEditar();
+
+
+            auxMedico = servicioMedicoUV.getMedico(Integer.parseInt(ventanaMedico.getIdEditar()));
+            if (auxMedico != null)
+            {
+                auxMedico.getConsultorio().setAsignado(false);
+                auxNombre = ventanaMedico.getTxtNombreEditar();
+                auxServicio = ventanaMedico.getBoxEspecialidadEditar();
+                auxConsultorio = ventanaMedico.getBoxConsulEditar();
+                auxCorreo = ventanaMedico.getTxtCorreoEditar();
+                auxMedico.setDocumento(null);
+                auxTipoDocumento = ventanaMedico.getBoxTipoDocumentoEditar();
 
                 try
                 {
@@ -246,7 +250,7 @@ public class ControladorMedico
                     auxTelefono = Long.parseLong(ventanaMedico.getTxtTelefonoEditar());
                     auxDocumento = new Documento(auxTipoDocumento, auxNumDocumento);
 
-                    if(auxNumDocumento>=100000 && auxTelefono>=100000)
+                    if (auxNumDocumento >= 100000 && auxTelefono >= 100000)
                     {
 
                         if (comprobarDatosMedico(auxNombre, auxDocumento, auxCorreo, auxTelefono, auxServicio, auxConsultorio))
@@ -281,14 +285,13 @@ public class ControladorMedico
                     {
                         ventanaMedico.mostrarMensaje("Ingrese un numero de documento y un numero de telefono valido");
                     }
-                }
-                catch (NumberFormatException ex)
+                } catch (NumberFormatException ex)
                 {
                     ventanaMedico.mostrarMensaje("Ingrese numeros enteros en los campos de documento y telefono");
                 }
-        }
-        else
-        {
+            }
+            else
+            {
                 ventanaMedico.mostrarMensaje("Medico no encontrado");
                 ventanaMedico.activarControlesEditar();
                 ventanaMedico.limpiarDatosEditar();
@@ -296,6 +299,11 @@ public class ControladorMedico
                 ventanaMedico.manejarTextFieldIdEditar(true);
                 ventanaMedico.desactivarControlesEditar();
                 ventanaMedico.manejarBtnCancelarEditar(false);
+            }
+        }
+        else
+        {
+            ventanaMedico.mostrarMensaje("Ingrese un Entero en el campo ID");
         }
     }
 
@@ -336,7 +344,7 @@ public class ControladorMedico
                     }
                     catch (Exception ex)
                     {
-                        ventanaMedico.mostrarMensaje("Ingrese enteros en el campo ID");
+                        ventanaMedico.mostrarMensaje("Ingrese un Entero en el campo ID");
                     }
                 }
             }
