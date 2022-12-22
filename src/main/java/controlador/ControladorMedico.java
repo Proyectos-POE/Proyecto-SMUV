@@ -37,16 +37,20 @@ public class ControladorMedico
     }
 
 
-    class AgregarMedicoListener implements ActionListener {
+    class AgregarMedicoListener implements ActionListener
+    {
         @Override
-        public void actionPerformed(ActionEvent e) {
-            if (e.getActionCommand().equalsIgnoreCase("AGREGAR")) {
+        public void actionPerformed(ActionEvent e)
+        {
+            if (e.getActionCommand().equalsIgnoreCase("AGREGAR"))
+            {
                 AgregarMedico();
             }
         }
     }
 
-    private void AgregarMedico() {
+    private void AgregarMedico()
+    {
         String auxNombre;
         //Documento auxDocu;
         String auxCorreo;
@@ -61,7 +65,7 @@ public class ControladorMedico
         try {
 
             Documento auxDocu = new Documento(ventanaMedico.getBoxTipoDocumentoAgregar(), Long.parseLong(ventanaMedico.getTxtDocumentoAgregar()));
-            auxTelefono = Integer.parseInt(ventanaMedico.getTxtTelefonoAgregar());
+            auxTelefono = Long.parseLong(ventanaMedico.getTxtTelefonoAgregar());
 
             if (comprobarDatosMedico(auxNombre, auxDocu, auxCorreo, auxTelefono, auxServicio, auxConsultorio))
             {
@@ -76,27 +80,32 @@ public class ControladorMedico
                 }
                 else
                 {
-                    ventanaMedico.mostrarMensaje("Medico agregado sin exito");
+                    ventanaMedico.mostrarMensaje("No se pudo agregar el Medico");
                     ventanaMedico.limpiarDatosAgregar();
                 }
             }
 
-        }catch(NumberFormatException ex)
+        }
+        catch(NumberFormatException ex)
         {
-            ventanaMedico.mostrarMensaje("Por favor ingrese el numero de documento y telefono");
+            ventanaMedico.mostrarMensaje("Ingrese numeros enteros en los campos de documento y telefono");
         }
     }
 
-    class AtrasListener implements ActionListener {
+    class AtrasListener implements ActionListener
+    {
         @Override
-        public void actionPerformed(ActionEvent e) {
-            if (e.getActionCommand().equalsIgnoreCase("ATRAS")) {
+        public void actionPerformed(ActionEvent e)
+        {
+            if (e.getActionCommand().equalsIgnoreCase("ATRAS"))
+            {
                 volverMenuPrincipal();
             }
         }
     }
 
-    private void volverMenuPrincipal() {
+    private void volverMenuPrincipal()
+    {
         ventanaMedico.dispose();
         VentanaMenu ventanaMenu = new VentanaMenu();
         ControladorMenu controladorMenu = new ControladorMenu(servicioMedicoUV, ventanaMenu);
@@ -164,9 +173,10 @@ public class ControladorMedico
         if (e.getActionCommand().equalsIgnoreCase("CANCELAR"))
         {
             auxMedico = servicioMedicoUV.getMedico(Integer.parseInt(ventanaMedico.getIdEditar()));
-            auxConsultorio = auxMedico.getConsultorio();
+
             if(auxMedico!=null)
             {
+                auxConsultorio = auxMedico.getConsultorio();
                 auxConsultorio.setAsignado(true);
                 ventanaMedico.vaciarBoxConsultorioEditar();
                 rellenarConsultoriosEditar(servicioMedicoUV.getConsultorios());
@@ -179,15 +189,21 @@ public class ControladorMedico
             {
                 ventanaMedico.mostrarMensaje("No existe la id seleccionada");
                 ventanaMedico.limpiarDatosEditar();
+                ventanaMedico.setIdEditar("");
+                ventanaMedico.manejarTextFieldIdEditar(true);
+                ventanaMedico.manejarBtnCancelarEditar(false);
             }
         }
     }
 }
 
-    class EditarListener implements ActionListener {
+    class EditarListener implements ActionListener
+    {
         @Override
-        public void actionPerformed(ActionEvent e) {
-            if (e.getActionCommand().equalsIgnoreCase("EDITAR")) {
+        public void actionPerformed(ActionEvent e)
+        {
+            if (e.getActionCommand().equalsIgnoreCase("EDITAR"))
+            {
                 editarMedico();
             }
         }
@@ -218,7 +234,7 @@ public class ControladorMedico
 
             try {
                 auxNumDocumento = Long.parseLong(ventanaMedico.getTxtDocumentoEditar());
-                auxTelefono = Integer.parseInt(ventanaMedico.getTxtTelefonoEditar());
+                auxTelefono = Long.parseLong(ventanaMedico.getTxtTelefonoEditar());
                 auxDocumento = new Documento(auxTipoDocumento, auxNumDocumento);
 
                 if (comprobarDatosMedico(auxNombre, auxDocumento, auxCorreo, auxTelefono, auxServicio, auxConsultorio)) {
@@ -238,26 +254,30 @@ public class ControladorMedico
                         ventanaMedico.vaciarBoxConsultorio();
                         rellenarConsultorios(servicioMedicoUV.getConsultorios(false));
                         ventanaMedico.manejarBtnCancelarEditar(false);
-                    } else {
-                        ventanaMedico.mostrarMensaje("Medico Editado sin exito");
+                    }
+                    else
+                    {
+                        ventanaMedico.mostrarMensaje("No se pudo editar el medico");
                         ventanaMedico.limpiarDatosEditar();
                         ventanaMedico.setIdEditar("");
                     }
                 }
 
-            } catch (NumberFormatException ex) {
-                ventanaMedico.mostrarMensaje("Por favor ingrese el numero de documento y telefono");
+            }
+            catch (NumberFormatException ex)
+            {
+                ventanaMedico.mostrarMensaje("Ingrese numeros enteros en los campos de documento y telefono");
             }
         }
         else
         {
-            ventanaMedico.mostrarMensaje("Medico no encontrado");
-            ventanaMedico.activarControlesEditar();
-            ventanaMedico.limpiarDatosEditar();
-            ventanaMedico.setIdEditar("");
-            ventanaMedico.manejarTextFieldIdEditar(true);
-            ventanaMedico.desactivarControlesEditar();
-            ventanaMedico.manejarBtnCancelarEditar(false);
+                ventanaMedico.mostrarMensaje("Medico no encontrado");
+                ventanaMedico.activarControlesEditar();
+                ventanaMedico.limpiarDatosEditar();
+                ventanaMedico.setIdEditar("");
+                ventanaMedico.manejarTextFieldIdEditar(true);
+                ventanaMedico.desactivarControlesEditar();
+                ventanaMedico.manejarBtnCancelarEditar(false);
         }
     }
 
@@ -320,9 +340,11 @@ public class ControladorMedico
         }
     }
 
-    class EliminarListener implements ActionListener {
+    class EliminarListener implements ActionListener
+    {
         @Override
-        public void actionPerformed(ActionEvent e) {
+        public void actionPerformed(ActionEvent e)
+        {
             if (e.getActionCommand().equalsIgnoreCase("ELIMINAR"))
             {
                 eliminarMedico();
@@ -345,7 +367,7 @@ public class ControladorMedico
             {
                 if(servicioMedicoUV.eliminarMedico(auxMedico))
                 {
-                    ventanaMedico.mostrarMensaje("Medico eliminado");
+                    ventanaMedico.mostrarMensaje("Medico eliminado con exito");
                     ventanaMedico.limpiarDatosEliminar();
                     ventanaMedico.setIdEliminar("");
                     auxConsultorio.setAsignado(false);
@@ -363,10 +385,12 @@ public class ControladorMedico
         }
     }
 
-    class ListarMedicoListener implements ActionListener {
+    class ListarMedicoListener implements ActionListener
+    {
         @Override
         public void actionPerformed(ActionEvent e) {
-            if (e.getActionCommand().equalsIgnoreCase("REFRESCAR")) {
+            if (e.getActionCommand().equalsIgnoreCase("REFRESCAR"))
+            {
                 listarMedicos();
             }
         }
@@ -434,10 +458,10 @@ public class ControladorMedico
     }
 
 
-    public void rellenarConsultorios(ArrayList<Consultorio> array) {
-        //String auxNombre;
-        for (int i = 0; i < array.size(); i++) {
-            //auxNombre = String.valueOf(array.get(i).getNumeroConsultorio());
+    public void rellenarConsultorios(ArrayList<Consultorio> array)
+    {
+        for (int i = 0; i < array.size(); i++)
+        {
             ventanaMedico.activarControlesEditar();
             ventanaMedico.rellenarBoxConsultorio(array.get(i));
             ventanaMedico.desactivarControlesEditar();
@@ -446,14 +470,11 @@ public class ControladorMedico
         }
     }
 
-    public void rellenarConsultoriosEditar(ArrayList<Consultorio> array) {
-        //String auxNombre;
-        for (int i = 0; i < array.size(); i++) {
-            //auxNombre = String.valueOf(array.get(i).getNumeroConsultorio());
-            //ventanaMedico.activarControlesEditar();
+    public void rellenarConsultoriosEditar(ArrayList<Consultorio> array)
+    {
+        for (int i = 0; i < array.size(); i++)
+        {
             ventanaMedico.rellenarBoxConsultorioEditar(array.get(i));
-            //ventanaMedico.desactivarControlesEditar();
-            //ventanaMedico.setNullBoxConsultorioEditar();
         }
     }
 
@@ -482,13 +503,16 @@ public class ControladorMedico
                 DatosValidos = true;
                 for (Medico medico : auxMedicos)
                 {
-                    if (medico.getDocumento()!=null && medico.getDocumento().getNumeroDocumento() == documento.getNumeroDocumento()) {
+                    if (medico.getDocumento()!=null && medico.getDocumento().getNumeroDocumento() == documento.getNumeroDocumento())
+                    {
                         ventanaMedico.mostrarMensaje("Ya existe un medico con este documento");
                         DatosValidos = false;
                         break;
                     }
                 }
-            } else {
+            }
+            else
+            {
                 ventanaMedico.mostrarMensaje("Rellene todos los campos");
             }
             return DatosValidos;
