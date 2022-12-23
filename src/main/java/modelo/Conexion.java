@@ -51,15 +51,17 @@ public class Conexion implements Serializable
         return auxDatos;
     }
 
-    public void escribirDatos(ArrayList<String> auxDatos)
+    public void escribirDatosTxt(ArrayList auxDatos)
     {
         try
         {
             FileWriter salida = new FileWriter(archivo);
             PrintWriter salidaBuffer = new PrintWriter(salida);
-            for (String auxDato : auxDatos)
+            Afiliado auxAfiliado;
+            for (Object  auxDato : auxDatos)
             {
-                salidaBuffer.println(auxDato);
+                auxAfiliado = (Afiliado) auxDato;
+                salidaBuffer.println(auxAfiliado.toDatos());
             }
             salida.close();
         }
