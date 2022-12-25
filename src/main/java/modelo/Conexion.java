@@ -23,34 +23,6 @@ public class Conexion implements Serializable
         this.archivo = archivo;
     }
 
-    public ArrayList<ArrayList<String>> leerDatos()
-    {
-        ArrayList<ArrayList<String>> auxDatos = new ArrayList<ArrayList<String>>();
-        try
-        {
-            FileReader entrada = new FileReader(archivo);
-            BufferedReader entradaBuffer = new BufferedReader(entrada);
-            String linea;
-            while( (linea = entradaBuffer.readLine()) != null)
-            {
-                ArrayList<String> auxDatosFila = new ArrayList<String>();
-                StringTokenizer st = new StringTokenizer(linea, ";");
-                String auxToken;
-                while (st.hasMoreTokens())
-                {
-                    auxToken = st.nextToken();
-                    auxDatosFila.add(auxToken);
-                }
-                auxDatos.add(auxDatosFila);
-            }
-        }
-        catch (IOException | NumberFormatException e)
-        {
-            System.out.println("Error a cargar las clases" + e.getMessage());
-        }
-        return auxDatos;
-    }
-
     public void escribirDatosTxt(ArrayList auxDatos)
     {
         try

@@ -1,4 +1,3 @@
-
 package controlador;
 
 import modelo.Afiliado;
@@ -9,23 +8,18 @@ import Vista.VentanaMenu;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.File;
 import java.util.ArrayList;
-import java.util.Scanner;
-import modelo.Consultorio;
 import modelo.Documento;
-import modelo.Medico;
-import modelo.Servicio;
 /**
  *
  * MESSI
  */
 public class ControladorAfiliado
 {
-    private Empresa servicioMedicoUV;
-    private VentanaAfiliado ventanaAfiliado;
+    private final Empresa servicioMedicoUV;
+    private final VentanaAfiliado ventanaAfiliado;
     
-    public ControladorAfiliado (Empresa auxServicioMedicoUV, VentanaAfiliado auxVentanaAfiliado)
+    public ControladorAfiliado(Empresa auxServicioMedicoUV, VentanaAfiliado auxVentanaAfiliado)
     {
         this.servicioMedicoUV = auxServicioMedicoUV;
         this.ventanaAfiliado = auxVentanaAfiliado;
@@ -45,431 +39,66 @@ public class ControladorAfiliado
         this.ventanaAfiliado.addBtnCancelarEditarListener(new CancelarEditarListener());
         this.ventanaAfiliado.addBtnCancelarEliminarListener(new CancelarEliminarListener());
     }
-    
-    public Object[][] dataAfiliados(ArrayList<Afiliado> auxAfiliados)
-    {
-       Object[][] dataAfiliados;
-       dataAfiliados = new Object[auxAfiliados.size()][6];
-       
-       for(int fila=0; fila < dataAfiliados.length; fila++)
-       {
-           int auxId;
-           auxId = auxAfiliados.get(fila).getId();
-           
-           String auxNombre;
-           auxNombre = auxAfiliados.get(fila).getNombre();
-           
-           String auxTipoDocumento;
-           auxTipoDocumento = auxAfiliados.get(fila).getDocumento().getTipoDocumento();
-           
-           Long auxDocumento;
-           auxDocumento = auxAfiliados.get(fila).getDocumento().getNumeroDocumento();
-           
-           String auxCorreo;
-           auxCorreo = auxAfiliados.get(fila).getCorreo();
-           
-           Long auxTelefono;
-           auxTelefono = auxAfiliados.get(fila).getTelefono();
-           
-           dataAfiliados[fila][0] = auxId;
-           dataAfiliados[fila][1] = auxNombre;
-           dataAfiliados[fila][2] = auxTipoDocumento;
-           dataAfiliados[fila][3] = auxDocumento;
-           dataAfiliados[fila][4] = auxCorreo;
-           dataAfiliados[fila][5] = auxTelefono;
-       }
-       return dataAfiliados;
-    }
-    
-    private void AgregarAfiliado()
-    {
-        String auxNombre;
-        String auxCorreo;
-        long auxTelefono;
-        
-        auxNombre = ventanaAfiliado.getTxtNombreAgregar();
-        auxCorreo = ventanaAfiliado.getTxtCorreoAgregar();
-        
-        
-        try
-        {
-            Documento auxDocumento = new Documento(ventanaAfiliado.getBoxTipoDocumentoAgregar(), Long.parseLong(ventanaAfiliado.getTxtDocumentoAgregar()));
-            auxTelefono = Long.parseLong(ventanaAfiliado.getTxtTelefonoAgregar());
 
-            if(Long.parseLong(ventanaAfiliado.getTxtDocumentoAgregar())>=100000 && auxTelefono>=100000)
+    public boolean comprobarDatosAfiliado(int auxId,String auxNombre, String auxTipoDocumento, long auxNumeroDocumento, String correo, long auxTelefono)
+    {
+        boolean auxDatosValidos = true;
+        ArrayList<Afiliado> auxAfiliados;
+        auxAfiliados = servicioMedicoUV.getAfiliados();
+
+        if(auxNombre.length() != 0)
+        {
+            if(correo.length() != 0)
             {
-                if (comprobarDatosAfiliado(auxNombre, auxDocumento, auxCorreo, auxTelefono))
+                if(auxNumeroDocumento >= 100000)
                 {
-                    Afiliado auxAfiliado = new Afiliado(auxNombre, auxDocumento, auxCorreo, auxTelefono);
-                    if (servicioMedicoUV.agregarAfiliado(auxAfiliado))
+                    if(auxTelefono >= 100000)
                     {
-                        ventanaAfiliado.mostrarMensaje("Afiliado agregado con éxito" + mostrarDatos(auxAfiliado));
-                        servicioMedicoUV.escribirAfiliados();
-                        ventanaAfiliado.limpiarDatosAgregar();
-                    }
-                    else
-                    {
-                        ventanaAfiliado.mostrarMensaje("No se pudo agregar el afiliado");
-                        ventanaAfiliado.limpiarDatosAgregar();
-                    }
-                }
-            }
-            else
-            {
-                ventanaAfiliado.mostrarMensaje("Ingrese un numero de documento y de telefono valido (minimo 6 numeros)");
-            }
-        }
-        catch(NumberFormatException ex)
-        {
-            ventanaAfiliado.mostrarMensaje("Ingrese números en los campos de documento y teléfono");
-        }
-    }
-    
-    class AgregarAfiliadoListener implements ActionListener
-    {
-        @Override
-        public void actionPerformed(ActionEvent e) 
-        {
-            if(e.getActionCommand().equalsIgnoreCase("AGREGAR"))
-            {
-                AgregarAfiliado();
-            }
-        }        
-    }
-    
-    private void volverMenuPrincipal()
-    {
-        ventanaAfiliado.dispose();
-        VentanaMenu ventanaMenu = new VentanaMenu();
-        ControladorMenu controladorMenu = new ControladorMenu(servicioMedicoUV, ventanaMenu);
-    }
-    
-    class AtrasAfiliadoListener implements ActionListener
-    {
-        @Override
-        public void actionPerformed(ActionEvent e) 
-        {
-            if(e.getActionCommand().equalsIgnoreCase("ATRAS"))
-            {
-                volverMenuPrincipal();
-            }
-        } 
-    }
-    
-    private void editarAfiliado()
-    {
-        String auxNombre;
-        Afiliado auxAfiliado;
-        Documento auxDocumento;
-        String auxTipoDocumento;
-        long auxNumDocumento;
-        String auxCorreo;
-        long auxTelefono;
-
-        if (ventanaAfiliado.getIdEditar().length() > 0)
-        {
-            auxAfiliado = servicioMedicoUV.getAfiliado(Integer.parseInt(ventanaAfiliado.getIdEditar()));
-            if (auxAfiliado != null)
-            {
-
-                    auxNombre = ventanaAfiliado.getTxtNombreEditar();
-                    auxCorreo = ventanaAfiliado.getTxtCorreoEditar();
-                    auxAfiliado.setDocumento(null);
-                    auxTipoDocumento = ventanaAfiliado.getBoxTipoDocumentoEditar();
-
-                    try {
-                        auxNumDocumento = Long.parseLong(ventanaAfiliado.getTxtDocumentoEditar());
-                        auxTelefono = Long.parseLong(ventanaAfiliado.getTxtTelefonoEditar());
-                        auxDocumento = new Documento(auxTipoDocumento, auxNumDocumento);
-
-                        if (auxNumDocumento >= 100000 && auxTelefono >= 100000) {
-                            if (comprobarDatosAfiliado(auxNombre, auxDocumento, auxCorreo, auxTelefono)) {
-                                auxAfiliado.setDocumento(auxDocumento);
-                                if (servicioMedicoUV.actualizarAfiliado(auxAfiliado)) {
-                                    auxAfiliado.setNombre(auxNombre);
-                                    auxAfiliado.setCorreo(auxCorreo);
-                                    auxAfiliado.setTelefono(auxTelefono);
-                                    servicioMedicoUV.escribirAfiliados();
-                                    ventanaAfiliado.mostrarMensaje("Afiliado editado con éxito" + mostrarDatos(auxAfiliado));
-                                    ventanaAfiliado.manejarTextFieldIdEditar(true);
-                                    ventanaAfiliado.setIdEditar("");
-                                    ventanaAfiliado.limpiarDatosEditar();
-                                    ventanaAfiliado.desactivarControlesEditar();
-                                    ventanaAfiliado.manejarBtnCancelarEditar(false);
-                                } else {
-                                    ventanaAfiliado.mostrarMensaje("No se pudo editar el afiliado");
-                                    ventanaAfiliado.limpiarDatosEditar();
-                                    ventanaAfiliado.setIdEditar("");
+                        if(auxTipoDocumento != null)
+                        {
+                            for (Afiliado afiliado : auxAfiliados)
+                            {
+                                if(afiliado.getDocumento().getNumeroDocumento() == auxNumeroDocumento && afiliado.getId() != auxId)
+                                {
+                                    ventanaAfiliado.mostrarMensaje("Ya existe un afiliado con este documento");
+                                    auxDatosValidos = false;
+                                    break;
                                 }
                             }
-                        } else {
-                            ventanaAfiliado.mostrarMensaje("Ingrese un numero de documento y de telefono valido (minimo 6 numeros)");
                         }
-                    } catch (NumberFormatException ex) {
-                        ventanaAfiliado.mostrarMensaje("Ingrese números en los campos de documento y teléfono");
-                    }
-                }
-            else
-            {
-                ventanaAfiliado.mostrarMensaje("Afiliado no encontrado");
-                ventanaAfiliado.activarControlesEditar();
-                ventanaAfiliado.limpiarDatosEditar();
-                ventanaAfiliado.setIdEditar("");
-                ventanaAfiliado.manejarTextFieldIdEditar(true);
-                ventanaAfiliado.desactivarControlesEditar();
-                ventanaAfiliado.manejarBtnCancelarEditar(false);
-            }
-        }
-        else
-        {
-            ventanaAfiliado.mostrarMensaje("Ingrese un Entero en el campo ID");
-        }
-    }
-
-
-    
-    class EditarAfiliadoListener implements ActionListener
-    {
-        @Override
-        public void actionPerformed(ActionEvent e) 
-        {
-            if(e.getActionCommand().equalsIgnoreCase("EDITAR"))
-            {
-            editarAfiliado();
-            }
-        }
-        
-    }
-    
-    class BuscarEditarListener implements ActionListener
-    {
-        @Override
-        public void actionPerformed(ActionEvent e) 
-        {
-            Afiliado auxAfiliado;
-            int auxNumeroId;
-            
-            if(e.getActionCommand().equalsIgnoreCase("BUSCAR"))
-            {
-                try
-                {
-                    auxNumeroId = Integer.parseInt(ventanaAfiliado.getIdEditar());
-                    auxAfiliado = servicioMedicoUV.getAfiliado(auxNumeroId);
-                    
-                    if(auxAfiliado!=null)
-                    {
-                        ventanaAfiliado.manejarTextFieldIdEditar(false);
-                        ventanaAfiliado.activarControlesEditar();
-                        ventanaAfiliado.setTxtNombreEditar(auxAfiliado.getNombre());
-                        ventanaAfiliado.setTxtDocumentoEditar(String.valueOf(auxAfiliado.getDocumento().getNumeroDocumento()));
-                        ventanaAfiliado.setBoxTipoDocumentoEditar(auxAfiliado.getDocumento());
-                        ventanaAfiliado.setTxtTelefonoEditar(String.valueOf(auxAfiliado.getTelefono()));
-                        ventanaAfiliado.setTxtCorreoEditar(auxAfiliado.getCorreo());
-                        ventanaAfiliado.manejarBtnCancelarEditar(true);
+                        else
+                        {
+                            ventanaAfiliado.mostrarMensaje("Escoja un tipo de documento");
+                            auxDatosValidos = false;
+                        }
                     }
                     else
                     {
-                        ventanaAfiliado.mostrarMensaje("Afiliado no encontrado");
-                        ventanaAfiliado.setIdEditar("");
-                        ventanaAfiliado.limpiarDatosEditar();
-                        ventanaAfiliado.desactivarControlesEditar();
-                        ventanaAfiliado.manejarTextFieldIdEditar(true);
-                        ventanaAfiliado.manejarBtnCancelarEditar(false);
+                        ventanaAfiliado.mostrarMensaje("Ingrese un telefono valido (minimo 6 numeros)");
+                        auxDatosValidos = false;
                     }
-                }
-                catch(Exception ex)
-                {
-                    ventanaAfiliado.mostrarMensaje("Ingrese un Entero en el campo ID");
-                }
-            }
-        }   
-    }
-    
-    class CancelarEditarListener implements ActionListener
-    {
-        @Override
-        public void actionPerformed(ActionEvent e) 
-        {
-            Afiliado auxAfiliado;
-            
-            if(e.getActionCommand().equalsIgnoreCase("CANCELAR"))
-            {
-                auxAfiliado = servicioMedicoUV.getAfiliado(Integer.parseInt(ventanaAfiliado.getIdEditar()));
-                
-                if(auxAfiliado!=null)
-                {
-                    ventanaAfiliado.manejarTextFieldIdEditar(true);
-                    ventanaAfiliado.limpiarDatosEditar();
-                    ventanaAfiliado.desactivarControlesEditar();
-                    ventanaAfiliado.manejarBtnCancelarEditar(false);
                 }
                 else
                 {
-                    ventanaAfiliado.mostrarMensaje("No existe la ID seleccionada");
-                    ventanaAfiliado.setIdEditar("");
-                    ventanaAfiliado.limpiarDatosEditar();
-                    ventanaAfiliado.desactivarControlesEditar();
-                    ventanaAfiliado.manejarTextFieldIdEditar(true);
-                    ventanaAfiliado.manejarBtnCancelarEditar(false);
+                    ventanaAfiliado.mostrarMensaje("Ingrese un numero de documento valido (minimo 6 numeros)");
+                    auxDatosValidos = false;
                 }
             }
-        }   
-    }
-    
-    private void eliminarAfiliado()
-    {
-        Afiliado auxAfiliado;
-        int auxIdAfiliado;
-        
-        try
-        {
-            auxIdAfiliado = Integer.parseInt(ventanaAfiliado.getIdEliminar());
-            auxAfiliado = servicioMedicoUV.getAfiliado(auxIdAfiliado);
-            
-            if(auxAfiliado!=null)
+            else
             {
-                if(servicioMedicoUV.eliminarAfiliado(auxAfiliado))
-                {
-                    ventanaAfiliado.mostrarMensaje("Afiliado eliminado con éxito");
-                    servicioMedicoUV.escribirAfiliados();
-                    ventanaAfiliado.limpiarDatosEliminar();
-                    ventanaAfiliado.setIdEliminar("");
-                    ventanaAfiliado.manejarTextFieldIdElimnar(true);
-                    ventanaAfiliado.manejarBtnCancelarEliminar(false);
-                }
+                ventanaAfiliado.mostrarMensaje("No se puede agregar un correo vacio");
+                auxDatosValidos = false;
             }
-        }
-        catch(Exception ex)
-        {
-            ventanaAfiliado.mostrarMensaje("Ingrese un entero en el campo ID");
-            ventanaAfiliado.setIdEliminar("");
-        }
-    }
-    
-    class EliminarAfiliadoListener implements ActionListener
-    {
-        @Override
-        public void actionPerformed(ActionEvent e) 
-        {
-            if(e.getActionCommand().equalsIgnoreCase("ELIMINAR"))
-            {
-                eliminarAfiliado();
-            }
-        }   
-    }
-    
-    class BuscarEliminarListener implements ActionListener
-    {
-        @Override
-        public void actionPerformed(ActionEvent e) 
-        {
-            Afiliado auxAfiliado;
-            int auxNumeroId;
-            
-            if(e.getActionCommand().equalsIgnoreCase("BUSCAR"))
-            {
-                try
-                {
-                    auxNumeroId = Integer.parseInt(ventanaAfiliado.getIdEliminar());
-                    auxAfiliado = servicioMedicoUV.getAfiliado(auxNumeroId);
-                    
-                    if(auxAfiliado!=null)
-                    {
-                        ventanaAfiliado.manejarTextFieldIdElimnar(false);
-                        ventanaAfiliado.activarControlesEliminar();
-                        ventanaAfiliado.setTxtNombreEliminar(auxAfiliado.getNombre());
-                        ventanaAfiliado.setTxtDocumentoEliminar(String.valueOf(auxAfiliado.getDocumento().getNumeroDocumento()));
-                        ventanaAfiliado.setTxtTipoDocumentoEliminar(auxAfiliado.getDocumento().getTipoDocumento());
-                        ventanaAfiliado.setTxtCorreoEliminar(auxAfiliado.getCorreo());
-                        ventanaAfiliado.setTxtTelefonoEliminar(String.valueOf(auxAfiliado.getTelefono()));
-                        ventanaAfiliado.desactivarControlesEliminar();
-                        ventanaAfiliado.manejarBtnCancelarEliminar(true);
-                    }
-                    else
-                    {
-                        ventanaAfiliado.mostrarMensaje("Afiliado no encontrado");
-                        ventanaAfiliado.setIdEditar("");
-                    }
-                }
-                catch(Exception ex)
-                {
-                    ventanaAfiliado.mostrarMensaje("Ingrese un Entero en el campo ID");
-                }
-            }
-        }       
-    }
-    
-    class CancelarEliminarListener implements ActionListener
-    {
-        @Override
-        public void actionPerformed(ActionEvent e) 
-        {
-            if(e.getActionCommand().equalsIgnoreCase("CANCELAR"))
-            {
-                ventanaAfiliado.manejarTextFieldIdElimnar(true);
-                ventanaAfiliado.limpiarDatosEliminar();
-                ventanaAfiliado.desactivarControlesEliminar();
-                ventanaAfiliado.manejarBtnCancelarEliminar(false);
-            }
-        }        
-    }
-    
-    private void listarAfiliados()
-    {
-        ArrayList<Afiliado> auxAfiliados;
-        Object[][] auxDataAfiliado;
-        String[] nombresColumnas = {"ID", "NOMBRE", "T. DOCUMENTO", "# DOCUMENTO", "CORREO", "TELEFONO"};
-        auxAfiliados = servicioMedicoUV.getAfiliados();
-        
-        if(!auxAfiliados.isEmpty())
-        {
-            ventanaAfiliado.crearTabla(dataAfiliados(auxAfiliados), nombresColumnas);
         }
         else
         {
-            ventanaAfiliado.crearTabla(dataAfiliados(auxAfiliados), nombresColumnas);
-            ventanaAfiliado.mostrarMensaje("No hay afiliados listados");
+            ventanaAfiliado.mostrarMensaje("No se puede agregar un nombre vacio");
+            auxDatosValidos = false;
         }
+
+        return auxDatosValidos;
     }
-    
-    class ListarAfiliadoListener implements ActionListener
-    {
-        @Override
-        public void actionPerformed(ActionEvent e) 
-        {
-            if(e.getActionCommand().equalsIgnoreCase("REFRESCAR"))
-            {
-                listarAfiliados();
-            }
-        }      
-    }
-    
-    
-    public Boolean comprobarDatosAfiliado(String nombre, Documento documento, String correo, Long telefono)
-    {
-        Boolean DatosValidos = false;
-        ArrayList<Afiliado> auxAfiliados;
-        auxAfiliados = servicioMedicoUV.getAfiliados();
-            if (nombre.length() != 0 && String.valueOf(documento.getNumeroDocumento()).length() != 0 && documento.getTipoDocumento()!=null && correo.length() != 0 && String.valueOf(telefono).length()!=0)
-            {
-                DatosValidos = true;
-                for (Afiliado afiliado : auxAfiliados)
-                {
-                    if (afiliado.getDocumento()!=null && afiliado.getDocumento().getNumeroDocumento() == documento.getNumeroDocumento()) 
-                    {
-                        ventanaAfiliado.mostrarMensaje("Ya existe un afiliado con este documento");
-                        DatosValidos = false;
-                        break;
-                    }
-                }
-            }
-            else 
-            {
-                ventanaAfiliado.mostrarMensaje("Rellene todos los campos");
-            }
-            return DatosValidos;
-    }
-    
+
     public String mostrarDatos(Afiliado afiliado)
     {
         String datos;
@@ -483,6 +112,407 @@ public class ControladorAfiliado
         datos = "\n"+"ID: "+auxId+"\n"+"Nombre: "+auxNombre+"\n"+"# documento: "+auxDocumento+"\n"+"Tipo Documento: "+auxTipoDocu+"\n"+"Correo: "+auxCorreo+"\n"+"Telefono: "+auxTelefono;
 
         return datos;
+    }
+
+    public Object[][] tablaObjectAfiliados(ArrayList<Afiliado> auxAfiliados)
+    {
+       Object[][] dataAfiliados;
+       dataAfiliados = new Object[auxAfiliados.size()][6];
+
+       int auxId;
+       String auxNombre;
+       String auxTipoDocumento;
+       long auxNumeroDocumento;
+       String auxCorreo;
+       long auxTelefono;
+
+       for(int fila = 0; fila < dataAfiliados.length; fila++)
+       {
+           auxId = auxAfiliados.get(fila).getId();
+           auxNombre = auxAfiliados.get(fila).getNombre();
+           auxTipoDocumento = auxAfiliados.get(fila).getDocumento().getTipoDocumento();
+           auxNumeroDocumento = auxAfiliados.get(fila).getDocumento().getNumeroDocumento();
+           auxCorreo = auxAfiliados.get(fila).getCorreo();
+           auxTelefono = auxAfiliados.get(fila).getTelefono();
+           
+           dataAfiliados[fila][0] = auxId;
+           dataAfiliados[fila][1] = auxNombre;
+           dataAfiliados[fila][2] = auxTipoDocumento;
+           dataAfiliados[fila][3] = auxNumeroDocumento;
+           dataAfiliados[fila][4] = auxCorreo;
+           dataAfiliados[fila][5] = auxTelefono;
+       }
+
+       return dataAfiliados;
+    }
+
+    private void listarAfiliados()
+    {
+        ArrayList<Afiliado> auxAfiliados;
+        Object[][] auxDataAfiliados;
+        String[] nombresColumnas = {"ID", "NOMBRE", "T. DOCUMENTO", "# DOCUMENTO", "CORREO", "TELEFONO"};
+        auxAfiliados = servicioMedicoUV.getAfiliados();
+        auxDataAfiliados = tablaObjectAfiliados(auxAfiliados);
+        ventanaAfiliado.crearTabla(auxDataAfiliados, nombresColumnas);
+        if(auxAfiliados.isEmpty())
+        {
+            ventanaAfiliado.mostrarMensaje("No hay afiliados listados");
+        }
+    }
+
+    class ListarAfiliadoListener implements ActionListener
+    {
+        @Override
+        public void actionPerformed(ActionEvent e)
+        {
+            if(e.getActionCommand().equalsIgnoreCase("REFRESCAR"))
+            {
+                listarAfiliados();
+            }
+        }
+    }
+
+    private void AgregarAfiliado()
+    {
+        Afiliado auxAfiliado;
+        String auxNombre;
+        String auxTipoDocumento;
+        long auxNumeroDocumento;
+        Documento auxDocumento;
+        String auxCorreo;
+        long auxTelefono;
+
+        try
+        {
+            auxNombre = ventanaAfiliado.getTxtNombreAgregar();
+            auxCorreo = ventanaAfiliado.getTxtCorreoAgregar();
+            auxTipoDocumento = ventanaAfiliado.getBoxTipoDocumentoAgregar();
+            auxNumeroDocumento = Long.parseLong(ventanaAfiliado.getTxtDocumentoAgregar());
+            auxTelefono = Long.parseLong(ventanaAfiliado.getTxtTelefonoAgregar());
+
+            if (comprobarDatosAfiliado(0, auxNombre, auxTipoDocumento, auxNumeroDocumento, auxCorreo, auxTelefono))
+            {
+                auxDocumento = new Documento(auxTipoDocumento, auxNumeroDocumento);
+                auxAfiliado = new Afiliado(auxNombre, auxDocumento, auxCorreo, auxTelefono);
+                if (servicioMedicoUV.agregarAfiliado(auxAfiliado))
+                {
+                    ventanaAfiliado.mostrarMensaje("Afiliado agregado con éxito" + mostrarDatos(auxAfiliado));
+                    servicioMedicoUV.escribirAfiliados();
+                }
+                else
+                {
+                    ventanaAfiliado.mostrarMensaje("No se pudo agregar el afiliado");
+                }
+            }
+        }
+        catch(NumberFormatException ex)
+        {
+            ventanaAfiliado.mostrarMensaje("Ingrese números enteros en los campos de documento y teléfono");
+        }
+        ventanaAfiliado.limpiarDatosAgregar();
+    }
+
+    class AgregarAfiliadoListener implements ActionListener
+    {
+        @Override
+        public void actionPerformed(ActionEvent e)
+        {
+            if(e.getActionCommand().equalsIgnoreCase("AGREGAR"))
+            {
+                AgregarAfiliado();
+            }
+        }
+    }
+
+    private void buscarEditarAfiliado()
+    {
+        Afiliado auxAfiliado;
+        int auxId;
+        String auxNombre;
+        String auxNumeroDocumento;
+        Documento auxDocumento;
+        String auxCorreo;
+        String auxTelefono;
+
+        try
+        {
+            auxId = Integer.parseInt(ventanaAfiliado.getIdEditar());
+            auxAfiliado = servicioMedicoUV.getAfiliado(auxId);
+
+            if(auxAfiliado != null)
+            {
+                auxNombre = auxAfiliado.getNombre();
+                auxDocumento = auxAfiliado.getDocumento();
+                auxNumeroDocumento = String.valueOf(auxDocumento.getNumeroDocumento());
+                auxCorreo = auxAfiliado.getCorreo();
+                auxTelefono = String.valueOf(auxAfiliado.getTelefono());
+
+                ventanaAfiliado.activarControlesEditar();
+                ventanaAfiliado.setTxtNombreEditar(auxNombre);
+                ventanaAfiliado.setTxtDocumentoEditar(auxNumeroDocumento);
+                ventanaAfiliado.setBoxTipoDocumentoEditar(auxDocumento);
+                ventanaAfiliado.setTxtTelefonoEditar(auxTelefono);
+                ventanaAfiliado.setTxtCorreoEditar(auxCorreo);
+                ventanaAfiliado.manejarTextFieldIdEditar(false);
+                ventanaAfiliado.manejarBtnCancelarEditar(true);
+                ventanaAfiliado.manajerBtnEditar(true);
+            }
+            else
+            {
+                ventanaAfiliado.mostrarMensaje("Afiliado no encontrado");
+                ventanaAfiliado.setIdEditar("");
+            }
+        }
+        catch(Exception ex)
+        {
+            ventanaAfiliado.mostrarMensaje("Ingrese un Entero en el campo ID");
+            ventanaAfiliado.setIdEditar("");
+        }
+    }
+
+    class BuscarEditarListener implements ActionListener
+    {
+        @Override
+        public void actionPerformed(ActionEvent e)
+        {
+            if(e.getActionCommand().equalsIgnoreCase("BUSCAR"))
+            {
+                buscarEditarAfiliado();
+            }
+        }
+    }
+
+    private void editarAfiliado()
+    {
+        Afiliado auxAfiliado;
+        int auxId;
+        String auxNombre;
+        Documento auxDocumento;
+        String auxTipoDocumento;
+        long auxNumeroDocumento;
+        String auxCorreo;
+        long auxTelefono;
+
+        auxId = Integer.parseInt(ventanaAfiliado.getIdEditar());
+        auxAfiliado = servicioMedicoUV.getAfiliado(auxId);
+
+        try
+        {
+            auxNombre = ventanaAfiliado.getTxtNombreEditar();
+            auxTipoDocumento = ventanaAfiliado.getBoxTipoDocumentoEditar();
+            auxNumeroDocumento = Long.parseLong(ventanaAfiliado.getTxtDocumentoEditar());
+            auxTelefono = Long.parseLong(ventanaAfiliado.getTxtTelefonoEditar());
+            auxCorreo = ventanaAfiliado.getTxtCorreoEditar();
+
+            if (auxAfiliado != null)
+            {
+                if(comprobarDatosAfiliado(auxId ,auxNombre, auxTipoDocumento, auxNumeroDocumento, auxCorreo, auxTelefono))
+                {
+                    auxAfiliado.setNombre(auxNombre);
+                    auxDocumento = auxAfiliado.getDocumento();
+                    auxDocumento.setTipoDocumento(auxTipoDocumento);
+                    auxDocumento.setNumeroDocumento(auxNumeroDocumento);
+                    auxAfiliado.setCorreo(auxCorreo);
+                    auxAfiliado.setTelefono(auxTelefono);
+                    if(servicioMedicoUV.actualizarAfiliado(auxAfiliado))
+                    {
+                        ventanaAfiliado.mostrarMensaje("Afiliado editado con éxito" + mostrarDatos(auxAfiliado));
+                        servicioMedicoUV.escribirAfiliados();
+                    }
+                    else
+                    {
+                        ventanaAfiliado.mostrarMensaje("No se pudo editar el afiliado");
+                    }
+                }
+            }
+            else
+            {
+                ventanaAfiliado.mostrarMensaje("Afiliado no encontrado");
+            }
+        }
+        catch (NumberFormatException ex)
+        {
+            ventanaAfiliado.mostrarMensaje("Ingrese números enteros en los campos de documento y teléfono");
+        }
+        ventanaAfiliado.manejarTextFieldIdEditar(true);
+        ventanaAfiliado.manejarBtnCancelarEditar(false);
+        ventanaAfiliado.manajerBtnEditar(false);
+        ventanaAfiliado.setIdEditar("");
+        ventanaAfiliado.limpiarDatosEditar();
+        ventanaAfiliado.desactivarControlesEditar();
+    }
+
+    class EditarAfiliadoListener implements ActionListener
+    {
+        @Override
+        public void actionPerformed(ActionEvent e) 
+        {
+            if(e.getActionCommand().equalsIgnoreCase("EDITAR"))
+            {
+            editarAfiliado();
+            }
+        }
+    }
+
+    private void cancelarEditarAfiliado()
+    {
+        ventanaAfiliado.manejarTextFieldIdEditar(true);
+        ventanaAfiliado.manejarBtnCancelarEditar(false);
+        ventanaAfiliado.manajerBtnEditar(false);
+        ventanaAfiliado.setIdEditar("");
+        ventanaAfiliado.limpiarDatosEditar();
+        ventanaAfiliado.desactivarControlesEditar();
+    }
+
+    class CancelarEditarListener implements ActionListener
+    {
+        @Override
+        public void actionPerformed(ActionEvent e)
+        {
+            cancelarEditarAfiliado();
+        }
+    }
+
+    private void buscarEliminarAfiliado()
+    {
+        Afiliado auxAfiliado;
+        int auxId;
+        String auxNombre;
+        Documento auxDocumento;
+        String auxTipoDocumento;
+        String auxNumeroDocumento;;
+        String auxCorreo;
+        String auxTelefono;
+
+        try
+        {
+            auxId = Integer.parseInt(ventanaAfiliado.getIdEliminar());
+            auxAfiliado = servicioMedicoUV.getAfiliado(auxId);
+
+            if(auxAfiliado != null)
+            {
+                auxNombre = auxAfiliado.getNombre();
+                auxDocumento = auxAfiliado.getDocumento();
+                auxTipoDocumento = auxDocumento.getTipoDocumento();
+                auxNumeroDocumento = String.valueOf(auxDocumento.getNumeroDocumento());
+                auxCorreo = auxAfiliado.getCorreo();
+                auxTelefono = String.valueOf(auxAfiliado.getTelefono());
+
+                ventanaAfiliado.manejarTextFieldIdElimnar(false);
+                ventanaAfiliado.activarControlesEliminar();
+                ventanaAfiliado.setTxtNombreEliminar(auxNombre);
+                ventanaAfiliado.setTxtDocumentoEliminar(auxNumeroDocumento);
+                ventanaAfiliado.setTxtTipoDocumentoEliminar(auxTipoDocumento);
+                ventanaAfiliado.setTxtCorreoEliminar(auxCorreo);
+                ventanaAfiliado.setTxtTelefonoEliminar(auxTelefono);
+                ventanaAfiliado.desactivarControlesEliminar();
+                ventanaAfiliado.manejarBtnCancelarEliminar(true);
+                ventanaAfiliado.manajerBtnEliminar(true);
+            }
+            else
+            {
+                ventanaAfiliado.mostrarMensaje("Afiliado no encontrado");
+                ventanaAfiliado.setIdEditar("");
+            }
+        }
+        catch(Exception ex)
+        {
+            ventanaAfiliado.mostrarMensaje("Ingrese un Entero en el campo ID");
+            ventanaAfiliado.setIdEditar("");
+        }
+    }
+
+    class BuscarEliminarListener implements ActionListener
+    {
+        @Override
+        public void actionPerformed(ActionEvent e)
+        {
+            buscarEliminarAfiliado();
+        }
+    }
+    
+    private void eliminarAfiliado()
+    {
+        Afiliado auxAfiliado;
+        int auxId;
+
+        auxId = Integer.parseInt(ventanaAfiliado.getIdEliminar());
+        auxAfiliado = servicioMedicoUV.getAfiliado(auxId);
+
+        if(auxAfiliado != null)
+        {
+            if(servicioMedicoUV.eliminarAfiliado(auxAfiliado))
+            {
+                ventanaAfiliado.mostrarMensaje("Afiliado eliminado con éxito");
+                servicioMedicoUV.escribirAfiliados();
+            }
+            else
+            {
+                ventanaAfiliado.mostrarMensaje("No se pudo eliminar el consultorio");
+            }
+        }
+        else
+        {
+            ventanaAfiliado.mostrarMensaje("Afiliado no encontrado");
+        }
+        ventanaAfiliado.limpiarDatosEliminar();
+        ventanaAfiliado.setIdEliminar("");
+        ventanaAfiliado.manejarTextFieldIdElimnar(true);
+        ventanaAfiliado.manejarBtnCancelarEliminar(false);
+        ventanaAfiliado.manajerBtnEliminar(false);
+    }
+    
+    class EliminarAfiliadoListener implements ActionListener
+    {
+        @Override
+        public void actionPerformed(ActionEvent e) 
+        {
+            if(e.getActionCommand().equalsIgnoreCase("ELIMINAR"))
+            {
+                eliminarAfiliado();
+            }
+        }   
+    }
+
+    public void cancelarEliminarAfiliado()
+    {
+        ventanaAfiliado.limpiarDatosEliminar();
+        ventanaAfiliado.setIdEliminar("");
+        ventanaAfiliado.manejarTextFieldIdElimnar(true);
+        ventanaAfiliado.manejarBtnCancelarEliminar(false);
+        ventanaAfiliado.manajerBtnEliminar(false);
+        ventanaAfiliado.desactivarControlesEliminar();
+    }
+    
+    class CancelarEliminarListener implements ActionListener
+    {
+        @Override
+        public void actionPerformed(ActionEvent e) 
+        {
+            if(e.getActionCommand().equalsIgnoreCase("CANCELAR"))
+            {
+                cancelarEliminarAfiliado();
+            }
+        }        
+    }
+
+    private void volverMenuPrincipal()
+    {
+        ventanaAfiliado.dispose();
+        VentanaMenu ventanaMenu = new VentanaMenu();
+        ControladorMenu controladorMenu = new ControladorMenu(servicioMedicoUV, ventanaMenu);
+    }
+
+    class AtrasAfiliadoListener implements ActionListener
+    {
+        @Override
+        public void actionPerformed(ActionEvent e)
+        {
+            if(e.getActionCommand().equalsIgnoreCase("ATRAS"))
+            {
+                volverMenuPrincipal();
+            }
+        }
     }
 }
 
