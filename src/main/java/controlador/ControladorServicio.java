@@ -1,4 +1,3 @@
-
 package controlador;
 
 import Vista.VentanaMenu;
@@ -9,9 +8,8 @@ import Vista.VentanaServicio;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.File;
 import java.util.ArrayList;
-import java.util.Scanner;
+
 import modelo.Medico;
 
 /**
@@ -20,8 +18,8 @@ import modelo.Medico;
  */
 public class ControladorServicio 
 {
-    private Empresa servicioMedicoUV;
-    private VentanaServicio ventanaServicio;
+    private final Empresa servicioMedicoUV;
+    private final VentanaServicio ventanaServicio;
     
     public ControladorServicio(Empresa auxServicioMedicoUV, VentanaServicio auxVentanaServicio)
     {
@@ -41,45 +39,96 @@ public class ControladorServicio
         this.ventanaServicio.addBtnCancelarEditarListener(new CancelarEditarListener());
         this.ventanaServicio.addBtnCancelarEliminarListener(new CancelarEliminarListener());
     }
-    
-    private Object[][] dataServicio(ArrayList <Servicio> auxServicios)
+
+    public boolean comprobarAsignacionMedico(Servicio auxServicio)
     {
-       Object[][] dataServicio;
-       dataServicio = new Object [auxServicios.size()][2];
-       for(int fila=0; fila<dataServicio.length;fila++)
-       {
-           int auxID;
-           auxID = auxServicios.get(fila).getId();
-           
-           String auxCualServicio;
-           auxCualServicio = auxServicios.get(fila).getNombre();
-           
-           dataServicio[fila][0] = auxID;
-           dataServicio[fila][1] = auxCualServicio;
-       }
-       return dataServicio;
+        boolean auxAsignado = false;
+        ArrayList <Medico> auxMedicos;
+        auxMedicos = servicioMedicoUV.getMedicos();
+
+        if (!auxMedicos.isEmpty())
+        {
+            for(Medico medico: auxMedicos)
+            {
+                if(medico.getEspecialidad().getId() == auxServicio.getId())
+                {
+                    auxAsignado = true;
+                    break;
+                }
+            }
+        }
+        return auxAsignado;
+    }
+
+    private boolean comprobarNombreServicio(String auxNombre)
+    {
+        boolean auxNombreValido;
+        auxNombreValido = true;
+        ArrayList<Servicio> auxServicios;
+        auxServicios = servicioMedicoUV.getServicios();
+
+        if(!auxServicios.isEmpty())
+        {
+            for(Servicio servicio: auxServicios)
+            {
+                if(servicio.getNombre().trim().equalsIgnoreCase(auxNombre.trim()))
+                {
+                    ventanaServicio.mostrarMensaje("El servicio ya fue agregado. Por favor ingrese otros servicio");
+                    auxNombreValido = false;
+                    break;
+                }
+            }
+        }
+        return auxNombreValido;
+    }
+
+    public String mostrarDatos(Servicio servicio)
+    {
+        String datos;
+        String idServicio = String.valueOf(servicio.getId());
+        String nombreServicio = String.valueOf(servicio.getNombre());
+
+        datos = "\nId: " + idServicio+"\nNombre: "+ nombreServicio;
+
+        return datos;
+    }
+
+    private Object[][] tablaObjectServicio(ArrayList <Servicio> auxServicios)
+    {
+        Object[][] dataServicio;
+        dataServicio = new Object [auxServicios.size()][2];
+
+        int auxId;
+        String auxCualServicio;
+
+        for(int fila=0; fila<dataServicio.length;fila++)
+        {
+            auxId = auxServicios.get(fila).getId();
+            auxCualServicio = auxServicios.get(fila).getNombre();
+
+            dataServicio[fila][0] = auxId;
+            dataServicio[fila][1] = auxCualServicio;
+        }
+
+        return dataServicio;
     }
     
     private void listarServicio()
     {
         ArrayList <Servicio> auxServicios;
-        Object[] auxDataServicio;
+        Object[][] auxDataServicios;
         String[] nombresColumnas = {"ID", "SERVICIO"};
         auxServicios = servicioMedicoUV.getServicios();
-        if(!auxServicios.isEmpty())
+        auxDataServicios = tablaObjectServicio(auxServicios);
+        ventanaServicio.crearTabla(auxDataServicios, nombresColumnas);
+        if(auxServicios.isEmpty())
         {
-            ventanaServicio.crearTabla(dataServicio(auxServicios), nombresColumnas);
-        }
-        else
-        {
-            ventanaServicio.crearTabla(dataServicio(auxServicios), nombresColumnas);
             ventanaServicio.mostrarMensaje("No hay servicios listados");
         }
     }
     
     class ListarServicioListener implements ActionListener
     {
-
         @Override
         public void actionPerformed(ActionEvent e) {
             if(e.getActionCommand().equalsIgnoreCase("REFRESCAR"))
@@ -91,48 +140,35 @@ public class ControladorServicio
     
     private void agregarServicio()
     {
-        String auxServicio;
-        
-        try {
-            if (ventanaServicio.getTxtServicioAgregar().length() > 0)
-            {
-                auxServicio = ventanaServicio.getTxtServicioAgregar();
+        Servicio auxServicio;
+        String auxNombre;
 
-                if (comprobarNombreServicios(auxServicio))
+        if(ventanaServicio.getTxtServicioAgregar().length() > 0)
+        {
+            auxNombre = ventanaServicio.getTxtServicioAgregar();
+            if(comprobarNombreServicio(auxNombre))
+            {
+                auxServicio = new Servicio(auxNombre);
+                if (servicioMedicoUV.agregarServicio(auxServicio))
                 {
-                    Servicio auxServicios = new Servicio(auxServicio);
-                    if (servicioMedicoUV.agregarServicio(auxServicios))
-                    {
-                        ventanaServicio.mostrarMensaje("Servicio agregado con éxito" + mostrarDatos(auxServicios));
-                        servicioMedicoUV.escribirServicios();
-                        ventanaServicio.setTxtServicioAgregar("");
-                    }
-                    else
-                    {
-                        ventanaServicio.mostrarMensaje("No se pudo agregar el servicio");
-                        ventanaServicio.setTxtServicioAgregar("");
-                    }
+                    ventanaServicio.mostrarMensaje("Servicio agregado con éxito" + mostrarDatos(auxServicio));
+                    servicioMedicoUV.escribirServicios();
                 }
                 else
                 {
-                    ventanaServicio.setTxtServicioAgregar("");
+                    ventanaServicio.mostrarMensaje("No se pudo agregar el servicio");
                 }
             }
-            else
-            {
-                ventanaServicio.mostrarMensaje("No se puede crear un servicio vacio");
-            }
-        }
-        catch(NumberFormatException ex)
-        {
-            ventanaServicio.mostrarMensaje("Por favor escriba un servicio");
             ventanaServicio.setTxtServicioAgregar("");
+        }
+        else
+        {
+            ventanaServicio.mostrarMensaje("No se puede agregar un servicio vacio");
         }
     }
     
     class AgregarServicioListener implements ActionListener
     {
-
         @Override
         public void actionPerformed(ActionEvent e) 
         {
@@ -143,59 +179,222 @@ public class ControladorServicio
         }
         
     }
-    
-    private void eliminarServicio()
+
+    private void buscarEditarServicio()
     {
         Servicio auxServicio;
-        String auxNumeroID;
-        int intAuxNumeroID;
-        
+        int auxId;
+        String auxNombre;
+
         try
-        {   
-            auxNumeroID = ventanaServicio.getIdEliminar();
-            intAuxNumeroID = Integer.parseInt(auxNumeroID);
-            auxServicio = servicioMedicoUV.getServicio(intAuxNumeroID);
-            
+        {
+            auxId = Integer.parseInt(ventanaServicio.getIdEditar());
+            auxServicio = servicioMedicoUV.getServicio(auxId);
+
             if(auxServicio != null)
             {
-                if(!comprobarAsignacion(auxServicio))
+                auxNombre = auxServicio.getNombre();
+                ventanaServicio.setTxtServicioEditar(auxNombre);
+                ventanaServicio.activarControlesEditar();
+                ventanaServicio.manejarTextFieldIdEditar(false);
+                ventanaServicio.manejarBtnCancelarEditar(true);
+                ventanaServicio.manajerBtnEditar(true);
+            }
+            else
+            {
+                ventanaServicio.mostrarMensaje("Servicio no encontrado");
+                ventanaServicio.setIdEditar("");
+            }
+        }
+        catch (Exception ex)
+        {
+            ventanaServicio.mostrarMensaje("Ingrese un numero entero en el campo ID");
+            ventanaServicio.setIdEditar("");
+        }
+    }
+
+    class BuscarEditarServicioListener implements ActionListener
+    {
+        @Override
+        public void actionPerformed(ActionEvent e)
+        {
+            buscarEditarServicio();
+        }
+    }
+
+    private void editarServicio()
+    {
+        Servicio auxServicio;
+        int intId;
+        String auxNombre;
+
+        intId = Integer.parseInt(ventanaServicio.getIdEditar());
+        auxServicio = servicioMedicoUV.getServicio(intId);
+
+        if(auxServicio != null)
+        {
+            if(comprobarAsignacionMedico(auxServicio))
+            {
+                if(ventanaServicio.getTxtServicioEditar().length() > 0)
                 {
-                    if(servicioMedicoUV.eliminarServicio(auxServicio))
+                    auxNombre = ventanaServicio.getTxtServicioEditar();
+                    if(comprobarNombreServicio(auxNombre))
                     {
-                        ventanaServicio.mostrarMensaje("Servicio eliminado con éxito");
-                        servicioMedicoUV.escribirConsultorios();
-                        ventanaServicio.setTxtServicioEliminar("");
-                        ventanaServicio.setIdEliminar("");
-                        ventanaServicio.manejarBtnCancelarEliminar(false);
-                        ventanaServicio.manejarTextFieldIdElimnar(true);
-                    }
-                    else
-                    {
-                        ventanaServicio.mostrarMensaje("No se pudo eliminar el servicio");
-                        ventanaServicio.setTxtServicioEliminar("");
-                        ventanaServicio.setIdEliminar("");
-                        ventanaServicio.manejarBtnCancelarEliminar(false);
-                        ventanaServicio.manejarTextFieldIdElimnar(true);
+                        auxServicio.setNombre(auxNombre);
+                        if(servicioMedicoUV.actualizarServicio(auxServicio))
+                        {
+                            ventanaServicio.mostrarMensaje("Servicio editado con exito");
+                            servicioMedicoUV.escribirServicios();
+                            if(comprobarAsignacionMedico(auxServicio))
+                            {
+                                servicioMedicoUV.escribirMedicos();
+                            }
+                        }
+                        else
+                        {
+                            ventanaServicio.mostrarMensaje("No se pudo editar el servicio");
+                        }
                     }
                 }
                 else
                 {
-                    ventanaServicio.mostrarMensaje("No puede eliminar un servicio asignado");
+                    ventanaServicio.mostrarMensaje("No se puede editar un servicio vacio");
                 }
             }
             else
             {
-                ventanaServicio.mostrarMensaje("No se ha encontrado el servicio");
-                ventanaServicio.setTxtServicioEliminar("");
+                ventanaServicio.mostrarMensaje("No se puede editar un servicio asignado");
+            }
+        }
+        else
+        {
+            ventanaServicio.mostrarMensaje("Servicio no encontrado");
+        }
+        ventanaServicio.desactivarControlesEditar();
+        ventanaServicio.manejarTextFieldIdEditar(true);
+        ventanaServicio.manejarBtnCancelarEditar(false);
+        ventanaServicio.manajerBtnEditar(false);
+        ventanaServicio.setTxtServicioEditar("");
+        ventanaServicio.setIdEditar("");
+    }
+
+    class EditarServicioListener implements ActionListener
+    {
+        @Override
+        public void actionPerformed(ActionEvent e)
+        {
+            if(e.getActionCommand().equalsIgnoreCase("EDITAR"))
+            {
+                editarServicio();
+            }
+        }
+    }
+
+    private void cancelarEditarServicio()
+    {
+        ventanaServicio.desactivarControlesEditar();
+        ventanaServicio.manejarTextFieldIdEditar(true);
+        ventanaServicio.manejarBtnCancelarEditar(false);
+        ventanaServicio.manajerBtnEditar(false);
+        ventanaServicio.setTxtServicioEditar("");
+        ventanaServicio.setIdEditar("");
+    }
+
+    class CancelarEditarListener implements ActionListener
+    {
+        @Override
+        public void actionPerformed(ActionEvent e)
+        {
+            if (e.getActionCommand().equalsIgnoreCase("CANCELAR"))
+            {
+                cancelarEditarServicio();
+            }
+        }
+    }
+
+    private void buscarEliminarServicio()
+    {
+        Servicio auxServicio;
+        int auxId;
+        String auxNombre;
+
+        try
+        {
+            auxId = Integer.parseInt(ventanaServicio.getIdEliminar());
+            auxServicio = servicioMedicoUV.getServicio(auxId);
+
+            if(auxServicio != null)
+            {
+                auxNombre = auxServicio.getNombre();
+                ventanaServicio.manejarTextFieldIdElimnar(false);
+                ventanaServicio.activarControlesEliminar();
+                ventanaServicio.setTxtServicioEliminar(auxNombre);
+                ventanaServicio.desactivarControlesEliminar();
+                ventanaServicio.manejarBtnCancelarEliminar(true);
+                ventanaServicio.manajerBtnEliminar(true);
+            }
+            else
+            {
+                ventanaServicio.mostrarMensaje("Servicio no encontrado");
                 ventanaServicio.setIdEliminar("");
             }
-          
         }
-        catch(Exception ex)
+        catch (Exception ex)
         {
             ventanaServicio.mostrarMensaje("Ingrese un Entero en el campo ID");
             ventanaServicio.setIdEliminar("");
         }
+    }
+
+    class BuscarEliminarServicioListener implements ActionListener
+    {
+
+        @Override
+        public void actionPerformed(ActionEvent e)
+        {
+            if(e.getActionCommand().equalsIgnoreCase("BUSCAR"))
+            {
+                buscarEliminarServicio();
+            }
+        }
+    }
+    
+    private void eliminarServicio()
+    {
+        Servicio auxServicio;
+        int auxId;
+
+        auxId = Integer.parseInt(ventanaServicio.getIdEliminar());
+        auxServicio = servicioMedicoUV.getServicio(auxId);
+
+        if(auxServicio != null)
+        {
+            if(!comprobarAsignacionMedico(auxServicio))
+            {
+                if(servicioMedicoUV.eliminarServicio(auxServicio))
+                {
+                    ventanaServicio.mostrarMensaje("Servicio eliminado con éxito");
+                    servicioMedicoUV.escribirConsultorios();
+                }
+                else
+                {
+                    ventanaServicio.mostrarMensaje("No se pudo eliminar el servicio");
+                }
+            }
+            else
+            {
+                ventanaServicio.mostrarMensaje("No se puede eliminar un servicio asignado");
+            }
+        }
+        else
+        {
+            ventanaServicio.mostrarMensaje("No se ha encontrado el servicio");
+        }
+        ventanaServicio.setTxtServicioEliminar("");
+        ventanaServicio.setIdEliminar("");
+        ventanaServicio.manejarBtnCancelarEliminar(false);
+        ventanaServicio.manejarTextFieldIdElimnar(true);
+        ventanaServicio.manajerBtnEliminar(false);
     }
     
     class EliminarServicioListener implements ActionListener
@@ -210,233 +409,15 @@ public class ControladorServicio
         }
     }
 
-    private void editarServicio()
+    private void cancelarEliminarServicio()
     {
-        Servicio auxServicio;
-        String auxNumeroId;
-        int intAuxNumeroId;
-        String auxCualServicio;
-        
-
-        try
-        {
-                auxNumeroId = ventanaServicio.getIdEditar();
-                intAuxNumeroId = Integer.parseInt(auxNumeroId);
-                auxServicio = servicioMedicoUV.getServicio(intAuxNumeroId);
-                if (auxServicio != null)
-                {
-                    if (ventanaServicio.getIdEditar().length() > 0)
-                    {
-                        auxCualServicio = ventanaServicio.getTxtServicioEditar();
-
-                        if (comprobarNombreServicios(auxCualServicio))
-                        {
-                            auxServicio.setNombre(auxCualServicio);
-
-                            if (servicioMedicoUV.actualizarServicio(auxServicio))
-                            {
-                                ventanaServicio.mostrarMensaje("Servicio editado con exito");
-                                ventanaServicio.manejarTextFieldIdEditar(true);
-                                servicioMedicoUV.escribirServicios();
-                                ventanaServicio.setTxtServicioEditar("");
-                                ventanaServicio.setIdEditar("");
-                                ventanaServicio.desactivarControlesEditar();
-                                ventanaServicio.manejarBtnCancelarEditar(false);
-                                if (comprobarAsignacion(auxServicio))
-                                {
-                                    servicioMedicoUV.escribirMedicos();
-                                }
-                            }
-                            else
-                            {
-                                ventanaServicio.mostrarMensaje("No se pudo editar el servicio");
-                                ventanaServicio.setTxtServicioEditar("");
-                                ventanaServicio.setIdEditar("");
-
-                            }
-                        }
-                        else
-                        {
-                            ventanaServicio.setTxtServicioEditar("");
-                            ventanaServicio.setIdEditar("");
-                            ventanaServicio.desactivarControlesEditar();
-                        }
-                    }
-                    else
-                    {
-                        ventanaServicio.mostrarMensaje("No se puede crear un servicio vacio");
-                    }
-                }
-                else
-                {
-                    ventanaServicio.mostrarMensaje("Servicio no encontrado");
-                    ventanaServicio.setTxtServicioEditar("");
-                    ventanaServicio.setIdEditar("");
-                    ventanaServicio.manejarTextFieldIdEditar(true);
-                    ventanaServicio.desactivarControlesEditar();
-                }
-        }
-        catch (Exception ex)
-        {
-            ventanaServicio.mostrarMensaje("Ingrese un Entero en el campo ID");
-            ventanaServicio.setTxtServicioEditar("");
-            ventanaServicio.setIdEditar("");
-            ventanaServicio.desactivarControlesEditar();
-        }
-    }
-    class EditarServicioListener implements ActionListener
-    {
-        @Override
-        public void actionPerformed(ActionEvent e)
-        {
-            if(e.getActionCommand().equalsIgnoreCase("EDITAR"))
-            {
-                editarServicio();
-            }
-        }
+        ventanaServicio.setTxtServicioEliminar("");
+        ventanaServicio.setIdEliminar("");
+        ventanaServicio.manejarBtnCancelarEliminar(false);
+        ventanaServicio.manejarTextFieldIdElimnar(true);
+        ventanaServicio.manajerBtnEliminar(false);
     }
 
-    class BuscarEditarServicioListener implements ActionListener
-    {
-        @Override
-        public void actionPerformed(ActionEvent e)
-        {
-            Servicio auxServicio;
-            String auxNumeroId;
-            int intAuxNumeroId;
-
-            if(e.getActionCommand().equalsIgnoreCase("BUSCAR"))
-            {
-                try
-                {   
-                    auxNumeroId = ventanaServicio.getIdEditar();
-                    intAuxNumeroId = Integer.parseInt(auxNumeroId);
-                    auxServicio = servicioMedicoUV.getServicio(intAuxNumeroId);
-                    if(auxServicio != null)
-                    {
-                        ventanaServicio.setTxtServicioEditar(auxServicio.getNombre());
-                        ventanaServicio.activarControlesEditar();
-                        ventanaServicio.manejarTextFieldIdEditar(false);
-                        ventanaServicio.manejarBtnCancelarEditar(true);
-                        
-                    }
-                    else
-                    {
-                        ventanaServicio.mostrarMensaje("No se pudo encontrar el servicio");
-                        ventanaServicio.setIdEditar("");
-                        ventanaServicio.setTxtServicioEditar("");
-                        ventanaServicio.manejarTextFieldIdEditar(true);
-                        ventanaServicio.manejarBtnCancelarEditar(false);
-                        ventanaServicio.desactivarControlesEditar();
-                    }
-                }
-
-                catch (Exception ex)
-                {
-                    ventanaServicio.mostrarMensaje("Ingrese enteros en el campo ID");
-                    ventanaServicio.setIdEditar("");
-                }
-            }
-
-        }
-    }
-
-    class BuscarEliminarServicioListener implements ActionListener
-    {
-
-        @Override
-        public void actionPerformed(ActionEvent e)
-        {
-            Servicio auxServicio;
-            String auxNumeroId;
-            int intAuxNumeroId;
-
-            if(e.getActionCommand().equalsIgnoreCase("BUSCAR"))
-            {
-                try
-                {
-                    auxNumeroId = ventanaServicio.getIdEliminar();
-                    intAuxNumeroId = Integer.parseInt(auxNumeroId);
-                    auxServicio = servicioMedicoUV.getServicio(intAuxNumeroId);
-                    if(auxServicio != null)
-                    {
-                        ventanaServicio.manejarTextFieldIdElimnar(false);
-                        ventanaServicio.activarControlesEliminar();
-                        ventanaServicio.setTxtServicioEliminar(auxServicio.getNombre());
-                        ventanaServicio.desactivarControlesEliminar();
-                        ventanaServicio.manejarBtnCancelarEliminar(true);
-                    }
-                    else
-                    {
-                        ventanaServicio.mostrarMensaje("Servicio no encontrado");
-                        ventanaServicio.setIdEliminar("");
-                    }
-                }
-                catch (Exception ex)
-                {
-                    ventanaServicio.mostrarMensaje("Ingrese un Entero en el campo ID");
-                    ventanaServicio.setIdEliminar("");
-                }
-            }
-        }
-    }
-    
-    class AtrasServicioListener implements ActionListener
-    {
-
-        @Override
-        public void actionPerformed(ActionEvent e) {
-            if(e.getActionCommand().equalsIgnoreCase("ATRAS"))
-            {
-                volverMenuPrincipal();
-            }
-        }
-    }
-    
-     private void volverMenuPrincipal()
-    {
-        ventanaServicio.dispose();
-        VentanaMenu ventanaMenu = new VentanaMenu();
-        ControladorMenu controladorMenu = new ControladorMenu(servicioMedicoUV,ventanaMenu);
-    }
-
-    private boolean comprobarNombreServicios(String auxCualServicio)
-    {
-        Boolean datosValidos = true;
-        ArrayList<Servicio> auxServicios;
-        auxServicios = servicioMedicoUV.getServicios();
- 
-        if(!auxServicios.isEmpty())
-        {
-            for(Servicio servicio: auxServicios)
-            {
-                if(servicio.getNombre().equals(auxCualServicio))
-                {
-                    ventanaServicio.mostrarMensaje("Este servicio ya está agregado");
-                    datosValidos = false;
-                    break;
-                }
-            }
-        }
-        return datosValidos;
-    }
-    
-    class CancelarEditarListener implements ActionListener
-    {
-        @Override
-        public void actionPerformed(ActionEvent e)
-        {
-            if (e.getActionCommand().equalsIgnoreCase("CANCELAR"))
-            {
-                ventanaServicio.setIdEditar("");
-                ventanaServicio.setTxtServicioEditar("");
-                ventanaServicio.manejarTextFieldIdEditar(true);
-                ventanaServicio.desactivarControlesEditar();
-                ventanaServicio.manejarBtnCancelarEditar(false);
-            }
-        }
-    }
-        
     class CancelarEliminarListener implements ActionListener
     {
         @Override
@@ -444,43 +425,26 @@ public class ControladorServicio
         {
             if (e.getActionCommand().equalsIgnoreCase("CANCELAR"))
             {
-                ventanaServicio.setIdEliminar("");
-                ventanaServicio.setTxtServicioEliminar("");
-                ventanaServicio.manejarTextFieldIdElimnar(true);
-                ventanaServicio.manejarBtnCancelarEliminar(false);
+                cancelarEliminarServicio();
             }
         }
     }
-    
-    
 
-    public boolean comprobarAsignacion(Servicio auxServicio)
+    private void volverMenuPrincipal()
     {
-        boolean asignado = false;
-        ArrayList <Medico> auxMedicos;
-        auxMedicos = servicioMedicoUV.getMedicos();
-        
-        if (!auxMedicos.isEmpty())
-        {
-            for(Medico medico: auxMedicos)
+        ventanaServicio.dispose();
+        VentanaMenu ventanaMenu = new VentanaMenu();
+        ControladorMenu controladorMenu = new ControladorMenu(servicioMedicoUV,ventanaMenu);
+    }
+
+    class AtrasServicioListener implements ActionListener
+    {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            if(e.getActionCommand().equalsIgnoreCase("ATRAS"))
             {
-                if(medico.getEspecialidad().getId() == auxServicio.getId())
-                {
-                    asignado = true;
-                    
-                    break;
-                }
+                volverMenuPrincipal();
             }
         }
-        return asignado;
-    }
-
-    public String mostrarDatos(Servicio servicio)
-    {
-        String idServicio = String.valueOf(servicio.getId());
-        String nombreServicio = String.valueOf(servicio.getNombre());
-
-        String datos = "\nId: " + idServicio+"\nNombre: "+ nombreServicio;
-        return datos;
     }
 }

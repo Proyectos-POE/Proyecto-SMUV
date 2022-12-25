@@ -120,6 +120,7 @@ public class Plantilla extends  JFrame {
         btnEditar.setFocusable(false);
         btnEditar.setBorder(null);
         btnEditar.setFont(new Font("Arial", Font.BOLD, 16));
+        btnEditar.setEnabled(false);
         jpEditar.add(btnEditar);
 
         btnCancelarEditar = new JButton("CANCELAR");
@@ -168,6 +169,7 @@ public class Plantilla extends  JFrame {
         btnEliminar.setFocusable(false);
         btnEliminar.setBorder(null);
         btnEliminar.setFont(new Font("Arial", Font.BOLD, 16));
+        btnEliminar.setEnabled(false);
         jpEliminar.add(btnEliminar);
 
         btnCancelarEliminar = new JButton("CANCELAR");
@@ -340,6 +342,16 @@ public class Plantilla extends  JFrame {
         {
             box.addItem(arrayTipoDocu[i]);
         }
+    }
+
+    public void manajerBtnEditar(boolean auxEstado)
+    {
+        btnEditar.setEnabled(auxEstado);
+    }
+
+    public void manajerBtnEliminar(boolean auxEstado)
+    {
+        btnEliminar.setEnabled(auxEstado);
     }
 
     public void mostrarMensaje(String erroMessage){

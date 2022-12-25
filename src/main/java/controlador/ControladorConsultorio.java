@@ -11,8 +11,8 @@ import java.util.ArrayList;
 
 public class ControladorConsultorio
 {
-    private Empresa servicioMedicoUV;
-    private VentanaConsultorio ventanaConsultorio;
+    private final Empresa servicioMedicoUV;
+    private final VentanaConsultorio ventanaConsultorio;
 
     public ControladorConsultorio(Empresa auxServicioMedicoUV, VentanaConsultorio auxVentanaConsultorio)
     {
@@ -33,44 +33,74 @@ public class ControladorConsultorio
         this.ventanaConsultorio.addBtnActualizarListener(new ListarConsultorioListener());
     }
 
-    private Object[][] dataConsultorios(ArrayList<Consultorio> auxConsultorios)
+    private boolean comprobarNumeroConsultorio(int auxNumeroConsultorio)
+    {
+        boolean auxNumeroValido;
+        auxNumeroValido = true;
+        ArrayList<Consultorio> auxConsultorios;
+        auxConsultorios = servicioMedicoUV.getConsultorios();
+
+        if(!auxConsultorios.isEmpty())
+        {
+            for(Consultorio consultorio: auxConsultorios)
+            {
+                if(consultorio.getNombreConsultorio() == auxNumeroConsultorio)
+                {
+                    ventanaConsultorio.mostrarMensaje("El numero de consultorio ya fue agregado. Por favor digite otro numero");
+                    auxNumeroValido = false;
+                    break;
+                }
+            }
+        }
+        return auxNumeroValido;
+    }
+
+    public String mostrarDatos(Consultorio consultorio)
+    {
+        String datos;
+        String idConsul = String.valueOf(consultorio.getId());
+        String nConsul = String.valueOf(consultorio.getNombreConsultorio());
+
+        datos = "\nId: " + idConsul+"\nNumero: "+ nConsul;
+
+        return datos;
+    }
+
+    private Object[][] tablaObjectConsultorio(ArrayList<Consultorio> auxConsultorios)
     {
         Object[][] dataConsultorios;
         dataConsultorios = new Object[auxConsultorios.size()][3];
+
+        int auxId;
+        int auxNumeroConsultorio;
+        String auxEstado;
+
         for(int fila = 0; fila < dataConsultorios.length; fila++)
         {
-            int auxId;
             auxId = auxConsultorios.get(fila).getId();
-
-            int auxNumeroConsultorio;
             auxNumeroConsultorio = auxConsultorios.get(fila).getNombreConsultorio();
-
-            String auxEstado;
             auxEstado = auxConsultorios.get(fila).getStringAsignado();
 
             dataConsultorios[fila][0] = auxId;
             dataConsultorios[fila][1] = auxNumeroConsultorio;
             dataConsultorios[fila][2] = auxEstado;
         }
+
         return dataConsultorios;
     }
 
     private void listarConsultorios()
     {
         ArrayList<Consultorio> auxConsultorios;
-        Object[] auxDataConsultorio;
+        Object[][] auxDataConsultorio;
         String[] nombresColumnas = {"ID","NUMERO","ESTADO"};
         auxConsultorios = servicioMedicoUV.getConsultorios();
-        if(!auxConsultorios.isEmpty())
+        auxDataConsultorio = tablaObjectConsultorio(auxConsultorios);
+        ventanaConsultorio.crearTabla(auxDataConsultorio, nombresColumnas);
+        if(auxConsultorios.isEmpty())
         {
-            ventanaConsultorio.crearTabla(dataConsultorios(auxConsultorios), nombresColumnas);
-        }
-        else
-        {
-            ventanaConsultorio.crearTabla(dataConsultorios(auxConsultorios), nombresColumnas);
             ventanaConsultorio.mostrarMensaje("No hay consultorios listados");
         }
-
     }
 
     class ListarConsultorioListener implements ActionListener
@@ -87,34 +117,26 @@ public class ControladorConsultorio
 
     private void agregarConsultorio()
     {
-        String auxNumeroConsultorio;
-        int intAuxNumeroConsultorio;
+        Consultorio auxConsultorio;
+        int auxNumeroConsultorio;
+
         try
         {
-
-            auxNumeroConsultorio = ventanaConsultorio.getNumeroAgregar();
-            intAuxNumeroConsultorio = Integer.parseInt(auxNumeroConsultorio);
-
-            if(intAuxNumeroConsultorio>=100)
+            auxNumeroConsultorio = Integer.parseInt(ventanaConsultorio.getNumeroAgregar());
+            if(auxNumeroConsultorio>=100)
             {
-                if (comprobarNumeroConsultorio(intAuxNumeroConsultorio))
+                if(comprobarNumeroConsultorio(auxNumeroConsultorio))
                 {
-                    Consultorio auxConsultorio = new Consultorio(intAuxNumeroConsultorio);
+                    auxConsultorio = new Consultorio(auxNumeroConsultorio);
                     if (servicioMedicoUV.agregarConsultorio(auxConsultorio))
                     {
                         ventanaConsultorio.mostrarMensaje("Consultorio agregado con exito" + mostrarDatos(auxConsultorio));
                         servicioMedicoUV.escribirConsultorios();
-                        ventanaConsultorio.setTxtNumeroAgregar("");
                     }
                     else
                     {
                         ventanaConsultorio.mostrarMensaje("No se pudo agregar el consultorio");
-                        ventanaConsultorio.setTxtNumeroAgregar("");
                     }
-                }
-                else
-                {
-                    ventanaConsultorio.setTxtNumeroAgregar("");
                 }
             }
             else
@@ -124,9 +146,9 @@ public class ControladorConsultorio
         }
         catch (NumberFormatException ex)
         {
-            ventanaConsultorio.mostrarMensaje("Porfavor ingrese un numero entero en el campo Numero");
-            ventanaConsultorio.setTxtNumeroAgregar("");
+            ventanaConsultorio.mostrarMensaje("Ingrese un numero entero en el campo Numero");
         }
+        ventanaConsultorio.setTxtNumeroAgregar("");
     }
 
     class AgregarConsultorioListener implements ActionListener
@@ -141,67 +163,216 @@ public class ControladorConsultorio
         }
     }
 
-    class AtrasConsultorioListener implements ActionListener
-    {
-        @Override
-        public void actionPerformed(ActionEvent e)
-        {
-            if(e.getActionCommand().equalsIgnoreCase("ATRAS"))
-            {
-                volverMenuPrincipal();
-            }
-        }
-    }
-
-    private void volverMenuPrincipal()
-    {
-        ventanaConsultorio.dispose();
-        VentanaMenu ventanaMenu = new VentanaMenu();
-        ControladorMenu controladorMenu = new ControladorMenu(servicioMedicoUV,ventanaMenu);
-    }
-    private void eliminarConsultorio()
+    private void buscarEditarConsultorio()
     {
         Consultorio auxConsultorio;
-        String auxNumeroId;
-        int intAuxNumeroId;
+        int auxId;
+        String auxNumeroConsultorio;
 
         try
         {
-            auxNumeroId = ventanaConsultorio.getIdEliminar();
-            intAuxNumeroId = Integer.parseInt(auxNumeroId);
-            auxConsultorio = servicioMedicoUV.getConsultorio(intAuxNumeroId);
-            if(auxConsultorio != null )
+            auxId = Integer.parseInt(ventanaConsultorio.getIdEditar());
+            auxConsultorio = servicioMedicoUV.getConsultorio(auxId);
+
+            if(auxConsultorio != null)
             {
-                if(!auxConsultorio.isAsignado())
-                {
-                    if (servicioMedicoUV.eliminarConsultorio(auxConsultorio))
-                    {
-                        ventanaConsultorio.mostrarMensaje("Consultorio eliminado con exito");
-                        servicioMedicoUV.escribirConsultorios();
-                        ventanaConsultorio.setTxtNumeroEliminar("");
-                        ventanaConsultorio.setIdEliminar("");
-                        ventanaConsultorio.manejarTextFieldIdElimnar(true);
-                        ventanaConsultorio.manejarBtnCancelarEliminar(false);
-                    }
-                    else
-                    {
-                        ventanaConsultorio.mostrarMensaje("No se pudo eliminar el consultorio");
-                        ventanaConsultorio.setTxtNumeroEliminar("");
-                        ventanaConsultorio.setIdEliminar("");
-                        ventanaConsultorio.manejarTextFieldIdElimnar(true);
-                    }
-                }
-                else
-                {
-                    ventanaConsultorio.mostrarMensaje("No puede eliminar un consultorio asignado");
-                }
+                auxNumeroConsultorio = String.valueOf(auxConsultorio.getNombreConsultorio());
+                ventanaConsultorio.setTxtNumeroEditar(auxNumeroConsultorio);
+                ventanaConsultorio.activarControlesEditar();
+                ventanaConsultorio.manejarTextFieldIdEditar(false);
+                ventanaConsultorio.manejarBtnCancelarEditar(true);
+                ventanaConsultorio.manajerBtnEditar(true);
+            }
+            else
+            {
+                ventanaConsultorio.mostrarMensaje("Consultorio no encontrado");
+                ventanaConsultorio.setIdEditar("");
             }
         }
         catch (Exception ex)
         {
-            ventanaConsultorio.mostrarMensaje("Porfavor ingrese los datos correctamente");
+            ventanaConsultorio.mostrarMensaje("Porfavor ingrese un numero entero en el campo ID");
+            ventanaConsultorio.setIdEditar("");
+        }
+    }
+
+    class BuscarEditarConsultorioListener implements ActionListener
+    {
+        @Override
+        public void actionPerformed(ActionEvent e)
+        {
+            buscarEditarConsultorio();
+        }
+    }
+
+    private void editarConsultorio()
+    {
+        Consultorio auxConsultorio;
+        int auxId;
+        int auxNumeroConsultorio;
+
+        try
+        {
+            auxId = Integer.parseInt(ventanaConsultorio.getIdEditar());
+            auxConsultorio = servicioMedicoUV.getConsultorio(auxId);
+            auxNumeroConsultorio = Integer.parseInt(ventanaConsultorio.getNumeroEditar());
+
+            if(auxConsultorio != null)
+            {
+                if(auxNumeroConsultorio >= 100)
+                {
+                    if(comprobarNumeroConsultorio(auxNumeroConsultorio))
+                    {
+                        auxConsultorio.setNombreConsultorio(auxNumeroConsultorio);
+                        if (servicioMedicoUV.actualizarConsultorio(auxConsultorio))
+                        {
+                            ventanaConsultorio.mostrarMensaje("Consultorio editado con exito" + mostrarDatos(auxConsultorio));
+                            servicioMedicoUV.escribirConsultorios();
+
+                            if(auxConsultorio.isAsignado())
+                            {
+                                servicioMedicoUV.escribirMedicos();
+                                //espacio para citas.
+                            }
+                        }
+                        else
+                        {
+                            ventanaConsultorio.mostrarMensaje("No se pudo editar el consultorio");
+                        }
+                    }
+                }
+                else
+                {
+                    ventanaConsultorio.mostrarMensaje("Ingrese un numero de Consultorio de 3 digitos");
+                }
+            }
+            else
+            {
+                ventanaConsultorio.mostrarMensaje("Consultorio no encontrado");
+            }
+        }
+        catch (Exception ex)
+        {
+            ventanaConsultorio.mostrarMensaje("Ingrese un numero entero en el campo Numero");
+        }
+        ventanaConsultorio.setTxtNumeroEditar("");
+        ventanaConsultorio.setIdEditar("");
+        ventanaConsultorio.desactivarControlesEditar();
+        ventanaConsultorio.manejarTextFieldIdEditar(true);
+        ventanaConsultorio.manejarBtnCancelarEditar(false);
+        ventanaConsultorio.manajerBtnEditar(false);
+    }
+
+    class EditarConsultorioListener implements ActionListener
+    {
+        @Override
+        public void actionPerformed(ActionEvent e)
+        {
+            if(e.getActionCommand().equalsIgnoreCase("EDITAR"))
+            {
+                editarConsultorio();
+            }
+        }
+    }
+
+    public void cancelarEditarConsultorio()
+    {
+        ventanaConsultorio.setTxtNumeroEditar("");
+        ventanaConsultorio.setIdEditar("");
+        ventanaConsultorio.desactivarControlesEditar();
+        ventanaConsultorio.manejarTextFieldIdEditar(true);
+        ventanaConsultorio.manejarBtnCancelarEditar(false);
+        ventanaConsultorio.manajerBtnEditar(false);
+    }
+
+    class CancelarEditarListener implements ActionListener
+    {
+        @Override
+        public void actionPerformed(ActionEvent e)
+        {
+            if (e.getActionCommand().equalsIgnoreCase("CANCELAR"))
+            {
+                cancelarEditarConsultorio();
+            }
+        }
+    }
+
+    private void buscarEliminarConsultorio()
+    {
+        Consultorio auxConsultorio;
+        int auxId;
+        String auxNumeroConsultorio;
+
+        try
+        {
+            auxId = Integer.parseInt(ventanaConsultorio.getIdEliminar());
+            auxConsultorio = servicioMedicoUV.getConsultorio(auxId);
+
+            if(auxConsultorio != null)
+            {
+                auxNumeroConsultorio = String.valueOf(auxConsultorio.getNombreConsultorio());
+
+                ventanaConsultorio.setTxtNumeroEliminar(auxNumeroConsultorio);
+                ventanaConsultorio.manejarTextFieldIdElimnar(false);
+                ventanaConsultorio.manejarBtnCancelarEliminar(true);
+                ventanaConsultorio.activarControlesEliminar();
+                ventanaConsultorio.desactivarControlesEliminar();
+                ventanaConsultorio.manajerBtnEliminar(true);
+            }
+            else
+            {
+                ventanaConsultorio.mostrarMensaje("Consultorio no encontrado");
+                ventanaConsultorio.setIdEliminar("");
+            }
+        }
+        catch(Exception ex)
+        {
+            ventanaConsultorio.mostrarMensaje("Porfavor ingrese un numero entero en el campo ID");
             ventanaConsultorio.setIdEliminar("");
         }
+    }
+
+    class BuscarEliminarConsultorioListener implements ActionListener
+    {
+        @Override
+        public void actionPerformed(ActionEvent e)
+        {
+            buscarEliminarConsultorio();
+        }
+    }
+
+    private void eliminarConsultorio()
+    {
+        Consultorio auxConsultorio;
+        int auxId;
+
+        auxId = Integer.parseInt(ventanaConsultorio.getIdEliminar());
+        auxConsultorio = servicioMedicoUV.getConsultorio(auxId);
+
+        if(auxConsultorio != null)
+        {
+            if(!auxConsultorio.isAsignado())
+            {
+                if (servicioMedicoUV.eliminarConsultorio(auxConsultorio))
+                {
+                    ventanaConsultorio.mostrarMensaje("Consultorio eliminado con exito");
+                    servicioMedicoUV.escribirConsultorios();
+                }
+                else
+                {
+                    ventanaConsultorio.mostrarMensaje("No se pudo eliminar el consultorio");
+                }
+            }
+            else
+            {
+                ventanaConsultorio.mostrarMensaje("No se puede eliminar un consultorio asignado");
+            }
+        }
+        ventanaConsultorio.setTxtNumeroEliminar("");
+        ventanaConsultorio.setIdEliminar("");
+        ventanaConsultorio.manejarTextFieldIdElimnar(true);
+        ventanaConsultorio.manejarBtnCancelarEliminar(false);
+        ventanaConsultorio.manajerBtnEliminar(false);
     }
 
     class EliminarConsultorioListener implements ActionListener
@@ -216,185 +387,13 @@ public class ControladorConsultorio
         }
     }
 
-    private void editarConsultorio()
+    public void cancelarEliminarConsultorio()
     {
-        Consultorio auxConsultorio;
-        String auxNumeroId;
-        int intAuxNumeroId;
-        String auxNumeroConsultorio;
-        int intAuxNumeroConsultorio;
-
-        try
-        {
-            auxNumeroId = ventanaConsultorio.getIdEditar();
-            intAuxNumeroId = Integer.parseInt(auxNumeroId);
-            auxConsultorio = servicioMedicoUV.getConsultorio(intAuxNumeroId);
-
-            if(Long.parseLong(ventanaConsultorio.getNumeroEditar())>=100)
-            {
-                if (auxConsultorio != null)
-                {
-                    auxNumeroConsultorio = ventanaConsultorio.getNumeroEditar();
-                    intAuxNumeroConsultorio = Integer.parseInt(auxNumeroConsultorio);
-                    if (comprobarNumeroConsultorio(intAuxNumeroConsultorio))
-                    {
-                        auxConsultorio.setNombreConsultorio(intAuxNumeroConsultorio);
-
-                        if (servicioMedicoUV.actualizarConsultorio(auxConsultorio))
-                        {
-                            ventanaConsultorio.mostrarMensaje("Consultorio editado con exito" + mostrarDatos(auxConsultorio));
-                            ventanaConsultorio.setTxtNumeroEditar("");
-                            servicioMedicoUV.escribirConsultorios();
-                            ventanaConsultorio.setIdEditar("");
-                            ventanaConsultorio.desactivarControlesEditar();
-                            ventanaConsultorio.manejarTextFieldIdEditar(true);
-                            ventanaConsultorio.manejarBtnCancelarEditar(false);
-                            if(auxConsultorio.isAsignado())
-                            {
-                                servicioMedicoUV.escribirMedicos();
-                                //espacio para citas.
-                            }
-                        }
-                        else
-                        {
-                            ventanaConsultorio.mostrarMensaje("No se pudo editar el consultorio");
-                            ventanaConsultorio.setTxtNumeroEditar("");
-                            ventanaConsultorio.setIdEditar("");
-                            ventanaConsultorio.desactivarControlesEditar();
-                            ventanaConsultorio.manejarTextFieldIdEditar(true);
-                            ventanaConsultorio.manejarBtnCancelarEditar(false);
-                        }
-                    }
-                }
-                else
-                {
-                    ventanaConsultorio.mostrarMensaje("Consultorio no encontrado");
-                    ventanaConsultorio.setTxtNumeroEditar("");
-                    ventanaConsultorio.desactivarControlesEditar();
-                    ventanaConsultorio.manejarTextFieldIdEditar(true);
-                    ventanaConsultorio.setIdEditar("");
-                    ventanaConsultorio.manejarBtnCancelarEditar(false);
-                }
-            }
-            else
-            {
-                ventanaConsultorio.mostrarMensaje("Ingrese un numero de Consultorio de 3 digitos");
-            }
-        }
-        catch (Exception ex)
-        {
-            ventanaConsultorio.mostrarMensaje("Porfavor ingrese los datos correctamente");
-            ventanaConsultorio.setTxtNumeroEditar("");
-        }
-    }
-    class EditarConsultorioListener implements ActionListener
-    {
-        @Override
-        public void actionPerformed(ActionEvent e)
-        {
-            if(e.getActionCommand().equalsIgnoreCase("EDITAR"))
-            {
-                editarConsultorio();
-            }
-        }
-    }
-
-    class BuscarEditarConsultorioListener implements ActionListener
-    {
-        @Override
-        public void actionPerformed(ActionEvent e)
-        {
-            Consultorio auxConsultorio;
-            String auxNumeroId;
-            int intAuxNumeroId;
-
-            if(e.getActionCommand().equalsIgnoreCase("BUSCAR"))
-            {
-                try
-                {
-                    auxNumeroId = ventanaConsultorio.getIdEditar();
-                    intAuxNumeroId = Integer.parseInt(auxNumeroId);
-                    auxConsultorio = servicioMedicoUV.getConsultorio(intAuxNumeroId);
-                    if(auxConsultorio != null)
-                    {
-                        ventanaConsultorio.setTxtNumeroEditar(Integer.toString(auxConsultorio.getNombreConsultorio()));
-                        ventanaConsultorio.activarControlesEditar();
-                        ventanaConsultorio.manejarTextFieldIdEditar(false);
-                        ventanaConsultorio.manejarBtnCancelarEditar(true);
-                    }
-                    else
-                    {
-                        ventanaConsultorio.mostrarMensaje("Consultorio no encontrado");
-                        ventanaConsultorio.setIdEditar("");
-                        ventanaConsultorio.setTxtNumeroEditar("");
-                        ventanaConsultorio.desactivarControlesEditar();
-                        ventanaConsultorio.manejarTextFieldIdEditar(true);
-                        ventanaConsultorio.manejarBtnCancelarEditar(false);
-                    }
-                }
-                catch (Exception ex)
-                {
-                    ventanaConsultorio.mostrarMensaje("Porfavor ingrese un numero entero en el campo ID");
-                    ventanaConsultorio.setIdEditar("");
-                }
-            }
-
-        }
-    }
-
-    class CancelarEditarListener implements ActionListener
-    {
-        @Override
-        public void actionPerformed(ActionEvent e)
-        {
-            if (e.getActionCommand().equalsIgnoreCase("CANCELAR"))
-            {
-                ventanaConsultorio.setIdEditar("");
-                ventanaConsultorio.setTxtNumeroEditar("");
-                ventanaConsultorio.manejarTextFieldIdEditar(true);
-                ventanaConsultorio.desactivarControlesEditar();
-                ventanaConsultorio.manejarBtnCancelarEditar(false);
-            }
-        }
-    }
-
-    class BuscarEliminarConsultorioListener implements ActionListener
-    {
-        @Override
-        public void actionPerformed(ActionEvent e)
-        {
-            Consultorio auxConsultorio;
-            String auxNumeroId;
-            int intAuxNumeroId;
-
-            if(e.getActionCommand().equalsIgnoreCase("BUSCAR"))
-            {
-                try
-                {
-                    auxNumeroId = ventanaConsultorio.getIdEliminar();
-                    intAuxNumeroId = Integer.parseInt(auxNumeroId);
-                    auxConsultorio = servicioMedicoUV.getConsultorio(intAuxNumeroId);
-                    if(auxConsultorio != null)
-                    {
-                        ventanaConsultorio.setTxtNumeroEliminar(Integer.toString(auxConsultorio.getNombreConsultorio()));
-                        ventanaConsultorio.manejarTextFieldIdElimnar(false);
-                        ventanaConsultorio.manejarBtnCancelarEliminar(true);
-                        ventanaConsultorio.activarControlesEliminar();
-                        ventanaConsultorio.desactivarControlesEliminar();
-                    }
-                    else
-                    {
-                        ventanaConsultorio.mostrarMensaje("Consultorio no encontrado");
-                        ventanaConsultorio.setIdEliminar("");
-                    }
-                }
-                catch (Exception ex)
-                {
-                    ventanaConsultorio.mostrarMensaje("Porfavor ingrese un numero entero en el campo ID");
-                    ventanaConsultorio.setIdEliminar("");
-                }
-            }
-        }
+        ventanaConsultorio.setTxtNumeroEliminar("");
+        ventanaConsultorio.setIdEliminar("");
+        ventanaConsultorio.manejarTextFieldIdElimnar(true);
+        ventanaConsultorio.manejarBtnCancelarEliminar(false);
+        ventanaConsultorio.manajerBtnEliminar(false);
     }
 
     class CancelarEliminarListener implements ActionListener
@@ -404,67 +403,28 @@ public class ControladorConsultorio
         {
             if (e.getActionCommand().equalsIgnoreCase("CANCELAR"))
             {
-                ventanaConsultorio.setIdEliminar("");
-                ventanaConsultorio.setTxtNumeroEliminar("");
-                ventanaConsultorio.manejarTextFieldIdEliminar(true);
-                ventanaConsultorio.manejarBtnCancelarEliminar(false);
+                cancelarEliminarConsultorio();
             }
         }
     }
 
-    private boolean comprobarNumeroConsultorio(int auxNumeroConsultorio)
+    private void volverMenuPrincipal()
     {
-        ArrayList<Consultorio> auxConsultorios;
-        auxConsultorios = servicioMedicoUV.getConsultorios();
-        boolean auxValido;
-        auxValido = true;
-        if(!auxConsultorios.isEmpty())
+        ventanaConsultorio.dispose();
+        VentanaMenu ventanaMenu = new VentanaMenu();
+        ControladorMenu controladorMenu = new ControladorMenu(servicioMedicoUV,ventanaMenu);
+    }
+
+    class AtrasConsultorioListener implements ActionListener
+    {
+        @Override
+        public void actionPerformed(ActionEvent e)
         {
-            for(Consultorio consultorio: auxConsultorios)
+            if(e.getActionCommand().equalsIgnoreCase("ATRAS"))
             {
-                if(consultorio.getNombreConsultorio() == auxNumeroConsultorio)
-                {
-                    ventanaConsultorio.mostrarMensaje("El numero de consultorio ya fue agregado. Por favor digite otro numero");
-                    auxValido = false;
-                    break;
-                }
+                volverMenuPrincipal();
             }
         }
-        return auxValido;
     }
 
-    /*
-    private void escribirConsultorios()
-    {
-        ArrayList<Consultorio> auxConsultorios;
-        auxConsultorios = servicioMedicoUV.getConsultorios();
-        ArrayList<String> auxDatos;
-        auxDatos = new ArrayList<String>();
-        if(!auxConsultorios.isEmpty())
-        {
-            for(Consultorio consultorio: auxConsultorios)
-            {
-                String auxDatosFila;
-                auxDatosFila = consultorio.toString();
-                auxDatos.add(auxDatosFila);
-            }
-            conexionConsultorio.setArchivo(new File("src/main/java/archivos/consultorios.txt"));
-            conexionConsultorio.escribirDatos(auxDatos);
-        }
-        else
-        {
-            conexionConsultorio.setArchivo(new File("src/main/java/archivos/consultorios.txt"));
-            conexionConsultorio.escribirDatos(auxDatos);
-        }
-    }
-    */
-
-    public String mostrarDatos(Consultorio consultorio)
-    {
-        String idConsul = String.valueOf(consultorio.getId());
-        String nConsul = String.valueOf(consultorio.getNombreConsultorio());
-
-        String datos = "\nId: " + idConsul+"\nNumero: "+ nConsul;
-        return datos;
-    }
 }
