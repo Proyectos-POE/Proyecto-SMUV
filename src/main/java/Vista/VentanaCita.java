@@ -1,6 +1,5 @@
 package Vista;
 
-import com.toedter.calendar.JDateChooser;
 import java.awt.*;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemListener;
@@ -37,11 +36,7 @@ public class VentanaCita extends Plantilla
     public JTextField txtHoraEliminar;
     public JButton btnReiniciarAgregar;
     public JButton btnReiniciarEditar;
-    public JDateChooser a;
-    
-    
-    
-    
+
     public VentanaCita()
     {
       inicializarNuevosComponentes();
