@@ -4,7 +4,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionListener;
 
-public class VentanaMenu extends JFrame
+public class VentanaMenu extends Plantilla
 {
     private JPanel jpContenido;
     private JLabel lblTitulo;

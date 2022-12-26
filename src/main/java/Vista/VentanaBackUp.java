@@ -4,7 +4,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionListener;
 
-public class VentanaBackUp extends JFrame{
+public class VentanaBackUp extends Plantilla
+{
 
     private JPanel jpContenido;
     private JLabel lblTitulo;

@@ -64,4 +64,12 @@ public class ControladorMenu
             }
         }
     }
+
+    public void recuperarDatos()
+    {
+        if(!servicioMedicoUV.recuperarDatos())
+        {
+            ventanaMenu.mostrarMensaje("Error a recuperar los datos. Hace falta informacion. Porfavor cargue el backUp mas reciente");
+        }
+    }
 }

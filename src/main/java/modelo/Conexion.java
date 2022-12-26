@@ -6,10 +6,13 @@ import java.util.StringTokenizer;
 
 public class Conexion implements Serializable
 {
+    private final File directorioArchivos;
     private File archivo;
 
-    public Conexion()
+    public Conexion(File auxDirectorioArchivos)
     {
+        directorioArchivos = auxDirectorioArchivos;
+        crearCarpetaArchivos();
         archivo = null;
     }
 
@@ -18,9 +21,9 @@ public class Conexion implements Serializable
         return archivo;
     }
 
-    public void setArchivo(File archivo)
+    public void setArchivo(String auxNombreArchivo)
     {
-        this.archivo = archivo;
+        this.archivo = new File(directorioArchivos.getAbsolutePath() + File.separator + auxNombreArchivo);
     }
 
     public void escribirDatosTxt(ArrayList auxDatos)
@@ -87,5 +90,13 @@ public class Conexion implements Serializable
             System.out.println("Error a cargar las clases" + e.getMessage());
         }
         return auxDatos;
+    }
+
+    private void crearCarpetaArchivos()
+    {
+        if(!directorioArchivos.exists())
+        {
+            directorioArchivos.mkdirs();
+        }
     }
 }

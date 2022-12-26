@@ -22,7 +22,7 @@ public class Empresa implements Serializable
     private final ConsultorioDao consultorioDao;
     private final CitaDao citaDao;
     private final Horario horario;
-    //private final Backup backup;
+    private final BackUp backup;
     private final Conexion conexion;
 
     public Empresa(String auxNombre)
@@ -34,8 +34,8 @@ public class Empresa implements Serializable
         this.consultorioDao = new ConsultorioDao();
         this.citaDao = new CitaDao();
         this.horario = new Horario(LocalTime.of(7,0,0), Duration.ofMinutes(30));
-        //this.backup = new Backup("src/main/java/archivos/", "src/main/java/backup/");
-        this.conexion = new Conexion();
+        this.backup = new BackUp(new File("src/main/java/archivos/"), new File("src/main/java/backup/"));
+        this.conexion = new Conexion(new File("src/main/java/archivos/"));
     }
 
     //----------|Afiliados|----------//
@@ -196,15 +196,15 @@ public class Empresa implements Serializable
     }*/
 
     //----------|Backup|----------//
-    /*public void crearBackup(Fecha auxFecha, Hora auxHora)
+    public boolean crearBackup(Fecha auxFecha, Hora auxHora)
     {
-        backup.crearBackup(auxFecha, auxHora);
+        return backup.crearBackup(auxFecha, auxHora);
     }
 
-    public void cargarBackup(File auxArchivoZip)
+    public boolean cargarBackup(File auxArchivoZip)
     {
-        backup.cargarBackup(auxArchivoZip);
-    }*/
+        return backup.cargarBackup(auxArchivoZip);
+    }
 
     //----------|Horario|----------//
     public Hora getHora(int auxId)
@@ -243,7 +243,7 @@ public class Empresa implements Serializable
     {
         ArrayList auxMedicos;
         auxMedicos = getMedicos();
-        conexion.setArchivo(new File("src/main/java/archivos/medicos.bin"));
+        conexion.setArchivo("medicos.bin");
         conexion.escribirDatosBinario(auxMedicos);
     }
 
@@ -251,9 +251,9 @@ public class Empresa implements Serializable
     {
         ArrayList auxAfiliados;
         auxAfiliados = getAfiliados();
-        conexion.setArchivo(new File("src/main/java/archivos/afiliados.bin"));
+        conexion.setArchivo("afiliados.bin");
         conexion.escribirDatosBinario(auxAfiliados);
-        conexion.setArchivo(new File("src/main/java/archivos/afiliados.txt"));
+        conexion.setArchivo("afiliados.txt");
         conexion.escribirDatosTxt(auxAfiliados);
     }
 
@@ -261,7 +261,7 @@ public class Empresa implements Serializable
     {
         ArrayList auxConsultorios;
         auxConsultorios = getConsultorios();
-        conexion.setArchivo(new File("src/main/java/archivos/consultorios.bin"));
+        conexion.setArchivo("consultorios.bin");
         conexion.escribirDatosBinario(auxConsultorios);
     }
 
@@ -269,56 +269,67 @@ public class Empresa implements Serializable
     {
         ArrayList auxServicios;
         auxServicios = getServicios();
-        conexion.setArchivo(new File("src/main/java/archivos/servicios.bin"));
+        conexion.setArchivo("servicios.bin");
         conexion.escribirDatosBinario(auxServicios);
     }
 
-    public void recuperarDatos()
+    public boolean recuperarDatos()
     {
+        boolean datosValidos;
+        datosValidos = true;
+
         ArrayList<Object> auxDatos;
-        conexion.setArchivo(new File("src/main/java/archivos/afiliados.bin"));
+        conexion.setArchivo("afiliados.bin");
         auxDatos = conexion.leerDatosBinario();
         Afiliado auxAfiliado;
-        for(Object objeto: auxDatos)
+        for(Object objeto : auxDatos)
         {
             auxAfiliado = (Afiliado) objeto;
             agregarAfiliado(auxAfiliado);
             setNumeroAfiliado(auxAfiliado.getId());
         }
 
-        conexion.setArchivo(new File("src/main/java/archivos/servicios.bin"));
+        conexion.setArchivo("servicios.bin");
         auxDatos = conexion.leerDatosBinario();
         Servicio auxServicio;
-        for(Object objeto: auxDatos)
+        for(Object objeto : auxDatos)
         {
             auxServicio = (Servicio) objeto;
             agregarServicio(auxServicio);
             setNumeroServicio(auxServicio.getId());
         }
 
-        conexion.setArchivo(new File("src/main/java/archivos/consultorios.bin"));
+        conexion.setArchivo("consultorios.bin");
         auxDatos = conexion.leerDatosBinario();
         Consultorio auxConsultorio;
-        for(Object objeto: auxDatos)
+        for(Object objeto : auxDatos)
         {
             auxConsultorio = (Consultorio) objeto;
             agregarConsultorio(auxConsultorio);
             setNumeroConsultorio(auxConsultorio.getId());
         }
 
-        conexion.setArchivo(new File("src/main/java/archivos/medicos.bin"));
+        conexion.setArchivo("medicos.bin");
         auxDatos = conexion.leerDatosBinario();
         Medico auxMedico;
-        for(Object objeto: auxDatos)
+        for(Object objeto : auxDatos)
         {
             auxMedico = (Medico) objeto;
             auxServicio = getServicio(auxMedico.getEspecialidad().getId());
             auxConsultorio = getConsultorio(auxMedico.getConsultorio().getId());
+            if(auxServicio == null || auxConsultorio == null)
+            {
+                datosValidos = false;
+                escribirMedicos();
+                break;
+            }
             auxMedico.setEspecialidad(auxServicio);
             auxMedico.setConsultorio(auxConsultorio);
             agregarMedico(auxMedico);
             setNumeroMedico(auxMedico.getId());
         }
+
+        return datosValidos;
     }
 }
 
