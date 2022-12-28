@@ -9,9 +9,16 @@ import java.time.LocalTime;
 import java.util.ArrayList;
 
 import static modelo.Afiliado.setNumeroAfiliado;
+import static modelo.Cita.setNumeroCita;
 import static modelo.Consultorio.setNumeroConsultorio;
 import static modelo.Medico.setNumeroMedico;
 import static modelo.Servicio.setNumeroServicio;
+
+/* 
+ * @author Nicolas Herrera <herrera.nicolas@correounivalle.edu.co>
+ * @author Samuel Galindo Cuevas <samuel.galindo@correounivalle.edu.co>
+ * @author Julian Rendon <julian.david.rendon@correounivalle.edu.co>
+ */
 
 public class Empresa implements Serializable
 {
@@ -231,6 +238,10 @@ public class Empresa implements Serializable
     {
         horario.comprobarHorariosDisponibles(horariosNoDisponibles);
     }
+    public void setAsignado(Hora auxHora)
+    {
+        horario.setAsignado(auxHora);
+    }
 
     public void restablecerDisponibilidad()
     {
@@ -271,6 +282,14 @@ public class Empresa implements Serializable
         auxServicios = getServicios();
         conexion.setArchivo("servicios.bin");
         conexion.escribirDatosBinario(auxServicios);
+    }
+
+    public void escribirCitas()
+    {
+        ArrayList auxCitas;
+        auxCitas = getCitas();
+        conexion.setArchivo("citas.bin");
+        conexion.escribirDatosBinario(auxCitas);
     }
 
     public boolean recuperarDatos()
@@ -329,7 +348,35 @@ public class Empresa implements Serializable
             setNumeroMedico(auxMedico.getId());
         }
 
+        conexion.setArchivo("citas.bin");
+        auxDatos = conexion.leerDatosBinario();
+        Cita auxCita;
+        Hora auxHora;
+        for(Object objeto : auxDatos)
+        {
+            auxCita = (Cita) objeto;
+            auxAfiliado = getAfiliado(auxCita.getAfiliado().getId());
+            auxMedico = getMedico(auxCita.getMedico().getId());
+            auxConsultorio = getConsultorio(auxMedico.getConsultorio().getId());
+            auxServicio = getServicio(auxCita.getServicio().getId());
+            auxHora = getHora(auxCita.getHora().getId());
+
+            if(auxServicio == null || auxConsultorio == null || auxAfiliado == null || auxMedico == null || auxHora == null)
+            {
+                datosValidos = false;
+                escribirMedicos();
+                break;
+            }
+
+            auxCita.setAfiliado(auxAfiliado);
+            auxCita.setMedico(auxMedico);
+            auxCita.setServicio(auxServicio);
+            auxCita.setConsultorio(auxConsultorio);
+            auxCita.setHora(auxHora);
+            agregarCita(auxCita);
+            setNumeroCita(auxCita.getId());
+        }
+
         return datosValidos;
     }
 }
-
