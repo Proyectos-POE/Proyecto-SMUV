@@ -4,6 +4,11 @@ import java.awt.*;
 import javax.swing.*;
 import modelo.Documento;
 
+/* 
+ * @author Nicolas Herrera <herrera.nicolas@correounivalle.edu.co>
+ * @author Samuel Galindo Cuevas <samuel.galindo@correounivalle.edu.co>
+ * @author Julian Rendon <julian.david.rendon@correounivalle.edu.co>
+ */
 
 public class VentanaAfiliado extends Plantilla 
 {

@@ -8,6 +8,12 @@ import modelo.Consultorio;
 import modelo.Documento;
 import modelo.Servicio;
 
+/* 
+ * @author Nicolas Herrera <herrera.nicolas@correounivalle.edu.co>
+ * @author Samuel Galindo Cuevas <samuel.galindo@correounivalle.edu.co>
+ * @author Julian Rendon <julian.david.rendon@correounivalle.edu.co>
+ */
+
 public class VentanaMedico extends Plantilla
 {
     private JLabel lblNombre;

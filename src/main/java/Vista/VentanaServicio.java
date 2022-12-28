@@ -3,6 +3,11 @@ package Vista;
 import java.awt.*;
 import javax.swing.*;
 
+/* 
+ * @author Nicolas Herrera <herrera.nicolas@correounivalle.edu.co>
+ * @author Samuel Galindo Cuevas <samuel.galindo@correounivalle.edu.co>
+ * @author Julian Rendon <julian.david.rendon@correounivalle.edu.co>
+ */
 
 public class VentanaServicio extends Plantilla 
 {
