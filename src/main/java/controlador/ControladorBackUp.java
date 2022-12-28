@@ -15,6 +15,12 @@ import java.io.File;
 import java.time.LocalDate;
 import java.time.LocalTime;
 
+/* 
+ * @author Nicolas Herrera <herrera.nicolas@correounivalle.edu.co>
+ * @author Samuel Galindo Cuevas <samuel.galindo@correounivalle.edu.co>
+ * @author Julian Rendon <julian.david.rendon@correounivalle.edu.co>
+ */
+
 public class ControladorBackUp
 {
 
@@ -45,7 +51,7 @@ public class ControladorBackUp
         Hora auxHora = new Hora(LocalTime.now());
         if(servicioMedicoUV.crearBackup(auxFecha, auxHora))
         {
-            ventanaBackUp.mostrarMensaje("Backup realizado con exito");
+            ventanaBackUp.mostrarMensaje("Backup realizado con exito\n Guardado en la carpeta backup del proyecto");
         }
         else
         {
@@ -60,7 +66,12 @@ public class ControladorBackUp
         {
             if (e.getActionCommand().equalsIgnoreCase("<html><p style=\"text-align:center\">REALIZAR</p><p style=\"text-align:center\">BACK UP</p></html>"))
             {
-                realizarBackUp();
+                int respuesta;
+                respuesta = JOptionPane.showConfirmDialog(null,"¿Esta seguro que desea realizar el backUp?", "BackUp",JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+                if(respuesta == JOptionPane.YES_OPTION)
+                {
+                    realizarBackUp();
+                }
             }
         }
     }
@@ -81,18 +92,27 @@ public class ControladorBackUp
 
         if (archivo != null)
         {
-            if(servicioMedicoUV.cargarBackup(archivo))
+            int respuesta;
+            respuesta = JOptionPane.showConfirmDialog(null,"¿Esta seguro que desea restaurar este archivo?", "BackUp",JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+            if(respuesta == JOptionPane.YES_OPTION)
             {
-                vaciarDaos();
-                if(!servicioMedicoUV.recuperarDatos())
+                if (servicioMedicoUV.cargarBackup(archivo))
                 {
-                    ventanaBackUp.mostrarMensaje("Error a recuperar los datos. Hace falta informacion. Porfavor cargue otro backUp");
+                    vaciarDaos();
+                    if (!servicioMedicoUV.recuperarDatos())
+                    {
+                        ventanaBackUp.mostrarMensaje("Error a recuperar los datos. Hace falta informacion. Porfavor cargue otro backUp");
+                    }
+                    ventanaBackUp.mostrarMensaje("Carga del Backup realizado con exito");
                 }
-                ventanaBackUp.mostrarMensaje("Carga del Backup realizado con exito");
+                else
+                {
+                    ventanaBackUp.mostrarMensaje("Carga del Backup realizado sin exito");
+                }
             }
             else
             {
-                ventanaBackUp.mostrarMensaje("Carga del Backup realizado sin exito");
+                ventanaBackUp.mostrarMensaje("Restauración canceladad");
             }
         }
     }
