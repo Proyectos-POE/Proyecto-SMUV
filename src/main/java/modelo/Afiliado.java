@@ -2,6 +2,12 @@ package modelo;
 
 import java.io.Serializable;
 
+/* 
+ * @author Nicolas Herrera <herrera.nicolas@correounivalle.edu.co>
+ * @author Samuel Galindo Cuevas <samuel.galindo@correounivalle.edu.co>
+ * @author Julian Rendon <julian.david.rendon@correounivalle.edu.co>
+ */
+
 public class Afiliado extends Persona implements Serializable
 {
     private int id;
@@ -41,9 +47,7 @@ public class Afiliado extends Persona implements Serializable
 
     public String toString()
     {
-        String auxDatos;
-        auxDatos = id + ";" + nombre + ";" + documento.getTipoDocumento() + ";" + documento.getNumeroDocumento() + ";" + correo + ";" + telefono;
-        return auxDatos;
+        return nombre;
     }
 
     public String toDatos()

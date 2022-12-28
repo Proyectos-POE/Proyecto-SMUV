@@ -8,6 +8,12 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
+/* 
+ * @author Nicolas Herrera <herrera.nicolas@correounivalle.edu.co>
+ * @author Samuel Galindo Cuevas <samuel.galindo@correounivalle.edu.co>
+ * @author Julian Rendon <julian.david.rendon@correounivalle.edu.co>
+ */
+
 public class ControladorMedico
 {
     private final Empresa servicioMedicoUV;
@@ -34,6 +40,26 @@ public class ControladorMedico
         this.ventanaMedico.addBtnEditarListener(new EditarListener());
         this.ventanaMedico.addBtnEliminarListener(new EliminarListener());
         this.ventanaMedico.addBtnActualizarListener(new ListarMedicoListener());
+    }
+
+    private boolean comprobarAsignacionCita(Medico auxMedico)
+    {
+        boolean auxAsignado = false;
+        ArrayList <Cita> auxCitas;
+        auxCitas = servicioMedicoUV.getCitas();
+
+        if (!auxCitas.isEmpty())
+        {
+            for(Cita cita: auxCitas)
+            {
+                if(cita.getMedico().getId() == auxMedico.getId())
+                {
+                    auxAsignado = true;
+                    break;
+                }
+            }
+        }
+        return auxAsignado;
     }
 
     private Boolean comprobarDatosMedico(int auxId ,String auxNombre, String auxTipoDocumento, long auxNumeroDocumento, String auxCorreo, long auxTelefono, Servicio auxServicio, Consultorio auxConsultorio)
@@ -131,7 +157,7 @@ public class ControladorMedico
         return datos;
     }
 
-    public Object[][] tablaObjectMedico(ArrayList<Medico> auxMedicos)
+    private Object[][] tablaObjectMedico(ArrayList<Medico> auxMedicos)
     {
         Object[][] dataMedicos;
         dataMedicos = new Object[auxMedicos.size()][8];
@@ -179,7 +205,7 @@ public class ControladorMedico
         ventanaMedico.setNullBoxEspecialidadEditar();
     }
 
-    public void rellenarConsultorios(ArrayList<Consultorio> auxConsultorios)
+    private void rellenarConsultorios(ArrayList<Consultorio> auxConsultorios)
     {
         for (Consultorio consultorio : auxConsultorios)
         {
@@ -380,32 +406,39 @@ public class ControladorMedico
 
             if(auxMedico != null)
             {
-                if(comprobarDatosMedico(auxId ,auxNombre, auxTipoDocumento, auxNumDocumento, auxCorreo, auxTelefono, auxServicio, auxConsultorio))
+                if(!comprobarAsignacionCita(auxMedico))
                 {
-                    auxMedico.setNombre(auxNombre);
-                    auxDocumento = auxMedico.getDocumento();
-                    auxDocumento.setTipoDocumento(auxTipoDocumento);
-                    auxDocumento.setNumeroDocumento(auxNumDocumento);
-                    auxMedico.setDocumento(auxDocumento);
-                    auxMedico.setCorreo(auxCorreo);
-                    auxMedico.setTelefono(auxTelefono);
-                    auxMedico.setEspecialidad(auxServicio);
-                    auxMedico.getConsultorio().setAsignado(false);
-                    auxConsultorio.setAsignado(true);
-                    auxMedico.setConsultorio(auxConsultorio);
+                    if(comprobarDatosMedico(auxId ,auxNombre, auxTipoDocumento, auxNumDocumento, auxCorreo, auxTelefono, auxServicio, auxConsultorio))
+                    {
+                        auxMedico.setNombre(auxNombre);
+                        auxDocumento = auxMedico.getDocumento();
+                        auxDocumento.setTipoDocumento(auxTipoDocumento);
+                        auxDocumento.setNumeroDocumento(auxNumDocumento);
+                        auxMedico.setDocumento(auxDocumento);
+                        auxMedico.setCorreo(auxCorreo);
+                        auxMedico.setTelefono(auxTelefono);
+                        auxMedico.setEspecialidad(auxServicio);
+                        auxMedico.getConsultorio().setAsignado(false);
+                        auxConsultorio.setAsignado(true);
+                        auxMedico.setConsultorio(auxConsultorio);
 
-                    if(servicioMedicoUV.actualizarMedico(auxMedico))
-                    {
-                        ventanaMedico.mostrarMensaje("Medico editado con exito" + mostrarDatos(auxMedico));
-                        servicioMedicoUV.escribirMedicos();
-                        servicioMedicoUV.escribirConsultorios();
-                        ventanaMedico.vaciarBoxConsultorio();
-                        rellenarConsultorios(servicioMedicoUV.getConsultorios(false));
+                        if(servicioMedicoUV.actualizarMedico(auxMedico))
+                        {
+                            ventanaMedico.mostrarMensaje("Medico editado con exito" + mostrarDatos(auxMedico));
+                            servicioMedicoUV.escribirMedicos();
+                            servicioMedicoUV.escribirConsultorios();
+                            ventanaMedico.vaciarBoxConsultorio();
+                            rellenarConsultorios(servicioMedicoUV.getConsultorios(false));
+                        }
+                        else
+                        {
+                            ventanaMedico.mostrarMensaje("No se pudo editar el medico");
+                        }
                     }
-                    else
-                    {
-                        ventanaMedico.mostrarMensaje("No se pudo editar el medico");
-                    }
+                }
+                else
+                {
+                    ventanaMedico.mostrarMensaje("No se puede editar un medico que tiene asignado una cita");
                 }
             }
             else
@@ -543,19 +576,26 @@ public class ControladorMedico
 
         if(auxMedico != null)
         {
-            auxConsultorio = auxMedico.getConsultorio();
-            if(servicioMedicoUV.eliminarMedico(auxMedico))
+            if(!comprobarAsignacionCita(auxMedico))
             {
-                ventanaMedico.mostrarMensaje("Medico eliminado con exito");
-                servicioMedicoUV.escribirMedicos();
-                auxConsultorio.setAsignado(false);
-                servicioMedicoUV.escribirConsultorios();
-                ventanaMedico.vaciarBoxConsultorio();
-                rellenarConsultorios(servicioMedicoUV.getConsultorios(false));
+                auxConsultorio = auxMedico.getConsultorio();
+                if(servicioMedicoUV.eliminarMedico(auxMedico))
+                {
+                    ventanaMedico.mostrarMensaje("Medico eliminado con exito");
+                    servicioMedicoUV.escribirMedicos();
+                    auxConsultorio.setAsignado(false);
+                    servicioMedicoUV.escribirConsultorios();
+                    ventanaMedico.vaciarBoxConsultorio();
+                    rellenarConsultorios(servicioMedicoUV.getConsultorios(false));
+                }
+                else
+                {
+                    ventanaMedico.mostrarMensaje("No se pudo eliminar el medico");
+                }
             }
             else
             {
-                ventanaMedico.mostrarMensaje("No se pudo eliminar el medico");
+                ventanaMedico.mostrarMensaje("No se puede eliminar un medico que tiene asignado una cita");
             }
         }
         else

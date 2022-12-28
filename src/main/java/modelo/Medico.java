@@ -2,13 +2,19 @@ package modelo;
 
 import java.io.Serializable;
 
+/* 
+ * @author Nicolas Herrera <herrera.nicolas@correounivalle.edu.co>
+ * @author Samuel Galindo Cuevas <samuel.galindo@correounivalle.edu.co>
+ * @author Julian Rendon <julian.david.rendon@correounivalle.edu.co>
+ */
+
 public class Medico extends Persona implements Serializable
 {
     private static int numero;
     private int id;
     private Servicio especialidad;
     private Consultorio consultorio;
-
+    private static final long serialVersionUID = 1L;
 
     public Medico(String auxNombre, Documento auxDocumento, String auxCorreo, long auxTelefono, Servicio auxEspecialidad, Consultorio auxConsultorio)
     {
@@ -54,9 +60,7 @@ public class Medico extends Persona implements Serializable
 
     public String toString()
     {
-        String auxDatos;
-        auxDatos = id + ";" + nombre + ";" + documento.getTipoDocumento() + ";" + documento.getNumeroDocumento() + ";" + correo + ";" + telefono + ";" + especialidad.getId() + ";" + especialidad.getNombre() + ";" + consultorio.getId() + ";" + consultorio.getNombreConsultorio();
-        return auxDatos;
+        return nombre;
     }
 
     public static void setNumeroMedico(int auxNumero)

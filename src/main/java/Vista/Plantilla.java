@@ -6,6 +6,12 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 
+/* 
+ * @author Nicolas Herrera <herrera.nicolas@correounivalle.edu.co>
+ * @author Samuel Galindo Cuevas <samuel.galindo@correounivalle.edu.co>
+ * @author Julian Rendon <julian.david.rendon@correounivalle.edu.co>
+ */
+
 public class Plantilla extends  JFrame {
     protected JLabel lblTitulo;
     protected JTabbedPane jtab;

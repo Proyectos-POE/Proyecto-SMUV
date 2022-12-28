@@ -5,6 +5,12 @@ import java.time.Duration;
 import java.time.LocalTime;
 import java.util.ArrayList;
 
+/* 
+ * @author Nicolas Herrera <herrera.nicolas@correounivalle.edu.co>
+ * @author Samuel Galindo Cuevas <samuel.galindo@correounivalle.edu.co>
+ * @author Julian Rendon <julian.david.rendon@correounivalle.edu.co>
+ */
+
 public class Horario implements Serializable
 {
     private final ArrayList<Hora> horario;
@@ -102,6 +108,13 @@ public class Horario implements Serializable
         for(Hora hora : horario)
         {
             hora.setAsignado(false);
+        }
+    }
+    public void setAsignado(Hora auxHora)
+    {
+        if(horario.contains(auxHora))
+        {
+            horario.get(horario.indexOf(auxHora)).setAsignado(true);
         }
     }
 }

@@ -1,13 +1,21 @@
 package controlador;
 
 import Vista.VentanaMenu;
+import modelo.Cita;
 import modelo.Consultorio;
 import modelo.Empresa;
 import Vista.VentanaConsultorio;
+import modelo.Medico;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
+
+/* 
+ * @author Nicolas Herrera <herrera.nicolas@correounivalle.edu.co>
+ * @author Samuel Galindo Cuevas <samuel.galindo@correounivalle.edu.co>
+ * @author Julian Rendon <julian.david.rendon@correounivalle.edu.co>
+ */
 
 public class ControladorConsultorio
 {
@@ -33,6 +41,26 @@ public class ControladorConsultorio
         this.ventanaConsultorio.addBtnActualizarListener(new ListarConsultorioListener());
     }
 
+    private boolean comprobarAsignacionCita(Consultorio auxConsultorio)
+    {
+        boolean auxAsignado = false;
+        ArrayList <Cita> auxCitas;
+        auxCitas = servicioMedicoUV.getCitas();
+
+        if (!auxCitas.isEmpty())
+        {
+            for(Cita cita: auxCitas)
+            {
+                if(cita.getConsultorio().getId() == auxConsultorio.getId())
+                {
+                    auxAsignado = true;
+                    break;
+                }
+            }
+        }
+        return auxAsignado;
+    }
+
     private boolean comprobarNumeroConsultorio(int auxNumeroConsultorio)
     {
         boolean auxNumeroValido;
@@ -55,7 +83,7 @@ public class ControladorConsultorio
         return auxNumeroValido;
     }
 
-    public String mostrarDatos(Consultorio consultorio)
+    private String mostrarDatos(Consultorio consultorio)
     {
         String datos;
         String idConsul = String.valueOf(consultorio.getId());
@@ -232,7 +260,10 @@ public class ControladorConsultorio
                             if(auxConsultorio.isAsignado())
                             {
                                 servicioMedicoUV.escribirMedicos();
-                                //espacio para citas.
+                                if(comprobarAsignacionCita(auxConsultorio))
+                                {
+                                    servicioMedicoUV.escribirCitas();
+                                }
                             }
                         }
                         else
@@ -275,7 +306,7 @@ public class ControladorConsultorio
         }
     }
 
-    public void cancelarEditarConsultorio()
+    private void cancelarEditarConsultorio()
     {
         ventanaConsultorio.setTxtNumeroEditar("");
         ventanaConsultorio.setIdEditar("");

@@ -5,6 +5,12 @@ import java.time.Duration;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 
+/* 
+ * @author Nicolas Herrera <herrera.nicolas@correounivalle.edu.co>
+ * @author Samuel Galindo Cuevas <samuel.galindo@correounivalle.edu.co>
+ * @author Julian Rendon <julian.david.rendon@correounivalle.edu.co>
+ */
+
 public class Hora implements Serializable
 {
     private int id;
@@ -12,6 +18,7 @@ public class Hora implements Serializable
     private LocalTime fin;
     private Duration duracion;
     private boolean asignado;
+    private static final long serialVersionUID = 1L;
 
     public Hora(int auxId, LocalTime auxInicio, Duration auxDuracion)
     {
@@ -89,7 +96,7 @@ public class Hora implements Serializable
     public String toString()
     {
         String auxDatos;
-        auxDatos = id + ";" + inicio + ";" + fin;
+        auxDatos = inicio + " - " + fin;
         return auxDatos;
     }
 }

@@ -2,6 +2,12 @@ package modelo;
 
 import java.io.Serializable;
 
+/* 
+ * @author Nicolas Herrera <herrera.nicolas@correounivalle.edu.co>
+ * @author Samuel Galindo Cuevas <samuel.galindo@correounivalle.edu.co>
+ * @author Julian Rendon <julian.david.rendon@correounivalle.edu.co>
+ */
+
 public class Cita implements Serializable
 {
     private static int numero;
@@ -12,6 +18,7 @@ public class Cita implements Serializable
     private Servicio servicio;
     private Hora hora;
     private Fecha fecha;
+    private static final long serialVersionUID = 1L;
 
     public Cita(Afiliado auxAfiliado, Medico auxMedico, Consultorio auxConsultorio, Servicio auxServicio, Fecha fecha, Hora auxHora)
     {
@@ -30,7 +37,7 @@ public class Cita implements Serializable
         return numero;
     }
 
-    public static void setNumero(int auxNumero)
+    public static void setNumeroCita(int auxNumero)
     {
         Cita.numero = auxNumero;
     }
@@ -111,5 +118,4 @@ public class Cita implements Serializable
         auxDatos = id + ";" + afiliado.getId() + ";" + afiliado.getNombre() + ";" + medico.getId() + ";" + medico.getNombre() + ";" + servicio.getId() + ";" + servicio.getNombre() + ";" + consultorio.getId() + ";" + consultorio.getNombreConsultorio() + ";" + fecha.getFecha() + ";" + hora.toString();
         return auxDatos;
     }
-
 }

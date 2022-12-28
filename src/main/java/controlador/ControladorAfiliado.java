@@ -1,7 +1,6 @@
 package controlador;
 
-import modelo.Afiliado;
-import modelo.Empresa;
+import modelo.*;
 import Vista.VentanaAfiliado;
 import Vista.VentanaMenu;
 
@@ -9,11 +8,13 @@ import Vista.VentanaMenu;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
-import modelo.Documento;
-/**
- *
- * MESSI
- */
+
+/* 
+ * @author Nicolas Herrera <herrera.nicolas@correounivalle.edu.co>
+ * @author Samuel Galindo Cuevas <samuel.galindo@correounivalle.edu.co>
+ * @author Julian Rendon <julian.david.rendon@correounivalle.edu.co>
+ */
+
 public class ControladorAfiliado
 {
     private final Empresa servicioMedicoUV;
@@ -38,6 +39,26 @@ public class ControladorAfiliado
         this.ventanaAfiliado.addBtnAtrasListener(new AtrasAfiliadoListener());
         this.ventanaAfiliado.addBtnCancelarEditarListener(new CancelarEditarListener());
         this.ventanaAfiliado.addBtnCancelarEliminarListener(new CancelarEliminarListener());
+    }
+
+    private boolean comprobarAsignacionCita(Afiliado auxAfiliado)
+    {
+        boolean auxAsignado = false;
+        ArrayList <Cita> auxCitas;
+        auxCitas = servicioMedicoUV.getCitas();
+
+        if (!auxCitas.isEmpty())
+        {
+            for(Cita cita: auxCitas)
+            {
+                if(cita.getAfiliado().getId() == auxAfiliado.getId())
+                {
+                    auxAsignado = true;
+                    break;
+                }
+            }
+        }
+        return auxAsignado;
     }
 
     public boolean comprobarDatosAfiliado(int auxId,String auxNombre, String auxTipoDocumento, long auxNumeroDocumento, String correo, long auxTelefono)
@@ -99,22 +120,22 @@ public class ControladorAfiliado
         return auxDatosValidos;
     }
 
-    public String mostrarDatos(Afiliado afiliado)
+    private String mostrarDatos(Afiliado auxAfiliado)
     {
         String datos;
-        String auxId = String.valueOf(afiliado.getId());
-        String auxNombre = afiliado.getNombre();
-        String auxDocumento = String.valueOf(afiliado.getDocumento().getNumeroDocumento());
-        String auxTipoDocu = afiliado.getDocumento().getTipoDocumento();
-        String auxCorreo = afiliado.getCorreo();
-        String auxTelefono = String.valueOf(afiliado.getTelefono());
+        String auxId = String.valueOf(auxAfiliado.getId());
+        String auxNombre = auxAfiliado.getNombre();
+        String auxDocumento = String.valueOf(auxAfiliado.getDocumento().getNumeroDocumento());
+        String auxTipoDocu = auxAfiliado.getDocumento().getTipoDocumento();
+        String auxCorreo = auxAfiliado.getCorreo();
+        String auxTelefono = String.valueOf(auxAfiliado.getTelefono());
 
         datos = "\n"+"ID: "+auxId+"\n"+"Nombre: "+auxNombre+"\n"+"# documento: "+auxDocumento+"\n"+"Tipo Documento: "+auxTipoDocu+"\n"+"Correo: "+auxCorreo+"\n"+"Telefono: "+auxTelefono;
 
         return datos;
     }
 
-    public Object[][] tablaObjectAfiliados(ArrayList<Afiliado> auxAfiliados)
+    private Object[][] tablaObjectAfiliados(ArrayList<Afiliado> auxAfiliados)
     {
        Object[][] dataAfiliados;
        dataAfiliados = new Object[auxAfiliados.size()][6];
@@ -304,7 +325,7 @@ public class ControladorAfiliado
             auxTelefono = Long.parseLong(ventanaAfiliado.getTxtTelefonoEditar());
             auxCorreo = ventanaAfiliado.getTxtCorreoEditar();
 
-            if (auxAfiliado != null)
+            if(auxAfiliado != null)
             {
                 if(comprobarDatosAfiliado(auxId ,auxNombre, auxTipoDocumento, auxNumeroDocumento, auxCorreo, auxTelefono))
                 {
@@ -318,6 +339,10 @@ public class ControladorAfiliado
                     {
                         ventanaAfiliado.mostrarMensaje("Afiliado editado con éxito" + mostrarDatos(auxAfiliado));
                         servicioMedicoUV.escribirAfiliados();
+                        if(comprobarAsignacionCita(auxAfiliado))
+                        {
+                            servicioMedicoUV.escribirCitas();
+                        }
                     }
                     else
                     {
@@ -441,14 +466,21 @@ public class ControladorAfiliado
 
         if(auxAfiliado != null)
         {
-            if(servicioMedicoUV.eliminarAfiliado(auxAfiliado))
+            if(!comprobarAsignacionCita(auxAfiliado))
             {
-                ventanaAfiliado.mostrarMensaje("Afiliado eliminado con éxito");
-                servicioMedicoUV.escribirAfiliados();
+                if(servicioMedicoUV.eliminarAfiliado(auxAfiliado))
+                {
+                    ventanaAfiliado.mostrarMensaje("Afiliado eliminado con éxito");
+                    servicioMedicoUV.escribirAfiliados();
+                }
+                else
+                {
+                    ventanaAfiliado.mostrarMensaje("No se pudo eliminar el consultorio");
+                }
             }
             else
             {
-                ventanaAfiliado.mostrarMensaje("No se pudo eliminar el consultorio");
+                ventanaAfiliado.mostrarMensaje("No se puede eliminar un afiliado que tiene asignado una cita");
             }
         }
         else
@@ -515,4 +547,3 @@ public class ControladorAfiliado
         }
     }
 }
-
