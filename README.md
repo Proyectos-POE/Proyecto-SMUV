@@ -1,5 +1,5 @@
 
-# Miniproyecto No. 3
+# Proyecto-SMUV
 **Tema: GUI – Colecciones y Manejo de Archivos**
 
 El servicio de salud de Univalle requiere un software que le permita gestionar y controlar las
